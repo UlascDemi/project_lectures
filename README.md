@@ -1,1 +1,1 @@
-hoi wij zijn justin, brechje en ulas en blabla
+hoi wij zijn justin, brechje en ulas
