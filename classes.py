@@ -1,30 +1,34 @@
 # Classes file
 
 
-
-
 class Student:
+    def __init__(
+        self, first_name: str, last_name: str, student_num: str, courses: list
+    ) -> None:
 
-    def __init__(self, lastname, surname, studentnumber, course1, course2, course3, course4, course5):
-        self._lastname = lastname
-        self._surname = surname
-        self._studentnumber = studentnumber
-        self._course1 = course1
-        self._course2 = course2
-        self._course3 = course3
-        self._course4 = course4
-        self._course5 = course5
+        self._first_name = first_name
+        self._last_name = last_name
+        self._studentnumber = student_num
+        self._courses = courses
 
 
-class Rooms:
-    
+class Room:
     def __init__(self, roomnumber, capacity):
         self._roomnumber = roomnumber
         self._capacity = capacity
 
 
-class Courses:
-    def __init__(self, vak, hoorcollege, werkcollege, max_students_werk, practica, max_students_prac, verwacht):
+class Course:
+    def __init__(
+        self,
+        vak,
+        hoorcollege,
+        werkcollege,
+        max_students_werk,
+        practica,
+        max_students_prac,
+        verwacht,
+    ):
         self._course = vak
         self._lecture = hoorcollege
         self._worklecture = werkcollege
