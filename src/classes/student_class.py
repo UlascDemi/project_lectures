@@ -8,6 +8,6 @@ class Student:
 
         self._first_name = first_name
         self._last_name = last_name
-        self._studentnumber = student_num
+        self._student_num = student_num
         self._courses = courses
-        self._timetable = np.array([5, 5])  # hierin komt een tuple: (Room, Course)
+        self._time_table = np.array((5, 5))  # hierin komt een tuple: (Room, Course)

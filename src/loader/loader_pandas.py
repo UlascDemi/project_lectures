@@ -56,7 +56,7 @@ def load_courses(data: pd.DataFrame) -> dict:
         dict: _description_
     """
     courses = {}
-
+    
     for _, row in data.iterrows():
         course = row[0]
         lecture = row[1]
@@ -74,5 +74,4 @@ def load_courses(data: pd.DataFrame) -> dict:
             max_stud_pract,
             expected,
         )
-
     return courses
