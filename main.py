@@ -8,6 +8,8 @@ import pandas as pd
 
 # TODO docstrings in loader_pandas schrijven
 
+# TODO README
+
 
 def main():
 
