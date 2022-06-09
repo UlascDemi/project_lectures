@@ -9,6 +9,8 @@ def main():
     rooms = load_rooms(pd.read_csv("data/zalen.csv"))
     courses = load_courses(pd.read_csv("data/vakken.csv"))
 
+    # print(students)
+
 
 if __name__ == "__main__":
     main()

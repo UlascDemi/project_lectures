@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import pandas as pd
+import numpy as np
+
 from src.classes import Student, Room, Course
 
 
@@ -19,7 +21,7 @@ def load_students(data: pd.DataFrame) -> dict:
         last_name = row[0]
         first_name = row[1]
         student_num = row[2]
-        courses = [row[3], row[4], row[5], row[6], row[7]]
+        courses = [course for course in row[3:8] if course is not np.NaN]
         students[student_num] = Student(last_name, first_name, student_num, courses)
 
     return students
