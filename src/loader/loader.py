@@ -1,82 +1,77 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# ---------------------------------------------------------------------------
-# Created By  :
-# Created Date: 31-05-2022
-# ---------------------------------------------------------------------------
-"""
-"""
+from __future__ import annotations
 
-# Programma dat studentenvakken inload
-# Roep functie aan vanuit
+import pandas as pd
+import numpy as np
 
-import csv
-from csv import DictReader
-from classes import Student, Room, Course
+from src.classes import Student, Room, Course
 
 
-def load_course_registration(filename):
+def load_students(data: pd.DataFrame) -> dict:
+    """_summary_
+
+    Args:
+        data (pd.DataFrame): _description_
+
+    Returns:
+        dict: _description_
     """
-    Load function which loads information from course registration
+    students = {}
+
+    for _, row in data.iterrows():
+        last_name = row[0]
+        first_name = row[1]
+        student_num = row[2]
+        courses = [course for course in row[3:8] if course is not np.NaN]
+        students[student_num] = Student(last_name, first_name, student_num, courses)
+
+    return students
+
+
+def load_rooms(data: pd.DataFrame) -> dict:
+    """_summary_
+
+    Args:
+        data (pd.DataFrame): _description_
+
+    Returns:
+        dict: _description_
     """
+    rooms = {}
 
-    # Read the information from the file and add to variables
-    with open(filename, "r", encoding="utf-8", errors="ignore") as csv_file:
-        reader = DictReader(csv_file)
+    for _, row in data.iterrows():
+        room_num = row[0]
+        student_cap = row[1]
+        rooms[room_num] = Room(room_num, student_cap)
 
-        students = {}
-        # geeft info per student door aan de class student
-        for row in reader:
-            last_name = row["Achternaam"]
-            first_name = row["Voornaam"]
-            student_num = row["Stud.Nr."]
-            courses = [row["Vak1"], row["Vak2"], row["Vak3"], row["Vak4"], row["Vak5"]]
-            students[student_num] = Student(last_name, first_name, student_num, courses)
+    return rooms
 
 
-def load_rooms(filename):
+def load_courses(data: pd.DataFrame) -> dict:
+    """_summary_
+
+    Args:
+        data (pd.DataFrame): _description_
+
+    Returns:
+        dict: _description_
     """
-    Load function which loads information from rooms
-    """
-    with open(filename, mode="r", encoding="utf-8-sig", errors="ignore") as csv_file:
-        reader = DictReader(csv_file)
-
-        rooms = {}
-        # slaat informatie over de zalen en capaciteit op
-        for row in reader:
-            roomnumber = row["Zaalnummber"]
-            capacity = row["Max. capaciteit"]
-            rooms[roomnumber] = Room(roomnumber, capacity)
-
-
-def load_courses(filename):
-    """
-    Load function which loads information about courses.
-    """
-    with open(filename, "r") as csv_file:
-        reader = DictReader(csv_file)
-
-        courses = {}
-        # slaat informatie over de zalen en capaciteit op
-        for row in reader:
-            course = row["Vak"]
-            lecture = row["#Hoorcolleges"]
-            seminar = row["#Werkcolleges"]
-            max_stud_seminar = row["Max. stud. Werkcollege"]
-            practica = row["#Practica"]
-            max_stud_pract = row["Max. stud. Practicum"]
-            expected = row["Verwacht"]
-            courses[course] = Course(
-                course,
-                lecture,
-                seminar,
-                max_stud_seminar,
-                practica,
-                max_stud_pract,
-                expected,
-            )
-
-
-load_course_registration("data/studenten_en_vakken.csv")
-load_rooms("data/zalen.csv")
-load_courses("data/vakken.csv")
+    courses = {}
+    
+    for _, row in data.iterrows():
+        course = row[0]
+        lecture = row[1]
+        seminar = row[2]
+        max_stud_seminar = row[3]
+        practica = row[4]
+        max_stud_pract = row[5]
+        expected = row[6]
+        courses[course] = Course(
+            course,
+            lecture,
+            seminar,
+            max_stud_seminar,
+            practica,
+            max_stud_pract,
+            expected,
+        )
+    return courses

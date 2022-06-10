@@ -1,4 +1,4 @@
-from src.loader.loader_pandas import load_students, load_rooms, load_courses
+from src.loader.loader import load_students, load_rooms, load_courses
 
 import pandas as pd
 
