@@ -11,3 +11,43 @@ class Student:
         self._student_num = student_num
         self._courses = courses
         self._time_table = np.array((5, 5))  # hierin komt een tuple: (Room, Course)
+
+    def get_first_name(self) -> str:
+        """Returns first name of a student
+
+        Returns:
+            str: the first name of the student
+        """
+        return self._first_name
+    
+    def get_last_name(self) -> str:
+        """Returns last name of a student
+
+        Returns:
+            str: the last name of the student
+        """
+        return self._last_name
+    
+    def get_student_number(self) -> str:
+        """Returns studentnumber of a student
+
+        Returns:
+            str: the studentnumber of the student
+        """
+        return self._student_num
+
+    def get_students_courses(self) -> list:
+        """Returns applied courses of a student
+
+        Returns:
+            list: the applied courses of the student
+        """
+        return self._courses
+
+    def get_time_table_student(self) -> list:
+        """Returns timetable of a student
+
+        Returns:
+            list : the first name of the student
+        """
+        return self._time_table
