@@ -13,15 +13,15 @@ import pandas as pd
 
 def main():
 
-    students = load_students(pd.read_csv("data/studenten_en_vakken.csv"))
     rooms = load_rooms(pd.read_csv("data/zalen.csv"))
     courses = load_courses(pd.read_csv("data/vakken.csv"))
+    students = load_students(pd.read_csv("data/studenten_en_vakken.csv"))
 
-    total = 0
-    for i, (student_num, student) in enumerate(courses.items()):
-        total += student._n_lecture
-
-    print(total)
+    # Enroll all students to their respective courses
+    for student in students:
+        course_names = student.get_students_courses()
+        for course_name in course_names:
+            courses[course_name].enroll(student)
 
 
 if __name__ == "__main__":

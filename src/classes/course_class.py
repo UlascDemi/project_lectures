@@ -23,6 +23,7 @@ class Course:
         self._pract_cap = max_students_prac
 
         self._expected_students = expected
+        self._enrolled_students = []
 
         self._class_per_seminar = 0
         self._needed_seminars = 0
@@ -32,8 +33,12 @@ class Course:
         self._needed_practica = 0
         self._students_per_practicum = 0
 
+        # TODO misschien dit weg, want we krijgen de hoeveelheid studenten al via enroll()
         self.calc_seminars()
         self.calc_practica()
+
+    def enroll(self, student) -> None:
+        self._enrolled_students.append(student)
 
     def calc_practica(self) -> None:
         """_summary_"""
