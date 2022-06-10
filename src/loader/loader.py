@@ -6,7 +6,7 @@ import numpy as np
 from src.classes import Student, Room, Course
 
 
-def load_students(data: pd.DataFrame) -> list:
+def load_students(filename: str) -> list:
     """_summary_
 
     Args:
@@ -15,6 +15,7 @@ def load_students(data: pd.DataFrame) -> list:
     Returns:
         dict: _description_
     """
+    data = pd.read_csv(filename)
     students = []
 
     for _, row in data.iterrows():
@@ -27,7 +28,7 @@ def load_students(data: pd.DataFrame) -> list:
     return students
 
 
-def load_rooms(data: pd.DataFrame) -> list:
+def load_rooms(filename: str) -> list:
     """_summary_
 
     Args:
@@ -36,6 +37,9 @@ def load_rooms(data: pd.DataFrame) -> list:
     Returns:
         dict: _description_
     """
+
+    data = pd.read_csv(filename)
+
     rooms = []
 
     for _, row in data.iterrows():
@@ -46,7 +50,7 @@ def load_rooms(data: pd.DataFrame) -> list:
     return rooms
 
 
-def load_courses(data: pd.DataFrame) -> dict:
+def load_courses(filename: str) -> dict:
     """_summary_
 
     Args:
@@ -55,6 +59,8 @@ def load_courses(data: pd.DataFrame) -> dict:
     Returns:
         dict: _description_
     """
+    data = pd.read_csv(filename)
+
     courses = {}
 
     for _, row in data.iterrows():

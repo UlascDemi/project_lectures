@@ -13,9 +13,9 @@ import pandas as pd
 
 def main():
 
-    rooms = load_rooms(pd.read_csv("data/zalen.csv"))
-    courses = load_courses(pd.read_csv("data/vakken.csv"))
-    students = load_students(pd.read_csv("data/studenten_en_vakken.csv"))
+    rooms = load_rooms("data/zalen.csv")
+    courses = load_courses("data/vakken.csv")
+    students = load_students("data/studenten_en_vakken.csv")
 
     # Enroll all students to their respective courses
     for student in students:
