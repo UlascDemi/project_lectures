@@ -10,6 +10,8 @@ import pandas as pd
 
 # TODO README
 
+# TODO moeten een functie schrijven die kijkt naar hoe veel en waar conflicts zijn. Een conflict is bijvoorbeeld "student moet op twee plekken tegelijk zijn"
+
 
 def main():
 
