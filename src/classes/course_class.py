@@ -1,6 +1,13 @@
 import numpy as np
 from math import ceil
 
+""" 
+TODO course moet alle studenten onderverdelen in sub klassen.
+ Dus stel je voor een werkcollege moet 3 keer gegeven worden, er worden dan 3 variabelen
+ gemaakt, namelijk seminar_1, seminar_2 en seminar_3. Deze kunnen dan weer ingeroosterd
+ worden
+"""
+
 
 class Course:
     def __init__(
