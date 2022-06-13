@@ -13,7 +13,7 @@ def load_students(filename: str) -> list:
         data (pd.DataFrame): _description_
 
     Returns:
-        dict: _description_
+        list: _description_
     """
     data = pd.read_csv(filename)
     students = []
@@ -28,7 +28,7 @@ def load_students(filename: str) -> list:
     return students
 
 
-def load_rooms(filename: str) -> list:
+def load_rooms(filename: str) -> dict:
     """_summary_
 
     Args:
@@ -40,12 +40,12 @@ def load_rooms(filename: str) -> list:
 
     data = pd.read_csv(filename)
 
-    rooms = []
+    rooms = {}
 
     for _, row in data.iterrows():
         room_num = row[0]
         student_cap = row[1]
-        rooms.append(Room(room_num, student_cap))
+        rooms[room_num] = Room(room_num, student_cap)
 
     return rooms
 

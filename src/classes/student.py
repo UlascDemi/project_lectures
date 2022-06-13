@@ -11,7 +11,10 @@ class Student:
         self._student_num = student_num
         self._courses = courses
 
-        self._time_table = np.array((5, 5))  # hierin komt een tuple: (Room, Course)
+        # List comprehension van hel
+        self._time_table = [[[] for i in range(5)] for i in range(5)]
+
+        # hierin komt een tuple: (Room, Course)
 
     def get_first_name(self) -> str:
         """
@@ -49,7 +52,7 @@ class Student:
         """
         return self._courses
 
-    def get_time_table_student(self) -> list:
+    def get_time_table(self) -> list:
         """
         Returns timetable of a student
 

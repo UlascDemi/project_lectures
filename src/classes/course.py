@@ -22,9 +22,9 @@ class Course:
     ):
         self._course_name = course
 
-        self._n_lecture = lecture
-        self._n_seminar = seminar
-        self._n_practica = practica
+        self.n_lecture = lecture
+        self.n_seminar = seminar
+        self.n_practica = practica
 
         self._seminar_cap = max_students_werk
         self._pract_cap = max_students_prac
@@ -40,6 +40,8 @@ class Course:
         self._needed_practica = 0
         self._students_per_practicum = 0
 
+        self._time_table = [["-"] * 5 for i in range(5)]  # hier komen Rooms in
+
         # TODO misschien dit weg, want we krijgen de hoeveelheid studenten al via enroll()
         self.calc_seminars()
         self.calc_practica()
@@ -49,13 +51,13 @@ class Course:
 
     def calc_practica(self) -> None:
         """_summary_"""
-        if self._n_practica != 0:
+        if self.n_practica != 0:
 
             # Calculate amount of classes needed for one practicum
             self._class_per_practicum = ceil(self._expected_students / self._pract_cap)
 
             # Calculate total needed classes for all practicum
-            self._needed_practica = self._n_practica * self._class_per_practicum
+            self._needed_practica = self.n_practica * self._class_per_practicum
 
             # Calculate students per seminar
             self._students_per_practicum = ceil(
@@ -64,13 +66,13 @@ class Course:
 
     def calc_seminars(self) -> None:
         """_summary_"""
-        if self._n_seminar != 0:
+        if self.n_seminar != 0:
 
             # Calculate amount of classes needed for one seminar
             self._class_per_seminar = ceil(self._expected_students / self._seminar_cap)
 
             # Calculate total needed classes for all seminars
-            self._needed_seminars = self._n_seminar * self._class_per_seminar
+            self._needed_seminars = self.n_seminar * self._class_per_seminar
 
             # Calculate students per seminar
             self._students_per_seminar = ceil(
@@ -87,14 +89,33 @@ class Course:
         return self._course_name
 
     def get_n_lecture(self) -> int:
-        """_summary_
+        """
+        Returns the amount of given lectures per week
 
         Returns:
-            int: _description_
+            int: amount of given lectures per week
         """
-        return self._n_lecture
+        return self.n_lecture
 
-    def get_expected_stud(self) -> None:
+    def get_time_table(self) -> list:
+        """
+        Returns timetable
+
+        Returns:
+            list: _description_
+        """
+        return self._time_table
+
+    def get_enrol_students(self) -> list:
+        """
+        Returns the enrolled students
+
+        Returns:
+            list: enrolled students
+        """
+        return self._enrolled_students
+
+    def get_expected_students(self) -> None:
         """_summary_
 
         Returns:
@@ -109,3 +130,6 @@ class Course:
             value (_type_): _description_
         """
         self._expected_students = value
+
+    def __repr__(self) -> str:
+        return f"{self._course_name}"
