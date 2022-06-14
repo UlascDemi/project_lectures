@@ -76,7 +76,9 @@ class Course:
         if self.n_practica != 0:
 
             # Calculate amount of classes needed for one practicum
-            self._groups_per_practicum = ceil(self.get_n_enrol_students() / self._pract_cap)
+            self._groups_per_practicum = ceil(
+                self.get_n_enrol_students() / self._pract_cap
+            )
 
             # Calculate total needed classes for all practicum
             self._needed_prac_groups = self.n_practica * self._groups_per_practicum
@@ -133,13 +135,22 @@ class Course:
     def get_n_enrol_students(self) -> int:
         return len(self._enrolled_students)
 
-    def set_expected_stud(self, value) -> None:
-        """_summary_
+    def get_groups_per_seminar(self) -> int:
+        return self._groups_per_seminar
 
-        Args:
-            value (_type_): _description_
-        """
-        self._expected_students = value
+    def get_stud_per_sem_group(self) -> int:
+        return self._students_per_sem_group
+
+    def get_seminar_groups(self) -> list:
+        return self._seminar_groups
+
+    # def set_expected_stud(self, value) -> None:
+    #     """_summary_
+
+    #     Args:
+    #         value (_type_): _description_
+    #     """
+    #     self._expected_students = value
 
     def __repr__(self) -> str:
         return f"{self._course_name}, {self.get_n_enrol_students()}"

@@ -44,22 +44,25 @@ def main():
         course.calc_seminars()
         course.calc_practica()
 
-        # TODO DIT FIXEN IS PRIVATE
         course.subdivide_into_groups(
-            course._groups_per_seminar,
-            course._students_per_sem_group,
-            course._seminar_groups,
+            course.get_groups_per_seminar(),
+            course.get_stud_per_sem_group(),
+            course.get_seminar_groups(),
         )
+
+        # TODO hier moeten nu nog de practica ingedeeld worden
+        # course.subdivide_into_groups(practica dingen)
 
     # -----------------------Create timetable, based on courses---------------------------
     available_rooms = []
 
+    # Create a list of all available rooms, with all available time slots
     for room in rooms.values():
         for day in range(len(DAYS)):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
 
-    # Go through all courses
+    # Schedule all courses
     for course in courses_sorted:
         while not schedule_course(course, available_rooms):
             schedule_course(course, available_rooms)
@@ -113,7 +116,7 @@ def schedule_lecture(course, available_rooms) -> bool:
 
         # If no rooms found, choose new day and time slot and try over
         if len(choosable_rooms) == 0:
-            print("werk ik")  # moet later eruit
+            print("werk ik")  # TODO moet later eruit
             return False
 
         # Choose random time slot
