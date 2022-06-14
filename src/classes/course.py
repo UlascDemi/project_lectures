@@ -32,51 +32,58 @@ class Course:
         self._expected_students = expected
         self._enrolled_students = []
 
-        self._class_per_seminar = 0
-        self._needed_seminars = 0
-        self._students_per_seminar = 0
+        self._groups_per_seminar = 0
+        # self._needed_sem_groups = 0
+        self._students_per_sem_group = 0
 
-        self._class_per_practicum = 0
-        self._needed_practica = 0
-        self._students_per_practicum = 0
+        self._seminar_groups = []
+
+        self._groups_per_practicum = 0
+        self._needed_prac_groups = 0
+        self._students_per_prac_group = 0
+
+        self._prac_groups = []
 
         self._time_table = [["-"] * 5 for i in range(5)]  # hier komen Rooms in
 
-        # TODO misschien dit weg, want we krijgen de hoeveelheid studenten al via enroll()
-        self.calc_seminars()
-        self.calc_practica()
-
     def enroll(self, student) -> None:
         self._enrolled_students.append(student)
+
+    def subdivide_into_groups(self, n_group, stud_per_group, groups) -> None:
+        if n_group != 0:
+            for i in range(0, self.get_n_enrol_students(), stud_per_group):
+                groups.append(self.get_enrol_students()[i : i + stud_per_group])
+
+    def calc_seminars(self) -> None:
+        """_summary_"""
+        if self.n_seminar != 0:
+
+            # Calculate amount of groups needed for one seminar
+            self._groups_per_seminar = ceil(
+                self.get_n_enrol_students() / self._seminar_cap
+            )
+
+            # # Calculate total needed groups for all seminars
+            # self._needed_sem_groups = self.n_seminar * self._groups_per_seminar
+
+            # Calculate students per group
+            self._students_per_sem_group = ceil(
+                self.get_n_enrol_students() / self._groups_per_seminar
+            )
 
     def calc_practica(self) -> None:
         """_summary_"""
         if self.n_practica != 0:
 
             # Calculate amount of classes needed for one practicum
-            self._class_per_practicum = ceil(self._expected_students / self._pract_cap)
+            self._groups_per_practicum = ceil(self.get_n_enrol_students() / self._pract_cap)
 
             # Calculate total needed classes for all practicum
-            self._needed_practica = self.n_practica * self._class_per_practicum
+            self._needed_prac_groups = self.n_practica * self._groups_per_practicum
 
             # Calculate students per seminar
-            self._students_per_practicum = ceil(
-                self._expected_students / self._class_per_practicum
-            )
-
-    def calc_seminars(self) -> None:
-        """_summary_"""
-        if self.n_seminar != 0:
-
-            # Calculate amount of classes needed for one seminar
-            self._class_per_seminar = ceil(self._expected_students / self._seminar_cap)
-
-            # Calculate total needed classes for all seminars
-            self._needed_seminars = self.n_seminar * self._class_per_seminar
-
-            # Calculate students per seminar
-            self._students_per_seminar = ceil(
-                self._expected_students / self._class_per_seminar
+            self._students_per_prac_group = ceil(
+                self.get_n_enrol_students() / self._groups_per_practicum
             )
 
     def get_course_name(self) -> str:
@@ -123,6 +130,9 @@ class Course:
         """
         return self._expected_students
 
+    def get_n_enrol_students(self) -> int:
+        return len(self._enrolled_students)
+
     def set_expected_stud(self, value) -> None:
         """_summary_
 
@@ -132,4 +142,4 @@ class Course:
         self._expected_students = value
 
     def __repr__(self) -> str:
-        return f"{self._course_name}, {self._expected_students}"
+        return f"{self._course_name}, {self.get_n_enrol_students()}"

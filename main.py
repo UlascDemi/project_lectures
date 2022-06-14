@@ -34,12 +34,24 @@ def main():
         for course_name in course_names:
             courses[course_name].enroll(student)
 
-    # -----------------------Create timetable, based on courses---------------------------
     courses_list = list(courses.values())
     courses_sorted = sorted(
-        courses_list, key=lambda course: course.get_expected_students(), reverse=True
+        courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
 
+    # ----------------------Subdivide students into groups--------------------------------
+    for course in courses_sorted:
+        course.calc_seminars()
+        course.calc_practica()
+
+        # TODO DIT FIXEN IS PRIVATE
+        course.subdivide_into_groups(
+            course._groups_per_seminar,
+            course._students_per_sem_group,
+            course._seminar_groups,
+        )
+
+    # -----------------------Create timetable, based on courses---------------------------
     available_rooms = []
 
     for room in rooms.values():
@@ -92,7 +104,7 @@ def schedule_lecture(course, available_rooms) -> bool:
         if course.n_lecture == 0:
             return True
 
-        minimum_cap = course.get_expected_students()
+        minimum_cap = course.get_n_enrol_students()
 
         # Get all the rooms with enough capacity to fit all students
         choosable_rooms = [
