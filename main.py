@@ -1,3 +1,7 @@
+from matplotlib.style import available
+from src.classes.student import Student
+from src.classes.course import Course
+from src.classes.room import Room
 from src.loader.loader import load_students, load_rooms, load_courses
 
 import pandas as pd
@@ -89,15 +93,17 @@ def schedule_lecture(course, available_rooms) -> bool:
 
         # If no rooms found, choose new day and time slot and try over
         if len(choosable_rooms) == 0:
-            print("werk ik")
+            print("werk ik")  # moet later eruit
             return False
 
         # Choose random time slot
-        index = random.choice(range(len(choosable_rooms)))
-        room_time_slot = choosable_rooms[index]
+        room_time_slot = random.choice(choosable_rooms)
 
         # Remove time slot from list
-        available_rooms.pop(index)
+        # TODO, maak beter search method (is nu linear time O(n))
+        for j, time_slot in enumerate(available_rooms):
+            if time_slot == room_time_slot:
+                available_rooms.pop(j)
 
         # Unpack tuple
         room = room_time_slot[0]
@@ -178,9 +184,14 @@ def print_2d_list(object_to_print) -> None:
     list_to_print = object_to_print.get_time_table()
     object_type = type(object_to_print)
 
-    if object_type == "<class 'src.classes.student.Student'>":
+    # # BUG type vinden doet kut
+    # print(isinstance(object_type, Student))
+    # print(object_type)
+    # print(type(Student))
+
+    if object_type == type(Student):
         print(f"Timetable: Student {object_to_print}")
-    elif object_type == "<class 'src.classes.student.Course'>":
+    elif object_type == type(Course):
         print(f"Timetable: Course {object_to_print}")
     else:
         print(f"Timetable: Room {object_to_print}")
