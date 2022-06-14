@@ -136,15 +136,15 @@ def schedule_practica():
 
 
 def conflict_count(students) -> int:
-    """_summary_
+    """
+    _summary_
 
     Args:
-        students (list): _description_
+        students (_type_): _description_
 
     Returns:
         int: _description_
     """
-
     conflict_count = 0
 
     # Go through every student
