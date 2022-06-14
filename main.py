@@ -59,7 +59,19 @@ def main():
 
 
 def schedule_course(course, available_rooms) -> bool:
+<<<<<<< HEAD
     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+=======
+    """_summary_
+
+    Args:
+        course (_type_): _description_
+        available_rooms (_type_): _description_
+
+    Returns:
+        bool: _description_
+    """
+>>>>>>> 5f4cb2a9ab2e0bf2a2718807babf0a168897d3f9
     if (
         schedule_lecture(course, available_rooms)
         and schedule_seminar
