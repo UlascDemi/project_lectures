@@ -59,6 +59,7 @@ def main():
 
 
 def schedule_course(course, available_rooms) -> bool:
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     if (
         schedule_lecture(course, available_rooms)
         and schedule_seminar
