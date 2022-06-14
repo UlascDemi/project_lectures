@@ -1,4 +1,3 @@
-from matplotlib.style import available
 from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
@@ -59,9 +58,6 @@ def main():
 
 
 def schedule_course(course, available_rooms) -> bool:
-<<<<<<< HEAD
-    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-=======
     """_summary_
 
     Args:
@@ -71,7 +67,6 @@ def schedule_course(course, available_rooms) -> bool:
     Returns:
         bool: _description_
     """
->>>>>>> 5f4cb2a9ab2e0bf2a2718807babf0a168897d3f9
     if (
         schedule_lecture(course, available_rooms)
         and schedule_seminar
@@ -140,11 +135,11 @@ def schedule_lecture(course, available_rooms) -> bool:
     return True
 
 
-def schedule_seminar():
+def schedule_seminar() -> bool:
     pass
 
 
-def schedule_practica():
+def schedule_practica() -> bool:
     pass
 
 
@@ -195,19 +190,13 @@ def is_colliding(room, day, timeslot) -> bool:
 def print_2d_list(object_to_print) -> None:
 
     list_to_print = object_to_print.get_time_table()
-    object_type = type(object_to_print)
 
-    # # BUG type vinden doet kut
-    # print(isinstance(object_type, Student))
-    # print(object_type)
-    # print(type(Student))
-
-    if object_type == type(Student):
-        print(f"Timetable: Student {object_to_print}")
-    elif object_type == type(Course):
-        print(f"Timetable: Course {object_to_print}")
+    if isinstance(object_to_print, Student):
+        print(f"Timetable Student: {object_to_print}")
+    elif isinstance(object_to_print, Course):
+        print(f"Timetable Course: {object_to_print}")
     else:
-        print(f"Timetable: Room {object_to_print}")
+        print(f"Timetable Room: {object_to_print}")
 
     printable_list = np.transpose(np.array(list_to_print, dtype=object))
     print(
