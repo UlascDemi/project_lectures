@@ -59,6 +59,15 @@ def main():
 
 
 def schedule_course(course, available_rooms) -> bool:
+    """_summary_
+
+    Args:
+        course (_type_): _description_
+        available_rooms (_type_): _description_
+
+    Returns:
+        bool: _description_
+    """
     if (
         schedule_lecture(course, available_rooms)
         and schedule_seminar
