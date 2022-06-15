@@ -52,7 +52,7 @@ class Course:
     def subdivide_into_groups(self, n_group, stud_per_group, groups) -> None:
         if n_group != 0:
             for i in range(0, self.get_n_enrol_students(), stud_per_group):
-                groups.append(self.get_enrol_students()[i : i + stud_per_group])
+                groups.append(self.get_enrol_students()[i: i + stud_per_group])
 
     def calc_seminars(self) -> None:
         """_summary_"""
@@ -106,6 +106,12 @@ class Course:
         """
         return self.n_lecture
 
+    def get_n_seminar(self) -> int:
+        return self.n_seminar
+
+    def get_n_practicum(self) -> int:
+        return self.n_practica
+
     def get_time_table(self) -> list:
         """
         Returns timetable
@@ -143,6 +149,15 @@ class Course:
 
     def get_seminar_groups(self) -> list:
         return self._seminar_groups
+
+    def get_groups_per_practicum(self) -> int:
+        return self._groups_per_practicum
+
+    def get_stud_per_prac_group(self) -> int:
+        return self._students_per_prac_group
+
+    def get_practicum_groups(self) -> list:
+        return self._prac_groups
 
     # def set_expected_stud(self, value) -> None:
     #     """_summary_

@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# ---------------------------------------------------------------------------
+# Created By  :
+# Created Date:
+# ---------------------------------------------------------------------------
+from __future__ import annotations
+
 from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
@@ -50,6 +58,12 @@ def main():
             course.get_seminar_groups(),
         )
 
+        course.subdivide_into_groups(
+            course.get_groups_per_practicum(),
+            course.get_stud_per_prac_group(),
+            course.get_practicum_groups()
+        )
+
         # TODO hier moeten nu nog de practica ingedeeld worden
         # course.subdivide_into_groups(practica dingen)
 
@@ -64,12 +78,28 @@ def main():
 
     # Schedule all courses
     for course in courses_sorted:
-        while not schedule_course(course, available_rooms):
-            schedule_course(course, available_rooms)
+        schedule_course(course, available_rooms)
 
     print_2d_list(students[16])
 
     print(f"\nConflict count: {conflict_count(students)}")
+
+
+def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
+    """_summary_
+
+    Args:
+        rooms (_type_): _description_
+        min_capacity (_type_): _description_
+
+    Returns:
+        list: _description_
+    """
+    choosable_rooms = [
+        room for room in rooms if (room[0].get_capacity() >= min_capacity)
+    ]
+
+    return choosable_rooms
 
 
 def schedule_course(course, available_rooms) -> bool:
@@ -84,15 +114,15 @@ def schedule_course(course, available_rooms) -> bool:
     """
     if (
         schedule_lecture(course, available_rooms)
-        and schedule_seminar
-        and schedule_practica
+        and schedule_seminar(course, available_rooms)
+        and schedule_practicum(course, available_rooms)
     ):
         return True
 
     return False
 
 
-def schedule_lecture(course, available_rooms) -> bool:
+def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
     """_summary_
 
     Args:
@@ -102,7 +132,7 @@ def schedule_lecture(course, available_rooms) -> bool:
     Returns:
         bool: _description_
     """
-    for i in range(course.n_lecture):
+    for _ in range(course.n_lecture):
         # Checks if lectures need to be given
         if course.n_lecture == 0:
             return True
@@ -110,13 +140,11 @@ def schedule_lecture(course, available_rooms) -> bool:
         minimum_cap = course.get_n_enrol_students()
 
         # Get all the rooms with enough capacity to fit all students
-        choosable_rooms = [
-            room for room in available_rooms if (room[0].get_capacity() >= minimum_cap)
-        ]
+        choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
 
-        # If no rooms found, choose new day and time slot and try over
+        # If no rooms found, Schedule couldnt be found
         if len(choosable_rooms) == 0:
-            print("werk ik")  # TODO moet later eruit
+            print(f"Couldnt schedule lecture: {course}")
             return False
 
         # Choose random time slot
@@ -124,8 +152,8 @@ def schedule_lecture(course, available_rooms) -> bool:
 
         # Remove time slot from list
         # TODO, maak beter search method (is nu linear time O(n))
-        for j, time_slot in enumerate(available_rooms):
-            if time_slot == room_time_slot:
+        for j, time_slot_tmp in enumerate(available_rooms):
+            if time_slot_tmp == room_time_slot:
                 available_rooms.pop(j)
 
         # Unpack tuple
@@ -145,17 +173,90 @@ def schedule_lecture(course, available_rooms) -> bool:
         for student in course.get_enrol_students():
             student_time_table = student.get_time_table()
 
-            student_time_table[day][time_slot].append((room, course))
+            student_time_table[day][time_slot].append((room, course, "Lec"))
 
     return True
 
 
-def schedule_seminar() -> bool:
-    pass
+def schedule_seminar(course: Course, available_rooms: list) -> bool:
+
+    seminar_groups = course.get_seminar_groups()
+
+    if len(seminar_groups) == 0:
+        return True
+
+    for _ in range(course.get_n_seminar()):
+        for group in seminar_groups:
+
+            minimum_cap = len(group)
+            choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
+
+            if len(choosable_rooms) == 0:
+                print(f"Couldnt schedule seminar: {course}")
+                return False
+
+            room_time_slot = random.choice(choosable_rooms)
+
+            for j, time_slot_tmp in enumerate(available_rooms):
+                if time_slot_tmp == room_time_slot:
+                    available_rooms.pop(j)
+
+            room = room_time_slot[0]
+            day = room_time_slot[1]
+            time_slot = room_time_slot[2]
+
+            course_time_table = course.get_time_table()
+            room_time_table = room.get_time_table()
+
+            course_time_table[day][time_slot] = room
+            room_time_table[day][time_slot] = course
+
+            for student in group:
+                student_time_table = student.get_time_table()
+                student_time_table[day][time_slot].append((room, course, "Sem"))
+
+    return True
 
 
-def schedule_practica() -> bool:
-    pass
+def schedule_practicum(course: Course, available_rooms: list) -> bool:
+
+    practicum_groups = course.get_practicum_groups()
+
+    if len(practicum_groups) == 0:
+        return True
+
+    for _ in range(course.get_n_practicum()):
+
+        for group in practicum_groups:
+
+            minimum_cap = len(group)
+            choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
+
+            if len(choosable_rooms) == 0:
+                print(f"Couldnt schedule practicum: {course}")
+                return False
+
+            room_time_slot = random.choice(choosable_rooms)
+
+            for j, time_slot_tmp in enumerate(available_rooms):
+                if time_slot_tmp == room_time_slot:
+                    available_rooms.pop(j)
+
+            room = room_time_slot[0]
+            day = room_time_slot[1]
+            time_slot = room_time_slot[2]
+
+            course_time_table = course.get_time_table()
+            room_time_table = room.get_time_table()
+
+            course_time_table[day][time_slot] = room
+            room_time_table[day][time_slot] = course
+
+            for student in group:
+                student_time_table = student.get_time_table()
+                student_time_table[day][time_slot].append((room, course, "Prac"))
+
+    return True
 
 
 def conflict_count(students) -> int:
