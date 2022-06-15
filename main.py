@@ -102,12 +102,12 @@ def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
     return choosable_rooms
 
 
-def schedule_course(course, available_rooms) -> bool:
+def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
     """_summary_
 
     Args:
-        course (_type_): _description_
-        available_rooms (_type_): _description_
+        course (Course): _description_
+        available_rooms (list[Room]): _description_
 
     Returns:
         bool: _description_
@@ -126,8 +126,8 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
     """_summary_
 
     Args:
-        course (_type_): _description_
-        available_rooms (_type_): _description_
+        course (Course): _description_
+        available_rooms (list[Room]): _description_
 
     Returns:
         bool: _description_
@@ -150,11 +150,8 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
         # Choose random time slot
         room_time_slot = random.choice(choosable_rooms)
 
-        # Remove time slot from list
-        # TODO, maak beter search method (is nu linear time O(n))
-        for j, time_slot_tmp in enumerate(available_rooms):
-            if time_slot_tmp == room_time_slot:
-                available_rooms.pop(j)
+        # Remove time slot from available room time slots list
+        available_rooms.remove(room_time_slot)
 
         # Unpack tuple
         room = room_time_slot[0]
@@ -178,39 +175,56 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
     return True
 
 
-def schedule_seminar(course: Course, available_rooms: list) -> bool:
+def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
+    """_summary_
 
+    Args:
+        course (Course): _description_
+        available_rooms (list[Room]): _description_
+
+    Returns:
+        bool: _description_
+    """
     seminar_groups = course.get_seminar_groups()
 
+    # If there are no seminar groups, return the function
     if len(seminar_groups) == 0:
         return True
 
+    # Repeat scheduling for the amount of times seminar needs to be given
     for _ in range(course.get_n_seminar()):
+
+        # Schedule invidual groups
         for group in seminar_groups:
 
             minimum_cap = len(group)
             choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
 
+            # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
                 print(f"Couldnt schedule seminar: {course}")
                 return False
 
+            # Choose a time slot
             room_time_slot = random.choice(choosable_rooms)
 
-            for j, time_slot_tmp in enumerate(available_rooms):
-                if time_slot_tmp == room_time_slot:
-                    available_rooms.pop(j)
+            # Remove time slot from available room time slots list
+            available_rooms.remove(room_time_slot)
 
+            # Unpack time_slot tuple
             room = room_time_slot[0]
             day = room_time_slot[1]
             time_slot = room_time_slot[2]
 
+            # Get time tables
             course_time_table = course.get_time_table()
             room_time_table = room.get_time_table()
 
+            # Update time table
             course_time_table[day][time_slot] = room
             room_time_table[day][time_slot] = course
 
+            # Update time table of the students
             for student in group:
                 student_time_table = student.get_time_table()
                 student_time_table[day][time_slot].append((room, course, "Sem"))
@@ -218,40 +232,56 @@ def schedule_seminar(course: Course, available_rooms: list) -> bool:
     return True
 
 
-def schedule_practicum(course: Course, available_rooms: list) -> bool:
+def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
+    """_summary_
 
+    Args:
+        course (Course): _description_
+        available_rooms (list[Room]): _description_
+
+    Returns:
+        bool: _description_
+    """
     practicum_groups = course.get_practicum_groups()
 
+    # If there are no seminar groups, return the function
     if len(practicum_groups) == 0:
         return True
 
+    # Repeat scheduling for the amount of times seminar needs to be given
     for _ in range(course.get_n_practicum()):
 
+        # Schedule invidual groups
         for group in practicum_groups:
 
             minimum_cap = len(group)
             choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
 
+            # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
                 print(f"Couldnt schedule practicum: {course}")
                 return False
 
+             # Choose a time slot
             room_time_slot = random.choice(choosable_rooms)
 
-            for j, time_slot_tmp in enumerate(available_rooms):
-                if time_slot_tmp == room_time_slot:
-                    available_rooms.pop(j)
+            # Remove time slot from available room time slots list
+            available_rooms.remove(room_time_slot)
 
+            # Unpack time_slot tuple
             room = room_time_slot[0]
             day = room_time_slot[1]
             time_slot = room_time_slot[2]
 
+            # Get time tables
             course_time_table = course.get_time_table()
             room_time_table = room.get_time_table()
 
+            # Update time tables
             course_time_table[day][time_slot] = room
             room_time_table[day][time_slot] = course
 
+            # Update time tables of the students
             for student in group:
                 student_time_table = student.get_time_table()
                 student_time_table[day][time_slot].append((room, course, "Prac"))
@@ -259,12 +289,11 @@ def schedule_practicum(course: Course, available_rooms: list) -> bool:
     return True
 
 
-def conflict_count(students) -> int:
-    """
-    _summary_
+def conflict_count(students: list[Student]) -> int:
+    """_summary_
 
     Args:
-        students (_type_): _description_
+        students (list[Student]): _description_
 
     Returns:
         int: _description_
@@ -286,7 +315,7 @@ def conflict_count(students) -> int:
     return conflict_count
 
 
-def is_colliding(room, day, timeslot) -> bool:
+def is_colliding(room: Room, day: int, timeslot: int) -> bool:
     """_summary_
 
     Args:

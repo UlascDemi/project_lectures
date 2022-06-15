@@ -7,14 +7,6 @@ from src.classes import Student, Room, Course
 
 
 def load_students(filename: str) -> list:
-    """_summary_
-
-    Args:
-        data (pd.DataFrame): _description_
-
-    Returns:
-        list: _description_
-    """
     data = pd.read_csv(filename)
     students = []
 
@@ -29,15 +21,6 @@ def load_students(filename: str) -> list:
 
 
 def load_rooms(filename: str) -> dict:
-    """_summary_
-
-    Args:
-        data (pd.DataFrame): _description_
-
-    Returns:
-        dict: _description_
-    """
-
     data = pd.read_csv(filename)
 
     rooms = {}
@@ -51,14 +34,6 @@ def load_rooms(filename: str) -> dict:
 
 
 def load_courses(filename: str) -> dict:
-    """_summary_
-
-    Args:
-        data (pd.DataFrame): _description_
-
-    Returns:
-        dict: _description_
-    """
     data = pd.read_csv(filename)
 
     courses = {}

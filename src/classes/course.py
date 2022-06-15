@@ -1,13 +1,6 @@
 import numpy as np
 from math import ceil
 
-""" 
-TODO course moet alle studenten onderverdelen in sub klassen.
- Dus stel je voor een werkcollege moet 3 keer gegeven worden, er worden dan 3 variabelen
- gemaakt, namelijk seminar_1, seminar_2 en seminar_3. Deze kunnen dan weer ingeroosterd
- worden
-"""
-
 
 class Course:
     def __init__(
@@ -39,7 +32,7 @@ class Course:
         self._seminar_groups = []
 
         self._groups_per_practicum = 0
-        self._needed_prac_groups = 0
+        # self._needed_prac_groups = 0
         self._students_per_prac_group = 0
 
         self._prac_groups = []
@@ -49,7 +42,7 @@ class Course:
     def enroll(self, student) -> None:
         self._enrolled_students.append(student)
 
-    def subdivide_into_groups(self, n_group, stud_per_group, groups) -> None:
+    def subdivide_into_groups(self, n_group: int, stud_per_group: int, groups: list) -> None:
         if n_group != 0:
             for i in range(0, self.get_n_enrol_students(), stud_per_group):
                 groups.append(self.get_enrol_students()[i: i + stud_per_group])
