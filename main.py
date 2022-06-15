@@ -82,7 +82,7 @@ def main():
 
     print_2d_list(students[16])
 
-    print(f"\nConflict count: {conflict_count(students)}")
+    print(f"\nTotal conflict count: {conflict_count(students)}\n")
 
 
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
