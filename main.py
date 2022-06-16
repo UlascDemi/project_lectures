@@ -33,7 +33,7 @@ TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-
 def main():
 
     rooms = load_rooms("data/zalen.csv")
-    courses = load_courses("data/vakken.csv")
+    courses = load_courses("data/vakken.csv", "data/abbreviations.txt")
     students = load_students("data/studenten_en_vakken.csv")
 
     # -----------------------Enroll all students------------------------------------------
@@ -61,7 +61,7 @@ def main():
         course.subdivide_into_groups(
             course.get_groups_per_practicum(),
             course.get_stud_per_prac_group(),
-            course.get_practicum_groups()
+            course.get_practicum_groups(),
         )
 
         # TODO hier moeten nu nog de practica ingedeeld worden
@@ -89,8 +89,8 @@ def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
     """_summary_
 
     Args:
-        rooms (_type_): _description_
-        min_capacity (_type_): _description_
+        rooms (list:[Room]): a list containing all room objects
+        min_capacity (int): the minimum capacity the rooms need to have
 
     Returns:
         list: _description_
@@ -262,7 +262,7 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
                 print(f"Couldnt schedule practicum: {course}")
                 return False
 
-             # Choose a time slot
+            # Choose a time slot
             room_time_slot = random.choice(choosable_rooms)
 
             # Remove time slot from available room time slots list

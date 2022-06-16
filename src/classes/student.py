@@ -11,8 +11,9 @@ class Student:
         self._student_num = student_num
         self._courses = courses
 
-        # List comprehension van hel
+        # Helse list comprehension
         self._time_table = [[[] for i in range(5)] for i in range(5)]
+        a = [x for x in range(5)]
 
         # hierin komt een tuple: (Room, Course)
 

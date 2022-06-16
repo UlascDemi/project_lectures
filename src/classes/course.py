@@ -6,6 +6,7 @@ class Course:
     def __init__(
         self,
         course,
+        abbreviation,
         lecture,
         seminar,
         max_students_werk,
@@ -14,6 +15,7 @@ class Course:
         expected,
     ):
         self._course_name = course
+        self._abbreviation = abbreviation
 
         self.n_lecture = lecture
         self.n_seminar = seminar
@@ -42,10 +44,12 @@ class Course:
     def enroll(self, student) -> None:
         self._enrolled_students.append(student)
 
-    def subdivide_into_groups(self, n_group: int, stud_per_group: int, groups: list) -> None:
+    def subdivide_into_groups(
+        self, n_group: int, stud_per_group: int, groups: list
+    ) -> None:
         if n_group != 0:
             for i in range(0, self.get_n_enrol_students(), stud_per_group):
-                groups.append(self.get_enrol_students()[i: i + stud_per_group])
+                groups.append(self.get_enrol_students()[i : i + stud_per_group])
 
     def calc_seminars(self) -> None:
         """_summary_"""
@@ -161,4 +165,4 @@ class Course:
     #     self._expected_students = value
 
     def __repr__(self) -> str:
-        return f"{self._course_name}, {self.get_n_enrol_students()}"
+        return f"{self._abbreviation}, {self.get_n_enrol_students()}"

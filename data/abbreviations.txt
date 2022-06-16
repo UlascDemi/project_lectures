@@ -1,0 +1,30 @@
+course,abbreviation
+Advanced Heuristics,Adv Heur
+Algoritmen en complexiteit,Alg en Cmpl
+Analysemethoden en -technieken,Analyse en tech
+Architectuur en computerorganisatie,Arch en Comporg
+Autonomous Agents 2,Auto Agents 2
+Bioinformatica,Bioinfo
+Calculus 2,Calc 2
+Collectieve Intelligentie,Col Intel
+Compilerbouw,Compbouw
+Compilerbouw practicum,Compbouw prac
+Data Mining,Data Mining
+Databases 2,Databases 2
+Heuristieken 1,Heur 1
+Heuristieken 2,Heur 2
+Informatie- en organisatieontwerp,Info en Org
+Interactie-ontwerp,Inter ontwerp
+Kansrekenen 2,Kansrek 2
+Lineaire Algebra,Lin Alg
+Machine Learning,Mach learn
+Moderne Databases,Mod Data
+Netwerken en systeembeveiliging,Net en Sys
+Programmeren in Java 2,Progr in Java 2
+Project Genetic Algorithms,Proj Gen Alg
+Project Numerical Recipes,Proj Num Recipe
+Reflectie op de digitale cultuur,Refl Dig Cult
+Software engineering,Soft Eng
+Technology for games,Tech for Games
+Webprogrammeren en databases,Webprog and data
+Zoeken sturen en bewegen,Zoek stuur beweeg
