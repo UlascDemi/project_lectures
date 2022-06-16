@@ -14,7 +14,9 @@ from src.loader.loader import load_students, load_rooms, load_courses
 import pandas as pd
 import numpy as np
 import random
+
 from tabulate import tabulate
+from copy import deepcopy
 
 # TODO getters voor course schrijven - Brechje
 # TODO getters voor room schrijven - Ulas
@@ -82,7 +84,8 @@ def main():
 
     print_2d_list(students[16])
 
-    print(f"\nTotal conflict count: {conflict_count(students)}\n")
+    print(f"\nTotal conflict count: {conflict_count(students)}")
+    print(f"Total maluspoint count: {maluspoint_count(students)}")
 
 
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
@@ -315,6 +318,28 @@ def conflict_count(students: list[Student]) -> int:
     return conflict_count
 
 
+def tussenuur_count(students: list[Student]) -> int:
+    tussen_uur_maluspunt = 0
+    for student in students:
+        for day in student.get_time_table():
+            for i, _ in enumerate(day[:-2]):
+                if len(day[i]) != 0 and len(day[i + 1]) == 0 and len(day[i + 2]) != 0:
+                    tussen_uur_maluspunt += 1
+                elif len(day[i]) != 0 and len(day[i + 1]) == 0 and len(day[i + 2]) == 0:
+                    tussen_uur_maluspunt += 3
+
+    return tussen_uur_maluspunt
+
+
+def maluspoint_count(students: list[Student]):
+    conflicts = conflict_count(students)
+    tussenuren = tussenuur_count(students)
+
+    maluspoint = conflicts + tussenuren
+
+    return maluspoint
+
+
 def is_colliding(room: Room, day: int, timeslot: int) -> bool:
     """_summary_
 
@@ -334,16 +359,26 @@ def is_colliding(room: Room, day: int, timeslot: int) -> bool:
 
 def print_2d_list(object_to_print) -> None:
 
-    list_to_print = object_to_print.get_time_table()
+    time_table = object_to_print.get_time_table()
+
+    time_table_copy = deepcopy(time_table)
 
     if isinstance(object_to_print, Student):
         print(f"Timetable Student: {object_to_print}")
+
+        for i, _ in enumerate(time_table_copy):
+            for j, time_slot in enumerate(time_table_copy[i]):
+                if len(time_slot) == 0:
+                    time_table_copy[i][j] = "-"
+                else:
+                    time_table_copy[i][j] = ", ".join(map(str, time_slot))
+
     elif isinstance(object_to_print, Course):
         print(f"Timetable Course: {object_to_print}")
     else:
         print(f"Timetable Room: {object_to_print}")
 
-    printable_list = np.transpose(np.array(list_to_print, dtype=object))
+    printable_list = np.transpose(np.array(time_table_copy, dtype=object))
     print(
         tabulate(printable_list, headers=DAYS, showindex=TIME_SLOTS, tablefmt="github")
     )

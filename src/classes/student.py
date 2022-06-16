@@ -13,7 +13,6 @@ class Student:
 
         # Helse list comprehension
         self._time_table = [[[] for i in range(5)] for i in range(5)]
-        a = [x for x in range(5)]
 
         # hierin komt een tuple: (Room, Course)
 

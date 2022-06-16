@@ -38,6 +38,7 @@ def load_courses(filename: str, abbreviations: str) -> tuple[dict]:
     abbr = pd.read_csv(abbreviations)
 
     abbr_dict = dict(zip(abbr["course"], abbr["abbreviation"]))
+
     courses = {}
 
     for _, row in data.iterrows():
