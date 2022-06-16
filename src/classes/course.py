@@ -165,4 +165,4 @@ class Course:
     #     self._expected_students = value
 
     def __repr__(self) -> str:
-        return f"{self._course_name}, {self.get_n_enrol_students()}"
+        return f"{self._abbreviation}, {self.get_n_enrol_students()}"

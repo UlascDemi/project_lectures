@@ -33,10 +33,11 @@ def load_rooms(filename: str) -> dict:
     return rooms
 
 
-def load_courses(filename: str, abbreviations) -> tuple[dict]:
+def load_courses(filename: str, abbreviations: str) -> tuple[dict]:
     data = pd.read_csv(filename)
     abbr = pd.read_csv(abbreviations)
 
+    abbr_dict = dict(zip(abbr["course"], abbr["abbreviation"]))
     courses = {}
 
     for _, row in data.iterrows():
@@ -49,7 +50,7 @@ def load_courses(filename: str, abbreviations) -> tuple[dict]:
         expected = row[6]
         courses[course] = Course(
             course,
-            "aaa",
+            abbr_dict[course],
             lecture,
             seminar,
             max_stud_seminar,
