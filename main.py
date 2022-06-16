@@ -318,24 +318,66 @@ def conflict_count(students: list[Student]) -> int:
     return conflict_count
 
 
-def tussenuur_count(students: list[Student]) -> int:
+def oud_tussenuur_count(students: list[Student]) -> int:
     tussen_uur_maluspunt = 0
     for student in students:
         for day in student.get_time_table():
             for i, _ in enumerate(day[:-2]):
                 if len(day[i]) != 0 and len(day[i + 1]) == 0 and len(day[i + 2]) != 0:
                     tussen_uur_maluspunt += 1
-                elif len(day[i]) != 0 and len(day[i + 1]) == 0 and len(day[i + 2]) == 0:
+            for i, _ in enumerate(day[:-3]):
+                if len(day[i]) != 0 and len(day[i + 1]) == 0 and len(day[i + 2]) == 0 and  len(day[i + 3]) != 0:
                     tussen_uur_maluspunt += 3
+    # als we een 5de tijdslot hebben moet er een try and except in komen anders index out of bounce
+    return tussen_uur_maluspunt
+
+
+def tussenuur_count(students: list[Student]) -> int:
+    tussen_uur_maluspunt = 0
+
+    for student in students:
+        for day in student.get_time_table():
+            activiteit = 0
+            first_activity = 0
+            last_activity = 0
+
+            for i, time_slot in enumerate(day):
+                if len(time_slot) != 0:
+                    if activiteit == 0:
+                        first_activity = i
+                    activiteit += 1
+                    last_activity = i
+                
+            amount_activities = last_activity - first_activity +1
+            tussen_uren = amount_activities - activiteit
+            if tussen_uren == 1:
+                tussen_uur_maluspunt += 1
+            elif tussen_uren == 2:
+                tussen_uur_maluspunt += 3
+            elif tussen_uren > 2:
+                print("ERROR")
 
     return tussen_uur_maluspunt
+        
+
+
+ 
+
+
+    # eerste index activiteit, laatste index activiteit.
+    # van elkaar afhalen, plus 1 (vanwege 0) dit vergelijk je met hoeveel activiteiten er zijn geweest
+    # 
 
 
 def maluspoint_count(students: list[Student]):
     conflicts = conflict_count(students)
-    tussenuren = tussenuur_count(students)
+    nieuw_tussenuren = tussenuur_count(students)
+    oud_tussenuren = oud_tussenuur_count(students)
 
-    maluspoint = conflicts + tussenuren
+    print("Nieuwe tussenuren:", nieuw_tussenuren)
+    print("Oud_tussenuren:", oud_tussenuren)
+
+    maluspoint = conflicts + oud_tussenuren
 
     return maluspoint
 
