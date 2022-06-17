@@ -6,7 +6,7 @@ import numpy as np
 from src.classes import Student, Room, Course
 
 
-def load_students(filename: str) -> list:
+def load_students(filename: str) -> list[Student]:
     data = pd.read_csv(filename)
     students = []
 
@@ -20,7 +20,7 @@ def load_students(filename: str) -> list:
     return students
 
 
-def load_rooms(filename: str) -> dict:
+def load_rooms(filename: str) -> dict[Room]:
     data = pd.read_csv(filename)
 
     rooms = {}
@@ -33,7 +33,7 @@ def load_rooms(filename: str) -> dict:
     return rooms
 
 
-def load_courses(filename: str, abbreviations: str) -> tuple[dict]:
+def load_courses(filename: str, abbreviations: str) -> dict[Course]:
     data = pd.read_csv(filename)
     abbr = pd.read_csv(abbreviations)
 
