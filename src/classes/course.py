@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from src.classes import Student, Room, Course
 from math import ceil
 
 
@@ -40,18 +43,41 @@ class Course:
 
         self._time_table = [["-"] * 5 for i in range(5)]  # hier komen Rooms in
 
-    def enroll(self, student) -> None:
+    def enroll(self, student: Student) -> None:
+        """
+        Adds the enrolled students to the list 'enrolled_students'.
+
+        Args:
+            student (Student): Object of the student class
+        """
         self._enrolled_students.append(student)
+
 
     def subdivide_into_groups(
         self, n_group: int, stud_per_group: int, groups: list
     ) -> None:
+        """
+        Function that goes through all students enrolled in a course and divides 
+        them into the subgroups. 
+
+        Args:
+            n_group (int): Number of lessons to be given per class
+            stud_per_group (int): Maximum number of students who can participate in a class
+            groups (list): List where the groups need to subdived into
+        """
+        # If a lesson needs to be scheduled, walk through the enrolled students and 
+        # add the in the subgroup
         if n_group != 0:
             for i in range(0, self.get_n_enrol_students(), stud_per_group):
                 groups.append(self.get_enrol_students()[i : i + stud_per_group])
 
+
     def calc_seminars(self) -> None:
-        """_summary_"""
+        """
+        When a course has seminars, it calculates how many groups should be given. This 
+        is determined based on the students enrolled in that course. This is because the 
+        seminars have a maximum number of students who can participate in the class.
+        """
         if self.n_seminar != 0:
 
             # Calculate amount of groups needed for one seminar
@@ -59,16 +85,18 @@ class Course:
                 self.get_n_enrol_students() / self._seminar_cap
             )
 
-            # # Calculate total needed groups for all seminars
-            # self._needed_sem_groups = self.n_seminar * self._groups_per_seminar
-
             # Calculate students per group
             self._students_per_sem_group = ceil(
                 self.get_n_enrol_students() / self._groups_per_seminar
             )
 
+
     def calc_practica(self) -> None:
-        """_summary_"""
+        """
+        When a course has practica, it calculates how many groups should be given. This 
+        is determined based on the students enrolled in that course. This is because the 
+        practica have a maximum number of students who can participate in the class.
+        """
         if self.n_practica != 0:
 
             # Calculate amount of classes needed for one practicum
@@ -84,6 +112,7 @@ class Course:
                 self.get_n_enrol_students() / self._groups_per_practicum
             )
 
+
     def get_course_name(self) -> str:
         """
         Returns the name of the course
@@ -92,6 +121,7 @@ class Course:
             str: the name of the course
         """
         return self._course_name
+
 
     def get_n_lecture(self) -> int:
         """
@@ -102,42 +132,64 @@ class Course:
         """
         return self.n_lecture
 
+
     def get_n_seminar(self) -> int:
+        """
+        Returns the amount of given seminars per week
+
+        Returns:
+            int: amount of given seminars per week
+        """
         return self.n_seminar
 
+
     def get_n_practicum(self) -> int:
+        """
+        Returns the amount of given practica per week
+
+        Returns:
+            int: amount of given practica per week
+        """
         return self.n_practica
+
 
     def get_time_table(self) -> list:
         """
-        Returns timetable
+        Returns timetable of a student
 
         Returns:
-            list: _description_
+            list: timetable of a student for one week
         """
         return self._time_table
 
+
     def get_enrol_students(self) -> list:
         """
-        Returns the enrolled students
+        Returns the enrolled students for a course
 
         Returns:
             list: enrolled students
         """
         return self._enrolled_students
 
-    def get_expected_students(self) -> None:
-        """_summary_
-
-        Returns:
-            _type_: _description_
-        """
-        return self._expected_students
 
     def get_n_enrol_students(self) -> int:
+        """
+        Returns the amount of enrolled students for a course
+
+        Returns:
+            int: amount of enrolled students
+        """
         return len(self._enrolled_students)
 
+
     def get_groups_per_seminar(self) -> int:
+        """
+        _summary_
+
+        Returns:
+            int: _description_
+        """
         return self._groups_per_seminar
 
     def get_stud_per_sem_group(self) -> int:
@@ -155,13 +207,6 @@ class Course:
     def get_practicum_groups(self) -> list:
         return self._prac_groups
 
-    # def set_expected_stud(self, value) -> None:
-    #     """_summary_
-
-    #     Args:
-    #         value (_type_): _description_
-    #     """
-    #     self._expected_students = value
 
     def __repr__(self) -> str:
         return f"{self._abbreviation}, {self.get_n_enrol_students()}"
