@@ -87,7 +87,7 @@ def main():
 
 
     print(f"\nTotal conflict count: {conflict_count(students)}")
-    print(f"Total maluspoint count: {maluspoint_count(students, rooms.values())}")
+    print(f"Total maluspoint count: {maluspoint_count(students, rooms)}")
 
 
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
@@ -401,7 +401,7 @@ def capacity_count(rooms: list[Room]) -> int:
     return excess_students
 
 
-def maluspoint_count(students: list[Student], rooms: list[Room]):
+def maluspoint_count(students: list[Student], rooms: dict[Room]):
     conflicts = conflict_count(students)
     nieuw_tussenuren = tussenuur_count(students)
     capacity_conflict = capacity_count(rooms)
