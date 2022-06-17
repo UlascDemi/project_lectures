@@ -83,10 +83,12 @@ def main():
         schedule_course(course, available_rooms)
 
     print_2d_list(students[16])
+    print_2d_list(rooms["C0.110"])
+
 
 
     print(f"\nTotal conflict count: {conflict_count(students)}")
-    print(f"Total maluspoint count: {maluspoint_count(students)}")
+    print(f"Total maluspoint count: {maluspoint_count(students, rooms)}")
 
 
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
@@ -362,13 +364,30 @@ def tussenuur_count(students: list[Student]) -> int:
 
     return tussen_uur_maluspunt
         
+def big_room_count(rooms: dict[Room]):
+    #FUNCTIE NIET AFGESCHREVEN!!!
+    #GEEFT ERROR. WE WAREN ER HELEMAAL KLAAR MEE
+    #WE PROBEERDE DE VALUE VAN VIJFDE TIJDSLOT TE KRIJGEN IN ROOMS
+    
+    maluspunten = 0
 
+    room = rooms["C0.110"]
+    time_table = room.get_time_table()
 
-def maluspoint_count(students: list[Student]):
+    for day in time_table:
+        if day[4] != "-":
+            maluspunten += 5
+
+    return maluspunten
+    
+
+def maluspoint_count(students: list[Student], rooms):
     conflicts = conflict_count(students)
     nieuw_tussenuren = tussenuur_count(students)
+    laat_tijdslot = big_room_count(rooms)
+    print(laat_tijdslot)
 
-    maluspoint = conflicts + nieuw_tussenuren
+    maluspoint = conflicts + nieuw_tussenuren + laat_tijdslot
 
     return maluspoint
 
