@@ -1,7 +1,3 @@
-import numpy as np
-from math import ceil
-
-
 class Room:
     def __init__(self, roomnumber, capacity):
         self._room_number = roomnumber

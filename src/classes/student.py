@@ -1,7 +1,3 @@
-import numpy as np
-import pandas as pd
-
-
 class Student:
     def __init__(
         self, last_name: str, first_name: str, student_num: str, courses: list
@@ -12,7 +8,7 @@ class Student:
         self._courses = courses
 
         # Helse list comprehension
-        self._time_table = [[[] for i in range(5)] for i in range(5)]
+        self._time_table = [[[] for _ in range(5)] for _ in range(5)]
 
         # hierin komt een tuple: (Room, Course)
 

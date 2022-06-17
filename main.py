@@ -33,7 +33,7 @@ DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-19:00"]
 
 
-def main():
+def main(print_time_table=True):
 
     rooms = load_rooms("data/zalen.csv")
     courses = load_courses("data/vakken.csv", "data/abbreviations.txt")
@@ -83,10 +83,16 @@ def main():
     for course in courses_sorted:
         schedule_course(course, available_rooms)
 
-    print_2d_list(students[16])
+    conflicts = conflict_count(students)
+    malus_points = malus_point_count(students, rooms)
 
-    print(f"\nTotal conflict count: {conflict_count(students)}")
-    print(f"Total maluspoint count: {malus_point_count(students, rooms)}")
+    if print_time_table:
+        print_2d_list(students[16])
+
+        print(f"\nTotal conflict count: {conflicts}")
+        print(f"Total maluspoint count: {malus_points}")
+
+    return malus_points
 
 
 def print_2d_list(object_to_print) -> None:
@@ -117,4 +123,16 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+
+    results = []
+
+    iterations = 1000
+
+    for i in range(iterations):
+        results.append(main(print_time_table=False))
+        if i % 50 == 0:
+            print(f"Step {i} / {iterations}")
+
+    print(f"minimum malus points = {min(results)}")
+    print(f"average malus points = {sum(results) / len(results)}")
