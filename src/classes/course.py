@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.classes import Student, Room, Course
+from src.classes import Student
 from math import ceil
 
 
