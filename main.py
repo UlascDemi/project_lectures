@@ -84,9 +84,8 @@ def main():
 
     print_2d_list(students[16])
 
-
     print(f"\nTotal conflict count: {conflict_count(students)}")
-    print(f"Total maluspoint count: {maluspoint_count(students)}")
+    print(f"Total maluspoint count: {maluspoint_count(students, rooms.values())}")
 
 
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
@@ -168,7 +167,7 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
 
         # Update time tables
         course_time_table[day][time_slot] = room
-        room_time_table[day][time_slot] = course
+        room_time_table[day][time_slot] = course, course.get_enrol_students()
 
         # Update time tables for all students
         for student in course.get_enrol_students():
@@ -226,7 +225,7 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
 
             # Update time table
             course_time_table[day][time_slot] = room
-            room_time_table[day][time_slot] = course
+            room_time_table[day][time_slot] = course, group
 
             # Update time table of the students
             for student in group:
@@ -283,7 +282,7 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
 
             # Update time tables
             course_time_table[day][time_slot] = room
-            room_time_table[day][time_slot] = course
+            room_time_table[day][time_slot] = course, group
 
             # Update time tables of the students
             for student in group:
@@ -348,9 +347,9 @@ def tussenuur_count(students: list[Student]) -> int:
                         first_activity = i
                     activiteit += 1
                     last_activity = i
-            
-            if first_activity != last_activity:    
-                amount_activities = last_activity - first_activity +1
+
+            if first_activity != last_activity:
+                amount_activities = last_activity - first_activity + 1
                 tussen_uren = amount_activities - activiteit
 
                 if tussen_uren == 1:
@@ -361,14 +360,35 @@ def tussenuur_count(students: list[Student]) -> int:
                     print("ERROR")
 
     return tussen_uur_maluspunt
-        
 
 
-def maluspoint_count(students: list[Student]):
+def capacity_count(rooms: list[Room]) -> int:
+    excess_students = 0
+
+    for room in rooms:
+        for day in room.get_time_table():
+            for time_slot in day:
+
+                # Go to next time_slot if timeslot is not used
+                if time_slot == "-":
+                    continue
+                
+                # Compare the amount of students scheduled and the capacity
+                students_in_room = len(time_slot[1])
+                capacity = room.get_capacity()
+                
+                if students_in_room > room.get_capacity():
+                    excess_students += students_in_room - capacity
+
+    return excess_students
+
+
+def maluspoint_count(students: list[Student], rooms: list[Room]):
     conflicts = conflict_count(students)
     nieuw_tussenuren = tussenuur_count(students)
+    capacity_conflict = capacity_count(rooms)
 
-    maluspoint = conflicts + nieuw_tussenuren
+    maluspoint = conflicts + nieuw_tussenuren + capacity_conflict
 
     return maluspoint
 
