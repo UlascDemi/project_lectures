@@ -6,6 +6,7 @@ from src.classes.room import Room
 
 import random
 
+
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
     """_summary_
 
