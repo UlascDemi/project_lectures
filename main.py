@@ -13,6 +13,8 @@ from src.classes.room import Room
 from src.loader.loader import load_students, load_rooms, load_courses
 from src.algorithm.random_scheduling import schedule_course
 from src.malus_point_count import malus_point_count, conflict_count
+from src.algorithm.hillclimber import hill_climb
+
 
 import numpy as np
 
@@ -92,6 +94,10 @@ def main(print_time_table=True):
         print(f"\nTotal conflict count: {conflicts}")
         print(f"Total maluspoint count: {malus_points}")
 
+    # for i in range(1000):
+    #     while hill_climb(courses_sorted, available_rooms, students, rooms):
+    #         hill_climb(courses_sorted, available_rooms, students, rooms)
+
     return malus_points
 
 
@@ -122,16 +128,16 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    # main()
+    main(True)
 
-    results = []
+    # results = []
 
-    iterations = 1000
+    # iterations = 1000
 
-    for i in range(iterations):
-        results.append(main(print_time_table=False))
-        if i % 50 == 0:
-            print(f"Step {i} / {iterations}")
+    # for i in range(iterations):
+    #     results.append(main(print_time_table=False))
+    #     if i % 50 == 0:
+    #         print(f"Step {i} / {iterations}")
 
-    print(f"minimum malus points = {min(results)}")
-    print(f"average malus points = {sum(results) / len(results)}")
+    # print(f"minimum malus points = {min(results)}")
+    # print(f"average malus points = {sum(results) / len(results)}")

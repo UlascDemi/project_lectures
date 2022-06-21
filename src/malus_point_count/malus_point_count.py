@@ -5,13 +5,15 @@ from src.classes.course import Course
 from src.classes.room import Room
 
 def conflict_count(students: list[Student]) -> int:
-    """_summary_
+    """
+     Checks for every student if a timeslot has more than one course planned.
+     for each extra course that is given a malus points will be added.
 
     Args:
-        students (list[Student]): _description_
+        students (list[Student]): list of student objects 
 
     Returns:
-        int: _description_
+        int: total amount of conflicting timeslots
     """
     conflict_count = 0
 
@@ -30,21 +32,18 @@ def conflict_count(students: list[Student]) -> int:
     return conflict_count
 
 
-# def oud_tussenuur_count(students: list[Student]) -> int:
-#     tussen_uur_maluspunt = 0
-#     for student in students:
-#         for day in student.get_time_table():
-#             for i, _ in enumerate(day[:-2]):
-#                 if len(day[i]) != 0 and len(day[i + 1]) == 0 and len(day[i + 2]) != 0:
-#                     tussen_uur_maluspunt += 1
-#             for i, _ in enumerate(day[:-3]):
-#                 if len(day[i]) != 0 and len(day[i + 1]) == 0 and len(day[i + 2]) == 0 and  len(day[i + 3]) != 0:
-#                     tussen_uur_maluspunt += 3
-#     # als we een 5de tijdslot hebben moet er een try and except in komen anders index out of bounce
-#     return tussen_uur_maluspunt
-
-
 def free_period_count(students: list[Student]) -> int:
+    """ 
+    Checks if for every student if their schedule has free period between classes.
+    Students schedules with 1 free periods between classes get 1 malus point.
+    Students schedules with 2 free periods between classes get 3 malus points.
+
+    Args:
+        students (list[Student]): list of student objects
+
+    Returns:
+        int: total amount of malus points
+    """
     free_period_points = 0
 
     for student in students:
@@ -75,6 +74,16 @@ def free_period_count(students: list[Student]) -> int:
 
 
 def fifth_hour_points(rooms: dict[Room]) -> int:
+    """
+    Checks if the 5th timeslot is used for the room C0.110.
+    Room schedules get 5 malus points if this timeslot is used
+
+    Args:
+        rooms (dict[Room]): dictionairy with room objects
+
+    Returns:
+        int: total amount of malus points 
+    """
     malus_points = 0
 
     room = rooms["C0.110"]
@@ -88,6 +97,16 @@ def fifth_hour_points(rooms: dict[Room]) -> int:
 
 
 def capacity_count(rooms: dict[Room]) -> int:
+    """
+    Checks for class that is scheduled if the room capacity is exceeded.
+    For every extra student that exceeds the room capacity a malus point is added.
+
+    Args:
+        rooms (dict[Room]): dictionairy of room names and room objects
+
+    Returns:
+        int: total amount of malus points
+    """
     excess_students = 0
 
     for room in rooms.values():
@@ -109,6 +128,16 @@ def capacity_count(rooms: dict[Room]) -> int:
 
 
 def malus_point_count(students: list[Student], rooms: dict[Room]):
+    """
+    Add all malus points function together 
+
+    Args:
+        students (list[Student]): list of student objects
+        rooms (dict[Room]): dictionairy of room names and room objects
+
+    Returns:
+        int: total amount of malus point
+    """
     conflicts = conflict_count(students)
     free_periods = free_period_count(students)
     capacity_conflict = capacity_count(rooms)
