@@ -6,18 +6,32 @@ from src.classes.room import Room
 
 import random
 
-def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
-    """_summary_
+
+def get_choosable_rooms(
+    room_time_slots: list[tuple[Room, int, int]], min_capacity: int
+) -> list:
+    """
+    Returns a list containing all room time slots that are available and have enough
+    capacity.
+    This function expects a list with room time slots and an integer representing the
+    minimum capacity amount. The room time slot is in the format of a tuple containing
+    three elements: (Room, day, time_slot). Where Room is a Room object and the day and
+    time_slot are represented by an int. In this case (Room1, 0, 0) would be room 1 on
+    monday with the first time slot.
+    the function returns a list in the same format as the input list with the room time
+    slots that have enough capacity
 
     Args:
-        rooms (list:[Room]): a list containing all room objects
-        min_capacity (int): the minimum capacity the rooms need to have
+        rooms (list[tuple[Room, int, int]]): a list with all available room_time_slots
+        min_capacity (int): the minimum capacity to filter the rooms on
 
     Returns:
-        list: _description_
+        list: a list containing the room time slots where the rooms have sufficient capacity
     """
     choosable_rooms = [
-        room for room in rooms if (room[0].get_capacity() >= min_capacity)
+        room_time_slot
+        for room_time_slot in room_time_slots
+        if (room_time_slot[0].get_capacity() >= min_capacity)
     ]
 
     return choosable_rooms

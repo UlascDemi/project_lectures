@@ -98,7 +98,6 @@ def main(print_time_table=True):
 def print_2d_list(object_to_print) -> None:
 
     time_table = object_to_print.get_time_table()
-
     time_table_copy = deepcopy(time_table)
 
     if isinstance(object_to_print, Student):
