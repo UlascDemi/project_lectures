@@ -51,7 +51,9 @@ def main(print_time_table=True):
     courses_sorted = sorted(
         courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
-
+    print("\n")
+    print_2d_list(courses_sorted[11])
+    print("\n")
     # ----------------------Subdivide students into groups--------------------------------
     for course in courses_sorted:
         course.calc_seminars()
@@ -90,14 +92,20 @@ def main(print_time_table=True):
 
     if print_time_table:
         print_2d_list(students[16])
+        # print_2d_list(courses_sorted[11])
 
         print(f"\nTotal conflict count: {conflicts}")
         print(f"Total maluspoint count: {malus_points}")
 
-    # for i in range(1000):
-    #     while hill_climb(courses_sorted, available_rooms, students, rooms):
-    #         hill_climb(courses_sorted, available_rooms, students, rooms)
+    for i in range(1000):
+        hill_climb(courses_sorted, available_rooms, students, rooms)
+    # print(malus_point_count(students, rooms))
+    #     # print_2d_list(blabla)
+    #     # print(malus_point_count(students, rooms))
 
+    # # print_2d_list(courses_sorted[11])
+    # print(malus_points)
+    # print(malus_point_count(students, rooms))
     return malus_points
 
 

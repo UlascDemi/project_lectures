@@ -47,6 +47,9 @@ def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
     Returns:
         bool: _description_
     """
+    if is_scheduled(course):
+        un_schedule(course, available_rooms)
+
     if (
         schedule_lecture(course, available_rooms)
         and schedule_seminar(course, available_rooms)
@@ -55,6 +58,40 @@ def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
         return True
 
     return False
+
+
+def is_scheduled(course: Course):
+    time_table = course.get_time_table()
+
+    for day in time_table:
+        for time_slot in day:
+            if time_slot != "-":
+                return True
+
+
+def un_schedule(course: Course, available_rooms: list):
+    time_table = course.get_time_table()
+    # print(time_table)
+
+    students = course.get_enrol_students()
+
+    for i, day in enumerate(time_table):
+        for j, time_slot in enumerate(day):
+            if time_slot != "-":
+                for student in students:
+                    student_time_slots = student.get_time_table()[i][j]
+                    for k, (room_object, course_object, type) in enumerate(
+                        student_time_slots
+                    ):
+                        if room_object == time_slot and course_object == course:
+                            student_time_slots.pop(k)
+                time_slot.get_time_table()[i][j] = "-"
+
+                available_rooms.append((time_slot, i, j))
+                time_table[i][j] = "-"
+
+    # print(time_table)
+    # exit()
 
 
 def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
@@ -79,7 +116,7 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
 
         # If no rooms found, Schedule couldnt be found
         if len(choosable_rooms) == 0:
-            print(f"Couldnt schedule lecture: {course}")
+            # print(f"Couldnt schedule lecture: {course}")
             return False
 
         # Choose random time slot
@@ -137,7 +174,7 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
 
             # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
-                print(f"Couldnt schedule seminar: {course}")
+                # print(f"Couldnt schedule seminar: {course}")
                 return False
 
             # Choose a time slot
@@ -194,7 +231,7 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
 
             # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
-                print(f"Couldnt schedule practicum: {course}")
+                # print(f"Couldnt schedule practicum: {course}")
                 return False
 
             # Choose a time slot
