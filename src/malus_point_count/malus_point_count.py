@@ -67,8 +67,6 @@ def free_period_count(students: list[Student]) -> int:
                     free_period_points += 1
                 elif free_periods == 2:
                     free_period_points += 3
-                elif free_periods > 2:
-                    print("ERROR: more than two free periods")
 
     return free_period_points
 
@@ -139,9 +137,13 @@ def malus_point_count(students: list[Student], rooms: dict[Room]):
         int: total amount of malus point
     """
     conflicts = conflict_count(students)
+    print(f"conflicts: {conflicts}")
     free_periods = free_period_count(students)
+    print(f"free periods: {free_periods}")
     capacity_conflict = capacity_count(rooms)
+    print(f"capacity count: {capacity_conflict}")
     fifth_hour = fifth_hour_points(rooms)
+    print(f"fifth hour: {fifth_hour}")
 
     maluspoint = conflicts + free_periods + capacity_conflict + fifth_hour
 

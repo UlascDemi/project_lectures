@@ -10,8 +10,10 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
+from src.schedule_validity.schedule_validity import schedule_validity
 from src.loader.loader import load_students, load_rooms, load_courses
 from src.algorithm.random_scheduling import schedule_course
+from src.algorithm.Completely_random import random_schedule_course
 from src.malus_point_count import malus_point_count, conflict_count
 from src.algorithm.hillclimber import hill_climb
 
@@ -51,9 +53,9 @@ def main(print_time_table=True):
     courses_sorted = sorted(
         courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
-    print("\n")
-    print_2d_list(courses_sorted[11])
-    print("\n")
+    #print("\n")
+    #print_2d_list(courses_sorted[11])
+    #print("\n")
     # ----------------------Subdivide students into groups--------------------------------
     for course in courses_sorted:
         course.calc_seminars()
@@ -82,23 +84,30 @@ def main(print_time_table=True):
         for day in range(len(DAYS)):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
+            # added a fifth timeslot
+            available_rooms.append((rooms["C0.110"], day, 4))
 
     # Schedule all courses
     for course in courses_sorted:
         schedule_course(course, available_rooms)
+    print_2d_list(students[0])
 
+    # added schedule validity 
+    schedule_validity(students, rooms)
+    print(schedule_validity(students,rooms))
+    
     conflicts = conflict_count(students)
     malus_points = malus_point_count(students, rooms)
 
     if print_time_table:
         print_2d_list(students[16])
-        # print_2d_list(courses_sorted[11])
+        #print_2d_list(courses_sorted[11])
 
         print(f"\nTotal conflict count: {conflicts}")
         print(f"Total maluspoint count: {malus_points}")
 
-    for i in range(1000):
-        hill_climb(courses_sorted, available_rooms, students, rooms)
+    # for i in range(1000):
+    #     hill_climb(courses_sorted, available_rooms, students, rooms)
     # print(malus_point_count(students, rooms))
     #     # print_2d_list(blabla)
     #     # print(malus_point_count(students, rooms))
@@ -136,16 +145,16 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    main(True)
+    #main(True)
 
-    # results = []
+    results = []
 
-    # iterations = 1000
+    iterations = 1
 
-    # for i in range(iterations):
-    #     results.append(main(print_time_table=False))
-    #     if i % 50 == 0:
-    #         print(f"Step {i} / {iterations}")
-
-    # print(f"minimum malus points = {min(results)}")
-    # print(f"average malus points = {sum(results) / len(results)}")
+    for i in range(iterations):
+        results.append(main(print_time_table=False))
+        if i % 50 == 0:
+            print(f"Step {i} / {iterations}")
+    print(f"minimum malus points = {min(results)}")
+    print(f"average malus points = {sum(results) / len(results)}")
+    
