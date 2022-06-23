@@ -85,12 +85,12 @@ def main(print_time_table=True):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
             # added a fifth timeslot
-            available_rooms.append((rooms["C0.110"], day, 4))
+           # available_rooms.append((rooms["C0.110"], day, 4))
 
     # Schedule all courses
     for course in courses_sorted:
         schedule_course(course, available_rooms)
-    print_2d_list(students[0])
+    print(rooms["C0.110"].get_time_table())
 
     # added schedule validity 
     schedule_validity(students, rooms)

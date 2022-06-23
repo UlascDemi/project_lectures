@@ -36,7 +36,7 @@ def third_free_period_check(students: list[Student]) -> int:
                     print("ERROR: more than two free periods")
                     return False 
 
-
+#deze moet nog naar gekeken worden want zget nu dat dit gebeurd
 def room_conflict_check(rooms: dict[Room]) -> int:
     """
     Checks if a room has more than one activity planned in one timeslot
@@ -55,7 +55,7 @@ def room_conflict_check(rooms: dict[Room]) -> int:
             for time_slot in day:
 
                 # If the timeslot has more than 1 entry, count the excess amount
-                if len(time_slot) > 1:
+                if len(time_slot) > 2:
                     print("ERROR: more than two activities planned in one room")
                     return False
     
@@ -85,6 +85,6 @@ def fifth_hour_check(rooms: dict[Room]) -> int:
                     return False
 def schedule_validity(students, rooms):
     validity = True
-    if fifth_hour_check(rooms) or third_free_period_check or room_conflict_check is False:
+    if fifth_hour_check(rooms) or third_free_period_check(students) or room_conflict_check(rooms) is False:
         validity = False
     return validity
