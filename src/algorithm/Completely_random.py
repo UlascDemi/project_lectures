@@ -7,14 +7,15 @@ from src.classes.room import Room
 import random
 
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
-    """_summary_
+    """
+        List of rooms that are still available after scheduling courses
 
     Args:
         rooms (list:[Room]): a list containing all room objects
         min_capacity (int): the minimum capacity the rooms need to have
 
     Returns:
-        list: _description_
+        list: available rooms
     """
     choosable_rooms = rooms
 
@@ -22,14 +23,15 @@ def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
 
 
 def random_schedule_course(course: Course, available_rooms: list[Room]) -> bool:
-    """_summary_
+    """
+    Schedules courses based on random choices 
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): course object 
+        available_rooms (list[Room]): list of rooms that can be chosen to schedule 
 
     Returns:
-        bool: _description_
+        bool: returns true if course is scheduled
     """
     if (
         schedule_lecture(course, available_rooms)
@@ -42,14 +44,15 @@ def random_schedule_course(course: Course, available_rooms: list[Room]) -> bool:
 
 
 def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
-    """_summary_
+    """
+    randomly selects a room to schedule lecures 
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): dictionairy with course objects
+        available_rooms (list[Room]): list of room objects 
 
     Returns:
-        bool: _description_
+        bool: return true if lecture is scheduled
     """
     for _ in range(course.n_lecture):
         # Checks if lectures need to be given
@@ -98,11 +101,11 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
     randomly selects a room to schedule Seminars
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): dictionairy with course objects
+        available_rooms (list[Room]): list of room objects 
 
     Returns:
-        bool: _description_
+        bool: returns true is seminar is scheduled 
     """
     seminar_groups = course.get_seminar_groups()
 
@@ -151,14 +154,16 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
 
 
 def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
-    """_summary_
+    """
+    Randomly slects a room to schedule practicals
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): dictionairy with course objects
+        available_rooms (list[Room]): list of room objects 
+
 
     Returns:
-        bool: _description_
+        bool: return true if practical is scheduled 
     """
     practicum_groups = course.get_practicum_groups()
 
