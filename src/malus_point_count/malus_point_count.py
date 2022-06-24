@@ -121,6 +121,7 @@ def capacity_count(rooms: dict[Room]) -> int:
                 capacity = room.get_capacity()
 
                 if students_in_room > room.get_capacity():
+                    # print("aa")
                     excess_students += students_in_room - capacity
 
     return excess_students
@@ -137,11 +138,23 @@ def malus_point_count(students: list[Student], rooms: dict[Room]):
     Returns:
         int: total amount of malus point
     """
-    conflicts = conflict_count(students)
-    free_periods = free_period_count(students)
-    capacity_conflict = capacity_count(rooms)
-    fifth_hour = fifth_hour_points(rooms)
+    # conflicts = conflict_count(students)
+    # free_periods = free_period_count(students)
+    # # capacity_conflict = capacity_count(rooms)
+    # fifth_hour = fifth_hour_points(rooms)
 
-    maluspoint = conflicts + free_periods + capacity_conflict + fifth_hour
+    counts = [
+        conflict_count(students),
+        free_period_count(students),
+        fifth_hour_points(rooms),
+        capacity_count(rooms),
+    ]
+    # print(counts)
+    maluspoint = sum(counts)
+
+    # maluspoint = conflicts + free_periods + capacity_conflict + fifth_hour
+    # maluspoint = conflicts + free_periods + fifth_hour
 
     return maluspoint
+
+    # return conflicts

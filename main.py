@@ -95,13 +95,15 @@ def main(print_time_table=True):
     malus_points = malus_point_count(students, rooms)
 
     if print_time_table:
-        # print_2d_list(students[16])
+        print_2d_list(students[16])
         # print_2d_list(courses_sorted[0])
 
         print(f"\nTotal conflict count: {conflicts}")
         print(f"Total maluspoint count: {malus_points}")
 
-    for _ in range(100):
+    hill_climb_iterations = 10000
+
+    for i in range(hill_climb_iterations):
         hill_climb(courses_sorted, available_rooms, students, rooms)
 
     print(f"new malus points: {malus_point_count(students, rooms)}")
