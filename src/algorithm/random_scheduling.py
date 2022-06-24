@@ -135,7 +135,7 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
         room_time_table = room.get_time_table()
 
         # Update time tables
-        course_time_table[day][time_slot] = room
+        course_time_table[day][time_slot] = room, course.get_enrol_students()
         room_time_table[day][time_slot] = course, course.get_enrol_students()
 
         # Update time tables for all students
@@ -193,7 +193,7 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
             room_time_table = room.get_time_table()
 
             # Update time table
-            course_time_table[day][time_slot] = room
+            course_time_table[day][time_slot] = room, group
             room_time_table[day][time_slot] = course, group
 
             # Update time table of the students
@@ -250,7 +250,7 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
             room_time_table = room.get_time_table()
 
             # Update time tables
-            course_time_table[day][time_slot] = room
+            course_time_table[day][time_slot] = room, group
             room_time_table[day][time_slot] = course, group
 
             # Update time tables of the students

@@ -4,13 +4,14 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
+
 def conflict_count(students: list[Student]) -> int:
     """
      Checks for every student if a timeslot has more than one course planned.
      for each extra course that is given a malus points will be added.
 
     Args:
-        students (list[Student]): list of student objects 
+        students (list[Student]): list of student objects
 
     Returns:
         int: total amount of conflicting timeslots
@@ -33,7 +34,7 @@ def conflict_count(students: list[Student]) -> int:
 
 
 def free_period_count(students: list[Student]) -> int:
-    """ 
+    """
     Checks if for every student if their schedule has free period between classes.
     Students schedules with 1 free periods between classes get 1 malus point.
     Students schedules with 2 free periods between classes get 3 malus points.
@@ -80,7 +81,7 @@ def fifth_hour_points(rooms: dict[Room]) -> int:
         rooms (dict[Room]): dictionairy with room objects
 
     Returns:
-        int: total amount of malus points 
+        int: total amount of malus points
     """
     malus_points = 0
 
@@ -127,7 +128,7 @@ def capacity_count(rooms: dict[Room]) -> int:
 
 def malus_point_count(students: list[Student], rooms: dict[Room]):
     """
-    Add all malus points function together 
+    Add all malus points function together
 
     Args:
         students (list[Student]): list of student objects
@@ -137,13 +138,13 @@ def malus_point_count(students: list[Student], rooms: dict[Room]):
         int: total amount of malus point
     """
     conflicts = conflict_count(students)
-    print(f"conflicts: {conflicts}")
+    # print(f"conflicts: {conflicts}")
     free_periods = free_period_count(students)
-    print(f"free periods: {free_periods}")
+    # print(f"free periods: {free_periods}")
     capacity_conflict = capacity_count(rooms)
-    print(f"capacity count: {capacity_conflict}")
+    # print(f"capacity count: {capacity_conflict}")
     fifth_hour = fifth_hour_points(rooms)
-    print(f"fifth hour: {fifth_hour}")
+    # print(f"fifth hour: {fifth_hour}")
 
     maluspoint = conflicts + free_periods + capacity_conflict + fifth_hour
 

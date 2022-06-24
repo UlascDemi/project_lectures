@@ -8,6 +8,7 @@ from .random_scheduling import schedule_course
 from src.malus_point_count import malus_point_count
 
 import random
+from copy import copy
 
 # DIT GAAT ERVANUIT DAT AL EEN GELDIGE ROOSTER IS GEMAAKT
 
@@ -16,8 +17,8 @@ def hill_climb(courses: list[Course], room_time_slots: list, students, rooms):
     # Take random
     old_points = malus_point_count(students, rooms)
 
-    # course = random.choice(courses)
-    course = courses[11]
+    course = random.choice(courses)
+    # course = courses[11]
     # print(course)
 
     time_table = course.get_time_table()
@@ -49,46 +50,59 @@ def hill_climb(courses: list[Course], room_time_slots: list, students, rooms):
         day.index(time_slot),
     )
 
-    if not schedule_course(course, room_time_slots):
-        schedule_course(course, [original_day_time_slot])
-        print("aa")
-        return course
+    new_time_slot = random.choice(room_time_slots)
+
+    reschedule_time_slot(course, room_time_slots, original_day_time_slot, new_time_slot)
 
     new_points = malus_point_count(students, rooms)
 
-    if new_points <= old_points:
-        # print(new_points)
-        pass
-    else:
-        print("revert")
-        schedule_course(course, [original_day_time_slot])
-
-    print(malus_point_count(students, rooms))
-    # print("")
-
-    return course
+    if new_points > old_points:
+        reschedule_time_slot(
+            course, room_time_slots, new_time_slot, original_day_time_slot
+        )
 
 
-def un_schedule(course: Course, available_rooms: list):
-    time_table = course.get_time_table()
+def reschedule_time_slot(
+    course: Course, room_time_slots: list, orig_time_slot, new_time_slot
+) -> None:
 
-    students = course.get_enrol_students()
+    # Unpack the time_slot tuples
+    orig_room, orig_day_i, orig_time_slot_i = orig_time_slot
+    new_room, new_day_i, new_time_slot_i = new_time_slot
 
-    for i, day in enumerate(time_table):
-        for j, time_slot in enumerate(day):
-            if time_slot != "-":
-                for student in students:
-                    student_time_slots = student.get_time_table()[i][j]
-                    for k, (room_object, course_object, type) in enumerate(
-                        student_time_slots
-                    ):
-                        if room_object == time_slot and course_object == course:
-                            student_time_slots.pop(k)
-                time_slot.get_time_table()[i][j] = "-"
+    course_time_table = course.get_time_table()
 
-                available_rooms.append((time_slot, i, j))
-                time_table[i][j] = "-"
+    # Take the contents of the course time slot
+    room, students = course_time_table[orig_day_i][orig_time_slot_i]
 
-    def reschedule_course(course: Course, available_rooms: list, new_time_slot) -> None:
-        pass
-        # 1
+    # print(course_time_table[orig_day_i][orig_time_slot_i])
+
+    # Remove the old time slot and put contents in new time slot
+    course_time_table[orig_day_i][orig_time_slot_i] = "-"
+    course_time_table[new_day_i][new_time_slot_i] = new_room, students
+
+    room_time_table = room.get_time_table()
+
+    # Remove old time slot from the room timetable and put contents in new time slot
+    room_time_table[orig_day_i][orig_time_slot_i] = "-"
+    room_time_table[new_day_i][new_time_slot_i] = course, students
+
+    # Go through each student, remove the old time slot and put contents in new time slot
+    for student in students:
+        student_time_table = student.get_time_table()
+        student_orig_time_slot = student_time_table[orig_day_i][orig_time_slot_i]
+
+        # Find correct activity and remove it from the time slot
+        for activity in student_orig_time_slot:
+            scheduled_room = activity[0]
+            type = activity[2]
+
+            if scheduled_room == room:
+                student_orig_time_slot.remove(activity)
+
+        # Append the activty to the new time_slot
+        student_new_time_slot = student_time_table[new_day_i][new_time_slot_i]
+        student_new_time_slot.append((new_room, course, type))
+
+    room_time_slots.append(orig_time_slot)
+    room_time_slots.remove(new_time_slot)

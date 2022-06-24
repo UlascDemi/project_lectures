@@ -3,7 +3,7 @@ class Room:
         self._room_number = roomnumber
         self._capacity = capacity
 
-        # hierin komt een tuple: (lijst[student_num], Course)
+        # hierin komt een tuple: (Course, lijst[student_num])
         self._time_table = [["-"] * 5 for i in range(5)]
 
     def get_time_table(self) -> list:
