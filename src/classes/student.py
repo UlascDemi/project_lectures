@@ -7,10 +7,10 @@ class Student:
         self._student_num = student_num
         self._courses = courses
 
-        # Helse list comprehension
+        # Create 2D list representing student time table, each element of the list 
+        # contains a tuple with the room and the course
         self._time_table = [[[] for _ in range(5)] for _ in range(5)]
 
-        # hierin komt een tuple: (Room, Course)
 
     def get_first_name(self) -> str:
         """

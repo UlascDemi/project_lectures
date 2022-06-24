@@ -30,18 +30,17 @@ class Course:
         self._enrolled_students = []
 
         self._groups_per_seminar = 0
-        # self._needed_sem_groups = 0
         self._students_per_sem_group = 0
 
         self._seminar_groups = []
 
         self._groups_per_practicum = 0
-        # self._needed_prac_groups = 0
         self._students_per_prac_group = 0
 
         self._prac_groups = []
+        # Creates 2D list representing the course time table
+        self._time_table = [["-"] * 5 for i in range(5)] 
 
-        self._time_table = [["-"] * 5 for i in range(5)]  # hier komen Rooms in
 
     def enroll(self, student: Student) -> None:
         """
@@ -115,7 +114,7 @@ class Course:
 
     def get_course_name(self) -> str:
         """
-        Returns the name of the course
+        Returns the name of the course.
 
         Returns:
             str: the name of the course
@@ -125,7 +124,7 @@ class Course:
 
     def get_n_lecture(self) -> int:
         """
-        Returns the amount of given lectures per week
+        Returns the amount of given lectures per week.
 
         Returns:
             int: amount of given lectures per week
@@ -135,7 +134,7 @@ class Course:
 
     def get_n_seminar(self) -> int:
         """
-        Returns the amount of given seminars per week
+        Returns the amount of given seminars per week.
 
         Returns:
             int: amount of given seminars per week
@@ -145,7 +144,7 @@ class Course:
 
     def get_n_practicum(self) -> int:
         """
-        Returns the amount of given practica per week
+        Returns the amount of given practica per week.
 
         Returns:
             int: amount of given practica per week
@@ -155,7 +154,7 @@ class Course:
 
     def get_time_table(self) -> list:
         """
-        Returns timetable of a student
+        Returns timetable of a student.
 
         Returns:
             list: timetable of a student for one week
@@ -165,7 +164,7 @@ class Course:
 
     def get_enrol_students(self) -> list:
         """
-        Returns the enrolled students for a course
+        Returns the enrolled students for a course.
 
         Returns:
             list: enrolled students
@@ -185,26 +184,63 @@ class Course:
 
     def get_groups_per_seminar(self) -> int:
         """
-        _summary_
+        Returns the amount of groups to be scheduled per seminar.
 
         Returns:
-            int: _description_
+            int: amount of groups
         """
         return self._groups_per_seminar
 
+
     def get_stud_per_sem_group(self) -> int:
+        """
+        Returns the number of students per seminar group.
+
+        Returns:
+            int: number of students
+        """
         return self._students_per_sem_group
 
+
     def get_seminar_groups(self) -> list:
+        """
+        Returns a list containing containing groups. Each group represents a list 
+        containing the students in their respective groups.
+
+        Returns:
+            list: groups of students per seminar
+        """
         return self._seminar_groups
 
+
     def get_groups_per_practicum(self) -> int:
+        """
+        Returns the amount of groups to be scheduled per practicum.
+
+        Returns:
+            int: amount of groups
+        """
         return self._groups_per_practicum
 
+
     def get_stud_per_prac_group(self) -> int:
+        """
+        Returns the number of students per praticum group.
+
+        Returns:
+            int: number of students
+        """
         return self._students_per_prac_group
 
+
     def get_practicum_groups(self) -> list:
+        """
+        Returns a list containing containing groups. Each group represents a list 
+        containing the students in their respective groups.
+
+        Returns:
+            list: groups of students per practica
+        """
         return self._prac_groups
 
 
