@@ -7,9 +7,23 @@ from src.classes import Student, Room, Course
 
 
 def load_students(filename: str) -> list[Student]:
+    """
+    Loads in the data of all students and make objects of the Student class. 
+
+    Args:
+        filename (str): name of csv-file containing the data
+
+    Returns:
+        list[Student]: list of student objects
+    """
+    # Read data from csv file
     data = pd.read_csv(filename)
+
+    # List of student objects
     students = []
 
+    # Loop over the rows with the information per student and create a student object per 
+    # student. This will be added to the list of students.
     for _, row in data.iterrows():
         last_name = row[0]
         first_name = row[1]
@@ -21,10 +35,23 @@ def load_students(filename: str) -> list[Student]:
 
 
 def load_rooms(filename: str) -> dict[Room]:
+    """
+    Loads in the data of all rooms and make objects of the Room class.
+
+    Args:
+        filename (str): name of csv-file containing the data
+
+    Returns:
+        dict[Room]: dictionary with as key the roomnumber and value the maximum capacity
+    """
+    # Read data from csv file
     data = pd.read_csv(filename)
 
+    # Dictionary of room objects
     rooms = {}
 
+    # Loop over the information per room and create a room object per room. This will be
+    # added to the dictonary of rooms.
     for _, row in data.iterrows():
         room_num = row[0]
         student_cap = row[1]
@@ -34,13 +61,30 @@ def load_rooms(filename: str) -> dict[Room]:
 
 
 def load_courses(filename: str, abbreviations: str) -> dict[Course]:
+    """
+    Loads in the data of all courses and make objects of the Course class.
+
+    Args:
+        filename (str): name of csv-file containing the data of the courses
+        abbreviations (str): name of csv-file containing the abbreviation of the course name
+
+    Returns:
+        dict[Course]: dictionary with course name as keys
+    """
+    # Read data for the courses from a csv file
     data = pd.read_csv(filename)
+
+    # Read data for the abbreviations from a csv file
     abbr = pd.read_csv(abbreviations)
 
+    # Creates a dictonary with courses as keys and abbreviations as value
     abbr_dict = dict(zip(abbr["course"], abbr["abbreviation"]))
 
+    # Dictionary with course objects
     courses = {}
 
+    # Loop over the information per course and create a course object per course. This will be
+    # added to the dictonary of courses.
     for _, row in data.iterrows():
         course = row[0]
         lecture = row[1]

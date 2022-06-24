@@ -10,8 +10,10 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
+from src.schedule_validity.schedule_validity import schedule_validity
 from src.loader.loader import load_students, load_rooms, load_courses
 from src.algorithm.random_scheduling import schedule_course
+from src.algorithm.Completely_random import random_schedule_course
 from src.malus_point_count import malus_point_count, conflict_count
 from src.algorithm.hillclimber import hill_climb
 
@@ -51,7 +53,6 @@ def main(print_time_table=True):
     courses_sorted = sorted(
         courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
-
     # ----------------------Subdivide students into groups--------------------------------
     for course in courses_sorted:
         course.calc_seminars()
@@ -80,36 +81,46 @@ def main(print_time_table=True):
         for day in range(len(DAYS)):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
+            # added a fifth timeslot
+        # available_rooms.append((rooms["C0.110"], day, 4))
 
     # Schedule all courses
     for course in courses_sorted:
         schedule_course(course, available_rooms)
+
+    # added schedule validity
+    schedule_validity(students, rooms)
 
     conflicts = conflict_count(students)
     malus_points = malus_point_count(students, rooms)
 
     if print_time_table:
         print_2d_list(students[16])
+        # print_2d_list(courses_sorted[0])
 
         print(f"\nTotal conflict count: {conflicts}")
         print(f"Total maluspoint count: {malus_points}")
 
-    # for i in range(1000):
-    #     while hill_climb(courses_sorted, available_rooms, students, rooms):
-    #         hill_climb(courses_sorted, available_rooms, students, rooms)
+    hill_climb_iterations = 10000
+
+    for i in range(hill_climb_iterations):
+        hill_climb(courses_sorted, available_rooms, students, rooms)
+
+    print(f"new malus points: {malus_point_count(students, rooms)}")
 
     return malus_points
 
 
 def print_2d_list(object_to_print) -> None:
 
+    # Get make a copy of the time_Table
     time_table = object_to_print.get_time_table()
-
     time_table_copy = deepcopy(time_table)
 
     if isinstance(object_to_print, Student):
         print(f"Timetable Student: {object_to_print}")
 
+        # Reformat the copy to a printable format
         for i, _ in enumerate(time_table_copy):
             for j, time_slot in enumerate(time_table_copy[i]):
                 if len(time_slot) == 0:
@@ -119,8 +130,20 @@ def print_2d_list(object_to_print) -> None:
 
     elif isinstance(object_to_print, Course):
         print(f"Timetable Course: {object_to_print}")
+
+        # Reformat the copy to a printable format
+        for day in time_table_copy:
+            for time_slot in day:
+                time_slot = time_slot[0]
+                print(time_slot)
+
     else:
         print(f"Timetable Room: {object_to_print}")
+
+        # Reformat the copy to a printable format
+        for day in time_table_copy:
+            for time_slot in day:
+                time_slot = time_slot[0]
 
     printable_list = np.transpose(np.array(time_table_copy, dtype=object))
     print(
@@ -133,6 +156,7 @@ if __name__ == "__main__":
 
     results = []
 
+<<<<<<< HEAD
     iterations = 100000
 
     for i in range(iterations):
@@ -142,3 +166,13 @@ if __name__ == "__main__":
 
     print(f"minimum malus points = {min(results)}")
     print(f"average malus points = {sum(results) / len(results)}")
+=======
+    # iterations = 1
+
+    # for i in range(iterations):
+    #     results.append(main(print_time_table=False))
+    #     if i % 50 == 0:
+    #         print(f"Step {i} / {iterations}")
+    # print(f"minimum malus points = {min(results)}")
+    # print(f"average malus points = {sum(results) / len(results)}")
+>>>>>>> bc9a845251b5fba3711c0eab978ef38a46da1d19
