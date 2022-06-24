@@ -129,16 +129,16 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    main(True)
+    # main(True)
 
-    # results = []
+    results = []
 
-    # iterations = 1000
+    iterations = 100000
 
-    # for i in range(iterations):
-    #     results.append(main(print_time_table=False))
-    #     if i % 50 == 0:
-    #         print(f"Step {i} / {iterations}")
+    for i in range(iterations):
+        results.append(main(print_time_table=False))
+        if i % 50 == 0:
+            print(f"Step {i} / {iterations}")
 
-    # print(f"minimum malus points = {min(results)}")
-    # print(f"average malus points = {sum(results) / len(results)}")
+    print(f"minimum malus points = {min(results)}")
+    print(f"average malus points = {sum(results) / len(results)}")
