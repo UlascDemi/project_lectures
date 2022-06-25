@@ -10,7 +10,7 @@ from src.reschedule.reschedule import reschedule_time_slot
 import random
 
 
-def hill_climb(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
+def simulated_annealing(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
     """
 
 

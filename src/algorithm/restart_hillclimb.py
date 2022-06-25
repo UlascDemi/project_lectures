@@ -7,8 +7,18 @@ from src.classes.room import Room
 from src.algorithm.hillclimber import hill_climb
 
 
-def hill_climb_restart(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]):
+def hill_climb_restart(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> list[int]:
+    """_summary_
 
+    Args:
+        courses (list[Course]): _description_
+        room_time_slots (list): _description_
+        students (list[Student]): _description_
+        rooms (list[Room]): _description_
+
+    Returns:
+        _type_: _description_
+    """
     malus_points = []
     same_value_count = 0
     old_points = float('inf')

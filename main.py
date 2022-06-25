@@ -99,9 +99,10 @@ def main(print_time_table=False):
         # print_2d_list(courses_sorted[0])
 
     # print(f"Total maluspoint count: {malus_points}")
-    malus_points_progress = hill_climb_restart(
-        courses_sorted, available_rooms, students, rooms)
+    # malus_points_progress = hill_climb_restart(
+    #     courses_sorted, available_rooms, students, rooms)
 
+    return [malus_points]
     # print(f"new malus points: {malus_point_count(students, rooms)}")
 
     print(f"Start value = {malus_points}")
@@ -151,7 +152,6 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    # main(True)
 
     n_hill_climbs = 100
     data = []
@@ -172,22 +172,20 @@ if __name__ == "__main__":
         duration = end - begin
         computation_times.append(duration)
 
-    plt.plot(data)
+    x = range(len(data))
 
-    plt.ylabel("Malus Points")
-    plt.xlabel("Iterations")
+    plt.bar(x, data)
+
+    plt.ylabel("N")
+    plt.xlabel("Malus Points")
 
     plt.grid(which="both")
 
-    plt.savefig("hillclimber.png")
+    # plt.plot(data)
 
-    # results = []
+    # plt.ylabel("Malus Points")
+    # plt.xlabel("Iterations")
 
-    # iterations = 1
+    # plt.grid(which="both")
 
-    # for i in range(iterations):
-    #     results.append(main(print_time_table=False))
-    #     if i % 50 == 0:
-    #         print(f"Step {i} / {iterations}")
-    # print(f"minimum malus points = {min(results)}")
-    # print(f"average malus points = {sum(results) / len(results)}")
+    # plt.savefig("hillclimber.png")
