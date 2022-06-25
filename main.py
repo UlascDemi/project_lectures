@@ -20,7 +20,9 @@ from src.algorithm.hillclimber import hill_climb
 
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn
 
 from tabulate import tabulate
 from copy import deepcopy
@@ -153,7 +155,7 @@ def print_2d_list(object_to_print) -> None:
 
 if __name__ == "__main__":
 
-    n_hill_climbs = 100
+    n_hill_climbs = 10000
     data = []
 
     computation_times = []
@@ -162,9 +164,9 @@ if __name__ == "__main__":
         begin = time()
         if i != 0:
             average_time = sum(computation_times)/len(computation_times)
-            print(
-                f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
-        print(f"Simulation {i} out of {n_hill_climbs}")
+        #     print(
+        #         f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
+        # print(f"Simulation {i} out of {n_hill_climbs}")
 
         data += main()
 
@@ -172,14 +174,28 @@ if __name__ == "__main__":
         duration = end - begin
         computation_times.append(duration)
 
-    x = range(len(data))
+    mu = np.mean(data)
+    sigma = np.std(data)
 
-    plt.bar(x, data)
+    normal_dist = np.random.normal(mu, sigma, 1000)
 
-    plt.ylabel("N")
+    count, bins, ignored = plt.hist(normal_dist, 30, density=True)
+    plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
+             np.exp(- (bins - mu)**2 / (2 * sigma**2)),
+             linewidth=2, color='r')
+
     plt.xlabel("Malus Points")
-
     plt.grid(which="both")
+    plt.savefig("random_barplot.png")
+
+    # plt.bar(data)
+
+    # plt.ylabel("N")
+    # plt.xlabel("Malus Points")
+
+    # plt.grid(which="both")
+
+    # plt.savefig("random_barplot.png")
 
     # plt.plot(data)
 
