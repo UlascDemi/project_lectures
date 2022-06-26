@@ -15,6 +15,7 @@ from src.loader.loader import load_students, load_rooms, load_courses
 from src.algorithm.random_scheduling import schedule_course
 from src.algorithm.Completely_random import random_schedule_course
 from src.algorithm.restart_hillclimb import hill_climb_restart
+from src.algorithm.greedy import greedy 
 from src.malus_point_count import malus_point_count, conflict_count
 from src.algorithm.hillclimber import hill_climb
 
@@ -60,6 +61,7 @@ def main(print_time_table=False):
         courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
     # ----------------------Subdivide students into groups--------------------------------
+    #print(courses_sorted)
     for course in courses_sorted:
         course.calc_seminars()
         course.calc_practica()
@@ -86,6 +88,8 @@ def main(print_time_table=False):
                 available_rooms.append((room, day, time_slot))
             # added a fifth timeslot
         # available_rooms.append((rooms["C0.110"], day, 4))
+    
+    greedy(courses_sorted, available_rooms)
 
     # Schedule all courses
     for course in courses_sorted:
@@ -161,25 +165,26 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
+    main()
 
     n_hill_climbs = 200
     data = []
 
-    computation_times = []
+    # computation_times = []
 
-    for i in range(n_hill_climbs):
-        begin = time()
-        if i != 0:
-            average_time = sum(computation_times)/len(computation_times)
-            print(
-                f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
-        print(f"Simulation {i} out of {n_hill_climbs}")
+    # for i in range(n_hill_climbs):
+    #     begin = time()
+    #     if i != 0:
+    #         average_time = sum(computation_times)/len(computation_times)
+    #         print(
+    #             f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
+    #     print(f"Simulation {i} out of {n_hill_climbs}")
 
-        data += main()
+    #     data += main()
 
-        end = time()
-        duration = end - begin
-        computation_times.append(duration)
+    #     end = time()
+    #     duration = end - begin
+    #     computation_times.append(duration)
 
     print(f"best timetable found: {min(data)} malus points")
 
