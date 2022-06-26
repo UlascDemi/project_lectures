@@ -161,25 +161,11 @@ def print_2d_list(object_to_print) -> None:
 if __name__ == "__main__":
     main()
 
-<<<<<<< HEAD
-    # n_hill_climbs = 10000
-    # data = []
-=======
     n_hill_climbs = 500
     data = []
->>>>>>> 53238dc4ed9da68be0d9da409deb83058ead2ccc
 
     # computation_times = []
 
-<<<<<<< HEAD
-    # for i in range(n_hill_climbs):
-    #     begin = time()
-    #     if i != 0:
-    #         average_time = sum(computation_times)/len(computation_times)
-    #     #     print(
-    #     #         f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
-    #     # print(f"Simulation {i} out of {n_hill_climbs}")
-=======
     for i in range(n_hill_climbs):
         begin = time()
         if i != 0:
@@ -187,7 +173,6 @@ if __name__ == "__main__":
             print(
                 f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
         print(f"Simulation {i} out of {n_hill_climbs}")
->>>>>>> 53238dc4ed9da68be0d9da409deb83058ead2ccc
 
     #     data += main()
 
