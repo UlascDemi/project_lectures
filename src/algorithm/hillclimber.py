@@ -6,6 +6,7 @@ from src.classes.room import Room
 
 from src.malus_point_count import malus_point_count
 from src.reschedule.reschedule import reschedule_time_slot
+from src.schedule_validity.schedule_validity import third_free_period_check
 
 import random
 
@@ -47,7 +48,7 @@ def hill_climb(courses: list[Course], room_time_slots: list, students: list[Stud
     new_points = malus_point_count(students, rooms)
 
     # Check if the new schedule is better, if worse, revert back
-    if new_points > old_points:
+    if new_points > old_points or third_free_period_check(students):
         reschedule_time_slot(
             course, room_time_slots, new_time_slot, original_day_time_slot
         )

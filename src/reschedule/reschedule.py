@@ -4,11 +4,12 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
+
 def reschedule_time_slot(
     course: Course, room_time_slots: list, start_time_slot, end_time_slot
 ) -> None:
 
-    if len(room_time_slots) != 11:
+    if len(room_time_slots) != 16:
         print("aaaaaa")
         breakpoint()
 

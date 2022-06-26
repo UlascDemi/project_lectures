@@ -94,12 +94,15 @@ def main(print_time_table=False):
     # added schedule validity
     if not is_valid_schedule(students, rooms):
         print("not a valid schedule")
+        return
 
     malus_points = malus_point_count(students, rooms)
 
     if print_time_table:
         print_2d_list(students[16])
-        # print_2d_list(courses_sorted[0])
+
+    # Add the fifth hour for C0.110
+    available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
     # print(f"Total maluspoint count: {malus_points}")
     malus_points_progress = hill_climb_restart(
@@ -159,7 +162,7 @@ def print_2d_list(object_to_print) -> None:
 
 if __name__ == "__main__":
 
-    n_hill_climbs = 500
+    n_hill_climbs = 200
     data = []
 
     computation_times = []
@@ -178,19 +181,21 @@ if __name__ == "__main__":
         duration = end - begin
         computation_times.append(duration)
 
-    # mu = np.mean(data)
-    # sigma = np.std(data)
+    print(f"best timetable found: {min(data)} malus points")
 
-    # normal_dist = np.random.normal(mu, sigma, 1000)
+    mu = np.mean(data)
+    sigma = np.std(data)
 
-    # count, bins, ignored = plt.hist(normal_dist, 30, density=True)
-    # plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
-    #          np.exp(- (bins - mu)**2 / (2 * sigma**2)),
-    #          linewidth=2, color='r')
+    normal_dist = np.random.normal(mu, sigma, 1000)
 
-    # plt.xlabel("Malus Points")
-    # plt.grid(which="both")
-    # plt.savefig("random_barplot.png")
+    count, bins, ignored = plt.hist(normal_dist, 30, density=True)
+    plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
+             np.exp(- (bins - mu)**2 / (2 * sigma**2)),
+             linewidth=2, color='r')
+
+    plt.xlabel("Malus Points")
+    plt.grid(which="both")
+    plt.savefig("hillclimb_normal_dist_fifth_hour.png")
 
     # plt.bar(data)
 
@@ -201,11 +206,11 @@ if __name__ == "__main__":
 
     # plt.savefig("random_barplot.png")
 
-    plt.plot(data)
+    # plt.plot(data)
 
-    plt.ylabel("Malus Points")
-    plt.xlabel("Iterations")
+    # plt.ylabel("Malus Points")
+    # plt.xlabel("Iterations")
 
-    plt.grid(which="both")
+    # plt.grid(which="both")
 
-    plt.savefig("hillclimber.png")
+    # plt.savefig("hillclimber_2.png")
