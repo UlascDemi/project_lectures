@@ -12,7 +12,8 @@ import random
 
 def hill_climb(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
     """
-
+    The hill_climb algorithm works by rescheduling a random class, calculating the malus_points
+    and comparing it to the previous points. 
 
     Args:
         courses (list[Course]): a list of all courses
