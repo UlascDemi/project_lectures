@@ -60,6 +60,7 @@ def main(print_time_table=False):
         courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
     # ----------------------Subdivide students into groups--------------------------------
+    print(courses_sorted)
     for course in courses_sorted:
         course.calc_seminars()
         course.calc_practica()
@@ -154,39 +155,40 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
+    main()
 
-    n_hill_climbs = 10000
-    data = []
+    # n_hill_climbs = 10000
+    # data = []
 
-    computation_times = []
+    # computation_times = []
 
-    for i in range(n_hill_climbs):
-        begin = time()
-        if i != 0:
-            average_time = sum(computation_times)/len(computation_times)
-        #     print(
-        #         f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
-        # print(f"Simulation {i} out of {n_hill_climbs}")
+    # for i in range(n_hill_climbs):
+    #     begin = time()
+    #     if i != 0:
+    #         average_time = sum(computation_times)/len(computation_times)
+    #     #     print(
+    #     #         f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
+    #     # print(f"Simulation {i} out of {n_hill_climbs}")
 
-        data += main()
+    #     data += main()
 
-        end = time()
-        duration = end - begin
-        computation_times.append(duration)
+    #     end = time()
+    #     duration = end - begin
+    #     computation_times.append(duration)
 
-    mu = np.mean(data)
-    sigma = np.std(data)
+    # mu = np.mean(data)
+    # sigma = np.std(data)
 
-    normal_dist = np.random.normal(mu, sigma, 1000)
+    # normal_dist = np.random.normal(mu, sigma, 1000)
 
-    count, bins, ignored = plt.hist(normal_dist, 30, density=True)
-    plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
-             np.exp(- (bins - mu)**2 / (2 * sigma**2)),
-             linewidth=2, color='r')
+    # count, bins, ignored = plt.hist(normal_dist, 30, density=True)
+    # plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
+    #          np.exp(- (bins - mu)**2 / (2 * sigma**2)),
+    #          linewidth=2, color='r')
 
-    plt.xlabel("Malus Points")
-    plt.grid(which="both")
-    plt.savefig("random_barplot.png")
+    # plt.xlabel("Malus Points")
+    # plt.grid(which="both")
+    # plt.savefig("random_barplot.png")
 
     # plt.bar(data)
 
