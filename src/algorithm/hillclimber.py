@@ -12,8 +12,12 @@ import random
 
 def hill_climb(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
     """
-    The hill_climb algorithm works by rescheduling a random class, calculating the malus_points
-    and comparing it to the previous points. 
+    The hill_climb algorithm works by taking a random course, then a random time slot of the course.
+    This time slot is then rescheduled to another time slot. The malus points are then calculated
+    and compared to the malus points before the reschedule. If the points are worse than before, the
+    course is reverted to its original state.
+    The new time slot is taken from the room_time_slots. This is a list containing all available
+    room time slots.
 
     Args:
         courses (list[Course]): a list of all courses
@@ -28,7 +32,6 @@ def hill_climb(courses: list[Course], room_time_slots: list, students: list[Stud
     old_points = malus_point_count(students, rooms)
 
     course = random.choice(courses)
-
     time_table = course.get_time_table()
 
     filled_in_slots = []
@@ -42,7 +45,7 @@ def hill_climb(courses: list[Course], room_time_slots: list, students: list[Stud
     # Choose the course that needs to be moved and choose a new time_slot
     original_day_time_slot = random.choice(filled_in_slots)
     new_time_slot = random.choice(room_time_slots)
-
+    
     reschedule_time_slot(course, room_time_slots, original_day_time_slot, new_time_slot)
 
     new_points = malus_point_count(students, rooms)
