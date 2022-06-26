@@ -10,7 +10,7 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
-from src.schedule_validity.schedule_validity import schedule_validity
+from src.schedule_validity.schedule_validity import is_valid_schedule
 from src.loader.loader import load_students, load_rooms, load_courses
 from src.algorithm.random_scheduling import schedule_course
 from src.algorithm.Completely_random import random_schedule_course
@@ -92,7 +92,8 @@ def main(print_time_table=False):
         schedule_course(course, available_rooms)
 
     # added schedule validity
-    schedule_validity(students, rooms)
+    if not is_valid_schedule(students, rooms):
+        print("not a valid schedule")
 
     malus_points = malus_point_count(students, rooms)
 
@@ -101,15 +102,18 @@ def main(print_time_table=False):
         # print_2d_list(courses_sorted[0])
 
     # print(f"Total maluspoint count: {malus_points}")
-    # malus_points_progress = hill_climb_restart(
-    #     courses_sorted, available_rooms, students, rooms)
+    malus_points_progress = hill_climb_restart(
+        courses_sorted, available_rooms, students, rooms)
 
-    return [malus_points]
+    # return [malus_points]
     # print(f"new malus points: {malus_point_count(students, rooms)}")
+    if not is_valid_schedule(students, rooms):
+        print("not a valid schedule")
 
     print(f"Start value = {malus_points}")
     print(f"End value = {malus_point_count(students, rooms)}")
     print("------------------------------------------------")
+
     return malus_points_progress
 
 
@@ -155,7 +159,7 @@ def print_2d_list(object_to_print) -> None:
 
 if __name__ == "__main__":
 
-    n_hill_climbs = 10000
+    n_hill_climbs = 500
     data = []
 
     computation_times = []
@@ -164,9 +168,9 @@ if __name__ == "__main__":
         begin = time()
         if i != 0:
             average_time = sum(computation_times)/len(computation_times)
-        #     print(
-        #         f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
-        # print(f"Simulation {i} out of {n_hill_climbs}")
+            print(
+                f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
+        print(f"Simulation {i} out of {n_hill_climbs}")
 
         data += main()
 
@@ -174,19 +178,19 @@ if __name__ == "__main__":
         duration = end - begin
         computation_times.append(duration)
 
-    mu = np.mean(data)
-    sigma = np.std(data)
+    # mu = np.mean(data)
+    # sigma = np.std(data)
 
-    normal_dist = np.random.normal(mu, sigma, 1000)
+    # normal_dist = np.random.normal(mu, sigma, 1000)
 
-    count, bins, ignored = plt.hist(normal_dist, 30, density=True)
-    plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
-             np.exp(- (bins - mu)**2 / (2 * sigma**2)),
-             linewidth=2, color='r')
+    # count, bins, ignored = plt.hist(normal_dist, 30, density=True)
+    # plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
+    #          np.exp(- (bins - mu)**2 / (2 * sigma**2)),
+    #          linewidth=2, color='r')
 
-    plt.xlabel("Malus Points")
-    plt.grid(which="both")
-    plt.savefig("random_barplot.png")
+    # plt.xlabel("Malus Points")
+    # plt.grid(which="both")
+    # plt.savefig("random_barplot.png")
 
     # plt.bar(data)
 
@@ -197,11 +201,11 @@ if __name__ == "__main__":
 
     # plt.savefig("random_barplot.png")
 
-    # plt.plot(data)
+    plt.plot(data)
 
-    # plt.ylabel("Malus Points")
-    # plt.xlabel("Iterations")
+    plt.ylabel("Malus Points")
+    plt.xlabel("Iterations")
 
-    # plt.grid(which="both")
+    plt.grid(which="both")
 
-    # plt.savefig("hillclimber.png")
+    plt.savefig("hillclimber.png")

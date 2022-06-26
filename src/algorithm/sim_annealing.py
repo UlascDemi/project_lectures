@@ -50,9 +50,10 @@ def simulated_annealing(courses: list[Course], room_time_slots: list, students: 
     if new_points > old_points:
         accept_chance = 2**(old_points-new_points)
 
-        reschedule_time_slot(
-            course, room_time_slots, new_time_slot, original_day_time_slot
-        )
+        if random.random() > accept_chance:
+            reschedule_time_slot(
+                course, room_time_slots, new_time_slot, original_day_time_slot
+            )
 
         return old_points
 
