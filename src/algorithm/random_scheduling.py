@@ -38,14 +38,19 @@ def get_choosable_rooms(
 
 
 def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
-    """_summary_
+    """
+    This function schedules the all lectures, seminars and practica of course.
+    The rooms and time slots are randomly chosen. If the course was already
+    scheduled in, the course in unscheduled and scheduled again. If all
+    activities of the course are scheduled succesfully, True is returned.
+    If one of them fails, False is returned
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): the course that needs to be scheduled
+        available_rooms (list[Room]): a list of all available room time slots
 
     Returns:
-        bool: _description_
+        bool: returns True if schedule was succesful, False if not
     """
     if is_scheduled(course):
         un_schedule(course, available_rooms)
@@ -60,7 +65,17 @@ def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
     return False
 
 
-def is_scheduled(course: Course):
+def is_scheduled(course: Course) -> bool:
+    """
+    Checks if the course is already planned in 
+    
+    Args:
+        course (Course): a course object of the Course class
+
+    Returns:
+        bool: returns True if course is already planned in, False if not
+    
+    """
     time_table = course.get_time_table()
 
     for day in time_table:
@@ -69,14 +84,22 @@ def is_scheduled(course: Course):
                 return True
 
 
-def un_schedule(course: Course, available_rooms: list):
+def un_schedule(course: Course, available_rooms: list) -> None:
+    """
+    Unschedules all lectures, seminars and practica.  
+    
+    Args:
+        course (Course): a course object of the Course class
+        
+    """
     time_table = course.get_time_table()
-    # print(time_table)
 
     students = course.get_enrol_students()
-
+    
+    # Go through each time slot of the timetable
     for i, day in enumerate(time_table):
         for j, time_slot in enumerate(day):
+            # If time_slot is filled in, unschedul
             if time_slot != "-":
                 for student in students:
                     student_time_slots = student.get_time_table()[i][j]
@@ -90,19 +113,18 @@ def un_schedule(course: Course, available_rooms: list):
                 available_rooms.append((time_slot, i, j))
                 time_table[i][j] = "-"
 
-    # print(time_table)
-    # exit()
-
 
 def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
-    """_summary_
+    """
+    Schedules all lectures needed to be given for the given Course. These
+    are all randomly scheduled.
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): Course to be scheduled
+        available_rooms (list[Room]): The available room time slots
 
     Returns:
-        bool: _description_
+        bool: True if lectures have been scheduled, False if not
     """
     for _ in range(course.n_lecture):
         # Checks if lectures need to be given
@@ -116,7 +138,6 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
 
         # If no rooms found, Schedule couldnt be found
         if len(choosable_rooms) == 0:
-            # print(f"Couldnt schedule lecture: {course}")
             return False
 
         # Choose random time slot
@@ -151,11 +172,11 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
     """_summary_
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): Course to be scheduled
+        available_rooms (list[Room]): The available room time slots
 
     Returns:
-        bool: _description_
+        bool: True if lectures have been scheduled, False if not
     """
     seminar_groups = course.get_seminar_groups()
 
@@ -208,11 +229,11 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
     """_summary_
 
     Args:
-        course (Course): _description_
-        available_rooms (list[Room]): _description_
+        course (Course): Course to be scheduled
+        available_rooms (list[Room]): The available room time slots
 
     Returns:
-        bool: _description_
+        bool: True if lectures have been scheduled, False if not
     """
     practicum_groups = course.get_practicum_groups()
 
