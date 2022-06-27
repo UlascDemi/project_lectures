@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+from src.classes.student import Student
+from src.classes.course import Course
+from src.classes.room import Room
 
 # Dit zou 1 maluspunt moeten zijn
 time_table_1 = [
@@ -45,9 +50,9 @@ time_table_5 = [
     [[],[],[],[],[]]
 ]
 
-# schedule validity id false 
+# maluspunten 2 (2 conflicten)
 time_table_6 = [
-    [[1],[],[],[],[1]],
+    [[1,1],[1,1],[],[],[]],
     [[],[],[],[],[]],
     [[],[],[],[],[]],
     [[],[],[],[],[]],
@@ -83,8 +88,65 @@ def tussenuur_count(students) -> int:
 
     return tussen_uur_maluspunt
 
+
+def conflict_count(students: list[Student]) -> int:
+    """
+     Checks for every student if a timeslot has more than one course planned.
+     for each extra course that is given a malus points will be added.
+
+    Args:
+        students (list[Student]): list of student objects
+
+    Returns:
+        int: total amount of conflicting timeslots
+    """
+    conflict_count = 0
+
+    # Go through every student
+    for student in students:
+        time_table = student.get_time_table()
+
+        # Go through every time day and timeslot
+        for day in time_table:
+            for time_slot in day:
+
+                # If the timeslot has more than 1 entry, count the excess amount
+                if len(time_slot) > 1:
+                    conflict_count += len(time_slot) - 1
+
+    return conflict_count
+
+
+def fifth_hour_points(rooms: dict[Room]) -> int:
+    """
+    Checks if the 5th timeslot is used for the room C0.110.
+    Room schedules get 5 malus points if this timeslot is used
+
+    Args:
+        rooms (dict[Room]): dictionairy with room objects
+
+    Returns:
+        int: total amount of malus points
+    """
+    malus_points = 0
+
+    room = rooms["C0.110"]
+    time_table = room.get_time_table()
+
+    for day in time_table:
+        if day[4] != "-":
+            malus_points += 5
+
+    return malus_points
+
+
+
 print(tussenuur_count(time_table_1))
 print(tussenuur_count(time_table_2))
+print(fifth_hour_points(time_table_3))
+print(conflict_count(time_table_4))
 print(tussenuur_count(time_table_5))
+print(conflict_count(time_table_6))
+
 
 
