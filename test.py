@@ -149,4 +149,3 @@ print(tussenuur_count(time_table_5))
 print(conflict_count(time_table_6))
 
 
-
