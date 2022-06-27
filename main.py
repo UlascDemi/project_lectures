@@ -15,7 +15,7 @@ from src.loader.loader import load_students, load_rooms, load_courses
 from src.algorithm.random_scheduling import schedule_course
 from src.algorithm.Completely_random import random_schedule_course
 from src.algorithm.restart_hillclimb import hill_climb_restart
-from src.algorithm.greedy import greedy 
+# from src.algorithm.greedy import greedy
 from src.malus_point_count import malus_point_count, conflict_count
 from src.algorithm.hillclimber import hill_climb
 
@@ -61,7 +61,7 @@ def main(print_time_table=False):
         courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
     # ----------------------Subdivide students into groups--------------------------------
-    #print(courses_sorted)
+    # print(courses_sorted)
     for course in courses_sorted:
         course.calc_seminars()
         course.calc_practica()
@@ -88,8 +88,8 @@ def main(print_time_table=False):
                 available_rooms.append((room, day, time_slot))
             # added a fifth timeslot
         # available_rooms.append((rooms["C0.110"], day, 4))
-    
-    greedy(courses_sorted, available_rooms)
+
+    # greedy(courses_sorted, available_rooms)
 
     # Schedule all courses
     for course in courses_sorted:
