@@ -184,4 +184,3 @@ maluspunt9 = tussenuur_count(time_table_9) + conflict_count(time_table_9)
 print(maluspunt9)
 
 
-
