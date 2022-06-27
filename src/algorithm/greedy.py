@@ -14,6 +14,10 @@ from src.malus_point_count.malus_point_count import malus_point_count
 # Loop door courses: plant de course in en berekent voor alle mogelijkheden
 # de maluspunten. Wanneer de maluspunten het laagst zijn plant hij hem def in
 
+# Letten op: random bv op basis van veel maluspunten uit random. 
+# available_rooms: 
+# Slide maken waarom je greedy op welk probleem: werkte wel of niet
+
 def greedy(courses_sorted, available_rooms: list[Room]):
 
     for course in courses_sorted:
