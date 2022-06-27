@@ -169,14 +169,16 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
 
 
 def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
-    """_summary_
+    """
+    Schedules all seminars needed to be given for the given Course. These
+    are all randomly scheduled.
 
     Args:
         course (Course): Course to be scheduled
         available_rooms (list[Room]): The available room time slots
 
     Returns:
-        bool: True if lectures have been scheduled, False if not
+        bool: True if seminars have been scheduled, False if not
     """
     seminar_groups = course.get_seminar_groups()
 
@@ -226,14 +228,16 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
 
 
 def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
-    """_summary_
+    """
+    Schedules all practicals needed to be given for the given Course. These
+    are all randomly scheduled.
 
     Args:
         course (Course): Course to be scheduled
         available_rooms (list[Room]): The available room time slots
 
     Returns:
-        bool: True if lectures have been scheduled, False if not
+        bool: True if practicals have been scheduled, False if not
     """
     practicum_groups = course.get_practicum_groups()
 
