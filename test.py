@@ -116,7 +116,7 @@ def tussenuur_count(students) -> int:
     return tussen_uur_maluspunt
 
 
-def conflict_count(students: list[Student]) -> int:
+def conflict_count(time_table) -> int:
     """
      Checks for every student if a timeslot has more than one course planned.
      for each extra course that is given a malus points will be added.
@@ -129,22 +129,18 @@ def conflict_count(students: list[Student]) -> int:
     """
     conflict_count = 0
 
-    # Go through every student
-    for student in students:
-        time_table = student.get_time_table()
+    # Go through every time day and timeslot
+    for day in time_table:
+        for time_slot in day:
 
-        # Go through every time day and timeslot
-        for day in time_table:
-            for time_slot in day:
-
-                # If the timeslot has more than 1 entry, count the excess amount
-                if len(time_slot) > 1:
-                    conflict_count += len(time_slot) - 1
+            # If the timeslot has more than 1 entry, count the excess amount
+            if len(time_slot) > 1:
+                conflict_count += len(time_slot) - 1
 
     return conflict_count
 
 
-def fifth_hour_points(rooms: dict[Room]) -> int:
+def fifth_hour_points(time_table) -> int:
     """
     Checks if the 5th timeslot is used for the room C0.110.
     Room schedules get 5 malus points if this timeslot is used
@@ -157,30 +153,27 @@ def fifth_hour_points(rooms: dict[Room]) -> int:
     """
     malus_points = 0
 
-    room = rooms["C0.110"]
-    time_table = room.get_time_table()
-
     for day in time_table:
-        if day[4] != "-":
+        if len(day[4]) != 0:
             malus_points += 5
 
     return malus_points
 
 
 
-print(tussenuur_count(time_table_1))
-print(tussenuur_count(time_table_2))
-print(fifth_hour_points(time_table_3))
-print(conflict_count(time_table_4))
-print(tussenuur_count(time_table_5))
-print(conflict_count(time_table_6))
+print(f"timetable 1 moet 1 maluspunt zijn en is: {tussenuur_count(time_table_1)}")
+print(f"timetable 2 moet 3 maluspunten zijn en is: {tussenuur_count(time_table_2)}")
+print(f"timetable 3 moet 5 maluspunten zijn en is: {fifth_hour_points(time_table_3)}")
+print(f"timetable 4 moet 1 maluspunt zijn en is: {conflict_count(time_table_4)}")
+print(f"timetable 5 kan niet ivm 3 tussenuur en is: {tussenuur_count(time_table_5)}")
+print(f"timetable 6 moet 2 maluspunten zijn en is: {conflict_count(time_table_6)}")
 maluspunt7 = tussenuur_count(time_table_7) + conflict_count(time_table_7)
-print(maluspunt7)
+print(f"timetable 7 moet 3 maluspunten zijn en is: {maluspunt7}")
 
-maluspunt8 = tussenuur_count(time_table_8) + conflict_count(time_table_8)
-print(maluspunt8)
+maluspunt8 = tussenuur_count(time_table_8) + fifth_hour_points(time_table_8)
+print(f"timetable 8 moet 8 maluspunten zijn en is: {maluspunt8}")
 
 maluspunt9 = tussenuur_count(time_table_9) + conflict_count(time_table_9)
-print(maluspunt9)
+print(f"timetable 9 moet 1 maluspunt zijn en is: {maluspunt9}")
 
 
