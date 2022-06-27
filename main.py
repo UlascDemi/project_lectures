@@ -10,18 +10,25 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
-from src.schedule_validity.schedule_validity import schedule_validity
+from src.schedule_validity.schedule_validity import is_valid_schedule
 from src.loader.loader import load_students, load_rooms, load_courses
 from src.algorithm.random_scheduling import schedule_course
 from src.algorithm.Completely_random import random_schedule_course
+from src.algorithm.restart_hillclimb import hill_climb_restart
+# from src.algorithm.greedy import greedy
 from src.malus_point_count import malus_point_count, conflict_count
 from src.algorithm.hillclimber import hill_climb
 
 
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn
 
 from tabulate import tabulate
 from copy import deepcopy
+from time import time
+from math import ceil
 
 # TODO getters voor course schrijven - Brechje
 # TODO getters voor room schrijven - Ulas
@@ -37,7 +44,7 @@ DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-19:00"]
 
 
-def main(print_time_table=True):
+def main(print_time_table=False):
 
     rooms = load_rooms("data/zalen.csv")
     courses = load_courses("data/vakken.csv", "data/abbreviations.txt")
@@ -54,6 +61,7 @@ def main(print_time_table=True):
         courses_list, key=lambda course: course.get_n_enrol_students(), reverse=True
     )
     # ----------------------Subdivide students into groups--------------------------------
+    # print(courses_sorted)
     for course in courses_sorted:
         course.calc_seminars()
         course.calc_practica()
@@ -70,9 +78,6 @@ def main(print_time_table=True):
             course.get_practicum_groups(),
         )
 
-        # TODO hier moeten nu nog de practica ingedeeld worden
-        # course.subdivide_into_groups(practica dingen)
-
     # -----------------------Create timetable, based on courses---------------------------
     available_rooms = []
 
@@ -84,36 +89,44 @@ def main(print_time_table=True):
             # added a fifth timeslot
         # available_rooms.append((rooms["C0.110"], day, 4))
 
+    # greedy(courses_sorted, available_rooms)
+
     # Schedule all courses
     for course in courses_sorted:
         schedule_course(course, available_rooms)
 
     # added schedule validity
-    schedule_validity(students, rooms)
+    if not is_valid_schedule(students, rooms):
+        print("not a valid schedule")
+        return
 
-    conflicts = conflict_count(students)
     malus_points = malus_point_count(students, rooms)
 
     if print_time_table:
         print_2d_list(students[16])
-        # print_2d_list(courses_sorted[0])
 
-        print(f"\nTotal conflict count: {conflicts}")
-        print(f"Total maluspoint count: {malus_points}")
+    # Add the fifth hour for C0.110
+    available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
-    hill_climb_iterations = 10000
+    # print(f"Total maluspoint count: {malus_points}")
+    malus_points_progress = hill_climb_restart(
+        courses_sorted, available_rooms, students, rooms)
 
-    for i in range(hill_climb_iterations):
-        hill_climb(courses_sorted, available_rooms, students, rooms)
+    # return [malus_points]
+    # print(f"new malus points: {malus_point_count(students, rooms)}")
+    if not is_valid_schedule(students, rooms):
+        print("not a valid schedule")
 
-    print(f"new malus points: {malus_point_count(students, rooms)}")
+    print(f"Start value = {malus_points}")
+    print(f"End value = {malus_point_count(students, rooms)}")
+    print("------------------------------------------------")
 
-    return malus_points
+    return malus_points_progress
 
 
 def print_2d_list(object_to_print) -> None:
 
-    # Get make a copy of the time_Table
+    # Make a copy of the time_table
     time_table = object_to_print.get_time_table()
     time_table_copy = deepcopy(time_table)
 
@@ -152,15 +165,57 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    main(True)
+    main()
 
-    # results = []
+    n_hill_climbs = 200
+    data = []
 
-    # iterations = 1
+    # computation_times = []
 
-    # for i in range(iterations):
-    #     results.append(main(print_time_table=False))
-    #     if i % 50 == 0:
-    #         print(f"Step {i} / {iterations}")
-    # print(f"minimum malus points = {min(results)}")
-    # print(f"average malus points = {sum(results) / len(results)}")
+    # for i in range(n_hill_climbs):
+    #     begin = time()
+    #     if i != 0:
+    #         average_time = sum(computation_times)/len(computation_times)
+    #         print(
+    #             f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
+    #     print(f"Simulation {i} out of {n_hill_climbs}")
+
+    #     data += main()
+
+    #     end = time()
+    #     duration = end - begin
+    #     computation_times.append(duration)
+
+    print(f"best timetable found: {min(data)} malus points")
+
+    mu = np.mean(data)
+    sigma = np.std(data)
+
+    normal_dist = np.random.normal(mu, sigma, 1000)
+
+    count, bins, ignored = plt.hist(normal_dist, 30, density=True)
+    plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
+             np.exp(- (bins - mu)**2 / (2 * sigma**2)),
+             linewidth=2, color='r')
+
+    plt.xlabel("Malus Points")
+    plt.grid(which="both")
+    plt.savefig("hillclimb_normal_dist_fifth_hour.png")
+
+    # plt.bar(data)
+
+    # plt.ylabel("N")
+    # plt.xlabel("Malus Points")
+
+    # plt.grid(which="both")
+
+    # plt.savefig("random_barplot.png")
+
+    # plt.plot(data)
+
+    # plt.ylabel("Malus Points")
+    # plt.xlabel("Iterations")
+
+    # plt.grid(which="both")
+
+    # plt.savefig("hillclimber_2.png")

@@ -3,8 +3,6 @@ from copy import deepcopy
 from src.classes.student import Student
 from src.classes.room import Room
 
-schedule_validity = True
-
 
 def third_free_period_check(students: list[Student]) -> int:
     """
@@ -33,10 +31,12 @@ def third_free_period_check(students: list[Student]) -> int:
                 free_periods = amount_activities - activity
 
                 if free_periods > 2:
-                    print("ERROR: more than two free periods")
-                    return False 
+                    # print("ERROR: more than two free periods")
+                    return False
 
-#deze moet nog naar gekeken worden want zget nu dat dit gebeurd
+    return True
+
+
 def room_conflict_check(rooms: dict[Room]) -> int:
     """
     Checks if a room has more than one activity planned in one timeslot
@@ -58,33 +58,52 @@ def room_conflict_check(rooms: dict[Room]) -> int:
                 if len(time_slot) > 2:
                     print("ERROR: more than two activities planned in one room")
                     return False
-    
-def fifth_hour_check(rooms: dict[Room]) -> int:
-    """
-    Checks if a room has more than one activity planned in one timeslot
 
-    Args:
-        rooms (dict[Room]): contains room objects
+    return True
 
-    """
 
-    # Go through every room
-    copy = deepcopy(rooms)
-    del copy["C0.110"]
-    for room in copy.values():
-        time_table = room.get_time_table()
+# def fifth_hour_check(rooms: dict[Room]) -> int:
+#     """
+#     Checks if a room has more than one activity planned in one timeslot
 
-        # Go through every time day and timeslot
-        for day in time_table:
-            for time_slot in day:
+#     Args:
+#         rooms (dict[Room]): contains room objects
 
-                # If the timeslot has more than 1 entry, count the excess amount
-                if day[4] != "-":
-                    print("ERROR: fifth hour timeslot is use in other rooms than C0.110")
-                    
-                    return False
-def schedule_validity(students, rooms):
-    validity = True
-    if fifth_hour_check(rooms) or third_free_period_check(students) or room_conflict_check(rooms) is False:
-        validity = False
-    return validity
+#     """
+
+#     # Go through every room
+#     copy = deepcopy(rooms)
+#     del copy["C0.110"]
+#     for room in copy.values():
+#         time_table = room.get_time_table()
+
+#         # Go through every time day and timeslot
+#         for day in time_table:
+#             for time_slot in day:
+
+#                 # If the timeslot has more than 1 entry, count the excess amount
+#                 if day[4] != "-":
+#                     print("ERROR: fifth hour timeslot is use in other rooms than C0.110")
+
+#                     return False
+
+def fifth_hour_check(rooms: dict[Room]) -> bool:
+
+    for room in rooms.values():
+        if room == rooms["C0.110"]:
+            continue
+
+        for day in room.get_time_table():
+            if day[4] != "-":
+                print("aaa")
+                return False
+
+    return True
+
+
+def is_valid_schedule(students, rooms):
+
+    if fifth_hour_check(rooms) and third_free_period_check(students):
+        return True
+
+    return False

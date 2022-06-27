@@ -6,19 +6,13 @@ from src.classes.room import Room
 
 from src.malus_point_count import malus_point_count
 from src.reschedule.reschedule import reschedule_time_slot
-from src.schedule_validity.schedule_validity import third_free_period_check
 
 import random
 
 
-def hill_climb(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
+def simulated_annealing(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
     """
-    The hill_climb algorithm works by taking a random course, then a random time slot of
-    the course. This time slot is then rescheduled to another time slot. The malus points
-    are then calculated and compared to the malus points before the reschedule.
-    If the points are worse than before, the course is reverted to its original state.
-    The new time slot is taken from the room_time_slots. This is a list containing all
-    available room time slots.
+
 
     Args:
         courses (list[Course]): a list of all courses
@@ -33,6 +27,7 @@ def hill_climb(courses: list[Course], room_time_slots: list, students: list[Stud
     old_points = malus_point_count(students, rooms)
 
     course = random.choice(courses)
+
     time_table = course.get_time_table()
 
     filled_in_slots = []
@@ -52,10 +47,13 @@ def hill_climb(courses: list[Course], room_time_slots: list, students: list[Stud
     new_points = malus_point_count(students, rooms)
 
     # Check if the new schedule is better, if worse, revert back
-    if new_points > old_points or third_free_period_check(students):
-        reschedule_time_slot(
-            course, room_time_slots, new_time_slot, original_day_time_slot
-        )
+    if new_points > old_points:
+        accept_chance = 2**(old_points-new_points)
+
+        if random.random() > accept_chance:
+            reschedule_time_slot(
+                course, room_time_slots, new_time_slot, original_day_time_slot
+            )
 
         return old_points
 
