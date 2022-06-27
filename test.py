@@ -59,6 +59,33 @@ time_table_6 = [
     [[],[],[],[],[]]
 ]
 
+# maluspunten 3 (2 conflict & 1 tussenuur)
+time_table_7 = [
+    [[1,1],[],[1,1],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]]
+]
+
+# maluspunten = 8 (2 tussenuur & 5e)
+time_table_8 = [
+    [[],[],[],[],[]],
+    [[],[1],[],[],[1]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]]
+]
+
+# maluspunten = 1 conflict 
+time_table_9 = [
+    [[],[],[],[],[]],
+    [[1],[],[],[],[]],
+    [[1,1],[],[],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]]
+]
+
 def tussenuur_count(students) -> int:
     tussen_uur_maluspunt = 0
 
@@ -147,5 +174,13 @@ print(fifth_hour_points(time_table_3))
 print(conflict_count(time_table_4))
 print(tussenuur_count(time_table_5))
 print(conflict_count(time_table_6))
+maluspunt7 = tussenuur_count(time_table_7) + conflict_count(time_table_7)
+print(maluspunt7)
+
+maluspunt8 = tussenuur_count(time_table_8) + conflict_count(time_table_8)
+print(maluspunt8)
+
+maluspunt9 = tussenuur_count(time_table_9) + conflict_count(time_table_9)
+print(maluspunt9)
 
 
