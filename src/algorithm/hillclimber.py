@@ -11,7 +11,12 @@ from src.schedule_validity.schedule_validity import third_free_period_check
 import random
 
 
-def hill_climb(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
+def hill_climb(
+    courses: list[Course],
+    room_time_slots: list,
+    students: list[Student],
+    rooms: list[Room],
+) -> int:
     """
     The hill_climb algorithm works by taking a random course, then a random time slot of
     the course. This time slot is then rescheduled to another time slot. The malus points
@@ -34,14 +39,8 @@ def hill_climb(courses: list[Course], room_time_slots: list, students: list[Stud
 
     course = random.choice(courses)
     time_table = course.get_time_table()
-
-    filled_in_slots = []
-
-    # Find all non-empty timeslots in time_table
-    for i, _ in enumerate(time_table):
-        for j, value in enumerate(time_table[i]):
-            if time_table[i][j] != "-":
-                filled_in_slots.append((value[0], i, j))
+    
+    filled_in_slots = get_filled_in_slots(time_table)
 
     # Choose the course that needs to be moved and choose a new time_slot
     original_day_time_slot = random.choice(filled_in_slots)
@@ -60,3 +59,15 @@ def hill_climb(courses: list[Course], room_time_slots: list, students: list[Stud
         return old_points
 
     return new_points
+
+
+def get_filled_in_slots(time_table) -> list:
+    filled_in_slots = []
+
+    # Find all non-empty timeslots in time_table
+    for i, _ in enumerate(time_table):
+        for j, value in enumerate(time_table[i]):
+            if time_table[i][j] != "-":
+                filled_in_slots.append((value[0], i, j))
+
+    return filled_in_slots

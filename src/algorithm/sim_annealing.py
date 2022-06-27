@@ -10,7 +10,48 @@ from src.reschedule.reschedule import reschedule_time_slot
 import random
 
 
-def simulated_annealing(courses: list[Course], room_time_slots: list, students: list[Student], rooms: list[Room]) -> int:
+def start_annealing(
+    courses: list[Course],
+    room_time_slots: list,
+    students: list[Student],
+    rooms: list[Room],
+    starting_temp: int,
+) -> int:
+
+    malus_points = []
+    same_value_count = 0
+    old_points = float("inf")
+
+    threshold = 2000
+
+    current_iteration = 0
+
+    # Continue hillclimbing untill no improvement is found in N steps
+    while same_value_count < threshold:
+        new_points = simulated_annealing(
+            courses, room_time_slots, students, rooms, starting_temp, current_iteration
+        )
+
+        if old_points == new_points:
+            same_value_count += 1
+        else:
+            same_value_count = 0
+
+        old_points = new_points
+        malus_points.append(new_points)
+        current_iteration += 1
+
+    return malus_points
+
+
+def simulated_annealing(
+    courses: list[Course],
+    room_time_slots: list,
+    students: list[Student],
+    rooms: list[Room],
+    starting_temp: int,
+    current_iteration: int,
+) -> int:
     """
 
 
@@ -27,16 +68,9 @@ def simulated_annealing(courses: list[Course], room_time_slots: list, students: 
     old_points = malus_point_count(students, rooms)
 
     course = random.choice(courses)
-
     time_table = course.get_time_table()
 
-    filled_in_slots = []
-
-    # Find all non-empty timeslots in time_table
-    for i, _ in enumerate(time_table):
-        for j, value in enumerate(time_table[i]):
-            if time_table[i][j] != "-":
-                filled_in_slots.append((value[0], i, j))
+    filled_in_slots = get_filled_in_slots(time_table)
 
     # Choose the course that needs to be moved and choose a new time_slot
     original_day_time_slot = random.choice(filled_in_slots)
@@ -48,7 +82,8 @@ def simulated_annealing(courses: list[Course], room_time_slots: list, students: 
 
     # Check if the new schedule is better, if worse, revert back
     if new_points > old_points:
-        accept_chance = 2**(old_points-new_points)
+        temp = starting_temp * 0.9995**current_iteration
+        accept_chance = 2 ** ((old_points - new_points) / temp)
 
         if random.random() > accept_chance:
             reschedule_time_slot(
@@ -58,3 +93,15 @@ def simulated_annealing(courses: list[Course], room_time_slots: list, students: 
         return old_points
 
     return new_points
+
+
+def get_filled_in_slots(time_table) -> list:
+    filled_in_slots = []
+
+    # Find all non-empty timeslots in time_table
+    for i, _ in enumerate(time_table):
+        for j, value in enumerate(time_table[i]):
+            if time_table[i][j] != "-":
+                filled_in_slots.append((value[0], i, j))
+
+    return filled_in_slots
