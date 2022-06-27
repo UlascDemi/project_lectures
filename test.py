@@ -1,3 +1,4 @@
+
 # Dit zou 1 maluspunt moeten zijn
 time_table_1 = [
     [[1],[1],[],[1],[]],
@@ -8,30 +9,48 @@ time_table_1 = [
 ]
 
 
-# Dit zou 4 maluspunten moeten zijn
+# Dit zou 3 maluspunten moeten zijn
 time_table_2 = [
-    [[1],[1],[],[1],[]],
+    [[],[],[],[],[]],
     [[],[1],[],[],[1]],
     [[],[],[],[],[]],
     [[],[],[],[],[]],
     [[],[],[],[],[]]
 ]
 
-# Dit zou 3 maluspunten moeten zijn
+# Dit zou 5 maluspunten moeten zijn
 time_table_3 = [
-    [[1],[1],[1],[],[]],
-    [[1],[],[],[1],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[1]],
     [[],[],[],[],[]],
     [[],[],[],[],[]],
     [[],[],[],[],[]]
 ]
 
-# Dit zou 3 maluspunten moeten zijn
+# Dit zou 1 maluspunten moeten zijn
 time_table_4 = [
+    [[],[1,1],[],[],[]],
     [[],[],[],[],[]],
     [[],[],[],[],[]],
     [[],[],[],[],[]],
-    [[1],[],[1],[],[1]],
+    [[],[],[],[],[]]
+]
+
+# schedule validity is false 
+time_table_5 = [
+    [[1],[],[],[],[1]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]]
+]
+
+# schedule validity id false 
+time_table_6 = [
+    [[1],[],[],[],[1]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]],
+    [[],[],[],[],[]],
     [[],[],[],[],[]]
 ]
 
@@ -40,7 +59,6 @@ def tussenuur_count(students) -> int:
 
     # for student in students:
     for day in students:
-        print(day)
         activiteit = 0
         first_activity = None
         last_activity = None
@@ -61,8 +79,12 @@ def tussenuur_count(students) -> int:
             elif tussen_uren == 2:
                 tussen_uur_maluspunt += 3
             elif tussen_uren > 2:
-                print("ERROR")
+                print("ERROR: more than two free periods")
 
     return tussen_uur_maluspunt
 
-print(tussenuur_count(time_table_4))
+print(tussenuur_count(time_table_1))
+print(tussenuur_count(time_table_2))
+print(tussenuur_count(time_table_5))
+
+
