@@ -165,26 +165,26 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    # main()
 
-    n_hill_climbs = 200
+    n_hill_climbs = 1000
     data = []
 
-    # computation_times = []
+    computation_times = []
 
-    # for i in range(n_hill_climbs):
-    #     begin = time()
-    #     if i != 0:
-    #         average_time = sum(computation_times)/len(computation_times)
-    #         print(
-    #             f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
-    #     print(f"Simulation {i} out of {n_hill_climbs}")
+    for i in range(n_hill_climbs):
+        begin = time()
+        if i != 0:
+            average_time = sum(computation_times)/len(computation_times)
+            print(
+                f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes")
+        print(f"Simulation {i} out of {n_hill_climbs}")
 
-    #     data += main()
+        data += main()
 
-    #     end = time()
-    #     duration = end - begin
-    #     computation_times.append(duration)
+        end = time()
+        duration = end - begin
+        computation_times.append(duration)
 
     print(f"best timetable found: {min(data)} malus points")
 
