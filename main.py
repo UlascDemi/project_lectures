@@ -126,7 +126,7 @@ def main():
     plt.savefig("docs/sim_anneal.png")
 
 
-def run_algorithm(verbose=False):
+def run_algorithm(verbose=True):
 
     rooms = load_rooms("data/zalen.csv")
     courses = load_courses("data/vakken.csv", "data/abbreviations.txt")
@@ -159,7 +159,7 @@ def run_algorithm(verbose=False):
             course.get_practicum_groups(),
         )
 
-    # -----------------------Create timetable, based on courses---------------------------
+    # -----------------------Create random timetable--------------------------------------
     available_rooms = []
 
     # Create a list of all available rooms, with all available time slots
@@ -184,8 +184,8 @@ def run_algorithm(verbose=False):
 
     available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
-    malus_points_progress = hill_climb_restart(
-        courses_sorted, available_rooms, students, rooms
+    malus_points_progress = start_annealing(
+        courses_sorted, available_rooms, students, rooms, 9
     )
 
     if not is_valid_schedule(students, rooms):
@@ -194,6 +194,9 @@ def run_algorithm(verbose=False):
     print(f"Start value = {malus_points}")
     print(f"End value = {malus_point_count(students, rooms)}")
     print("------------------------------------------------")
+
+    if verbose:
+        print_2d_list(students[16])
 
     student_time_tables = []
 
