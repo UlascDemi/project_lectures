@@ -22,7 +22,7 @@ It is essential that all courses be scheduled in the weekly schedule, with a tim
 
 To understand the approach to algorithms, it is helpful to understand the state-space of the case. There are a total of 39 lectures, 41 working lectures and 49 labs to be scheduled. So this is a total of 129 choices. The number of options for scheduling the courses is (20 time slots * 7 halls + 5). The plus 5 is for the main hall which has an only evening slot.
 
-Therefore, the size of the state space is $\frac{145!}{(145-129)!}$   = 3,85 $\times$  $10^{238}$.
+Therefore, the size of the state space is $\frac{145!}{(145-129)!}$   = 3,85 *  $10^{238}$.
 This is the upper bound of a state space of a valid schedule. Given the large state space, some algorithms are implemented that eventually generate valid weekly grids where the malus points are minimized. 
 
 <p>&nbsp;</p>
