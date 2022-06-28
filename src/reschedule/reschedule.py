@@ -8,6 +8,14 @@ from src.classes.room import Room
 def reschedule_time_slot(
     course: Course, room_time_slots: list, start_time_slot, end_time_slot
 ) -> None:
+    """_summary_
+
+    Args:
+        course (Course): _description_
+        room_time_slots (list): _description_
+        start_time_slot (_type_): _description_
+        end_time_slot (_type_): _description_
+    """
 
     if len(room_time_slots) != 16:
         print("aaaaaa")

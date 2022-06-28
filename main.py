@@ -182,19 +182,14 @@ def run_algorithm(verbose=True):
 
     room_count_table = [[7] * 4 for _ in range(5)]
 
-    for course in courses_sorted:
-        greedy_schedule_course(course, available_rooms, room_count_table)
-
     if verbose:
         print_2d_list(students[16])
 
-    print(malus_point_count(students, rooms))
-
     available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
-    # malus_points_progress = hill_climb_restart(
-    #     courses_sorted, available_rooms, students, rooms
-    # )
+    malus_points_progress = hill_climb_restart(
+        courses_sorted, available_rooms, students, rooms
+    )
 
     malus_points_progress = []
 
