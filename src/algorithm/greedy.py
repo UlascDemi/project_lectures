@@ -6,7 +6,6 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 from src.algorithm.Completely_random import random_schedule_course
-from src.algorithm.random_scheduling import get_choosable_rooms
 import numpy as np
 
 import random
@@ -17,8 +16,8 @@ from src.malus_point_count.malus_point_count import malus_point_count
 # Loop door courses: plant de course in en berekent voor alle mogelijkheden
 # de maluspunten. Wanneer de maluspunten het laagst zijn plant hij hem def in
 
-# Letten op: random bv op basis van veel maluspunten uit random. 
-# available_rooms: 
+# Letten op: random bv op basis van veel maluspunten uit random.
+# available_rooms:
 # Slide maken waarom je greedy op welk probleem: werkte wel of niet
 # Stap 1. vind tijdslot
 # Stap 2. welke kamers zijn beschikbaar (availablerooms)
@@ -26,7 +25,7 @@ from src.malus_point_count.malus_point_count import malus_point_count
 
 
 def get_choosable_rooms(
-    room_time_slots: list[tuple[Room, int, int]], min_capacity: int
+    room_time_slots: list[tuple[Room, int, int]], min_capacity: int, day, time_slot
 ) -> list:
     """
     Returns a list containing all room time slots that are available and have enough
@@ -50,6 +49,8 @@ def get_choosable_rooms(
         room_time_slot
         for room_time_slot in room_time_slots
         if (room_time_slot[0].get_capacity() >= min_capacity)
+        and room_time_slot[1] == day
+        and room_time_slot[2] == time_slot
     ]
 
     return choosable_rooms
@@ -67,44 +68,50 @@ def get_best_room_time_slot(room_count_table):
 
 
 def greedy_schedule_course(course, available_rooms, room_count_table):
-     if (
-        schedule_lecture(course, available_rooms,room_count_table)
+    print(room_count_table)
+    if (
+        schedule_lecture(course, available_rooms, room_count_table)
         and schedule_seminar(course, available_rooms, room_count_table)
-        and schedule_practicum(course, available_rooms,room_count_table)
+        and schedule_practicum(course, available_rooms, room_count_table)
     ):
         return True
 
 
 def schedule_lecture(course: Course, available_rooms: list[Room], room_count_table):
-    
+
     for _ in range(course.n_lecture):
         # Checks if lectures need to be given
         if course.n_lecture == 0:
             return True
 
         minimum_cap = course.get_n_enrol_students()
-        choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
-        
-        best_i, best_j= get_best_room_time_slot(room_count_table)
-        
-        
+        best_day, best_time_slot = get_best_room_time_slot(room_count_table)
+        choosable_rooms = get_choosable_rooms(
+            available_rooms, minimum_cap, best_day, best_time_slot
+        )
+
         # Remove time slot from available room time slots list
         if len(choosable_rooms) != 0:
             for available_room in set(choosable_rooms):
-                if available_room[1] == best_i and available_room[2] == best_j:
-                    
+                if (
+                    available_room[1] == best_day
+                    and available_room[2] == best_time_slot
+                ):
+
                     room, day, time_slot = available_room
                     available_rooms.remove(available_room)
                     break
         else:
             for available_room in set(available_rooms):
-                if available_room[1] == best_i and available_room[2] == best_j:
-                    
+                if (
+                    available_room[1] == best_day
+                    and available_room[2] == best_time_slot
+                ):
+
                     room, day, time_slot = available_room
                     available_rooms.remove(available_room)
                     break
 
-            
         # Get time tables
         course_time_table = course.get_time_table()
         room_time_table = room.get_time_table()
@@ -122,7 +129,9 @@ def schedule_lecture(course: Course, available_rooms: list[Room], room_count_tab
     return True
 
 
-def schedule_seminar(course: Course, available_rooms: list[Room], room_count_table) -> bool:
+def schedule_seminar(
+    course: Course, available_rooms: list[Room], room_count_table
+) -> bool:
     """_summary_
 
     Args:
@@ -145,25 +154,32 @@ def schedule_seminar(course: Course, available_rooms: list[Room], room_count_tab
         for group in seminar_groups:
 
             minimum_cap = len(group)
-            # Choose a time slot
-            best_i, best_j = get_best_room_time_slot(room_count_table)
-            choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
-        
+
+            best_day, best_time_slot = get_best_room_time_slot(room_count_table)
+            choosable_rooms = get_choosable_rooms(
+                available_rooms, minimum_cap, best_day, best_time_slot
+            )
+
             if len(choosable_rooms) != 0:
                 for available_room in set(choosable_rooms):
-                    if available_room[1] == best_i and available_room[2] == best_j:
-                    
+                    if (
+                        available_room[1] == best_day
+                        and available_room[2] == best_time_slot
+                    ):
+
                         room, day, time_slot = available_room
                         available_rooms.remove(available_room)
                         break
             else:
                 for available_room in set(available_rooms):
-                    if available_room[1] == best_i and available_room[2] == best_j:
-                    
+                    if (
+                        available_room[1] == best_day
+                        and available_room[2] == best_time_slot
+                    ):
+
                         room, day, time_slot = available_room
                         available_rooms.remove(available_room)
                         break
-
 
             # Get time tables
             course_time_table = course.get_time_table()
@@ -181,7 +197,9 @@ def schedule_seminar(course: Course, available_rooms: list[Room], room_count_tab
     return True
 
 
-def schedule_practicum(course: Course, available_rooms: list[Room], room_count_table) -> bool:
+def schedule_practicum(
+    course: Course, available_rooms: list[Room], room_count_table
+) -> bool:
     """_summary_
 
     Args:
@@ -205,25 +223,36 @@ def schedule_practicum(course: Course, available_rooms: list[Room], room_count_t
 
             minimum_cap = len(group)
             # Remove time slot from available room time slots list
-            best_i, best_j = get_best_room_time_slot(room_count_table)
-            choosable_rooms = get_choosable_rooms(available_rooms, minimum_cap)
-        
-            if len(choosable_rooms) > 0:
+            best_day, best_time_slot = get_best_room_time_slot(room_count_table)
+            choosable_rooms = get_choosable_rooms(
+                available_rooms, minimum_cap, best_day, best_time_slot
+            )
+
+            if len(choosable_rooms) != 0:
                 for available_room in set(choosable_rooms):
-                    if available_room[1] == best_i and available_room[2] == best_j:
-                    
+                    if (
+                        available_room[1] == best_day
+                        and available_room[2] == best_time_slot
+                    ):
+
                         room, day, time_slot = available_room
-                        check_list
                         available_rooms.remove(available_room)
                         break
             else:
                 for available_room in set(available_rooms):
-                    if available_room[1] == best_i and available_room[2] == best_j:
-                    
+                    if (
+                        available_room[1] == best_day
+                        and available_room[2] == best_time_slot
+                    ):
+
                         room, day, time_slot = available_room
                         available_rooms.remove(available_room)
                         break
 
+            # print(room_count_table)
+            # print(choosable_rooms)
+            # print(available_rooms)
+            # print(best_day, best_time_slot)
             # Get time tables
             course_time_table = course.get_time_table()
             room_time_table = room.get_time_table()
@@ -238,10 +267,3 @@ def schedule_practicum(course: Course, available_rooms: list[Room], room_count_t
                 student_time_table[day][time_slot].append((room, course, "Prac"))
 
     return True
-
-
-
-
-        
-
-

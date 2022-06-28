@@ -20,6 +20,7 @@ from src.algorithm.sim_annealing import start_annealing
 # from src.algorithm.greedy import greedy
 from src.malus_point_count import malus_point_count, conflict_count
 from src.algorithm.hillclimber import hill_climb
+from src.algorithm.greedy import greedy_schedule_course
 
 
 import numpy as np
@@ -83,10 +84,10 @@ def main():
 
     print(f"best timetable found: {min(data)} malus points")
 
-    df = pd.DataFrame(best_time_table)
-    df.columns = ["Student", "Course"]
+    # df = pd.DataFrame(best_time_table)
+    # df.columns = ["Student", "Course"]
 
-    df.to_csv("output/output_time_table.csv")
+    # df.to_csv("output/output_time_table.csv")
 
     # mu = np.mean(end_values)
     # sigma = np.std(end_values)
@@ -116,14 +117,14 @@ def main():
 
     # plt.savefig("docs/random_barplot.png")
 
-    plt.plot(data)
+    # plt.plot(data)
 
-    plt.ylabel("Malus Points")
-    plt.xlabel("Iterations")
+    # plt.ylabel("Malus Points")
+    # plt.xlabel("Iterations")
 
-    plt.grid(which="both")
+    # plt.grid(which="both")
 
-    plt.savefig("docs/sim_anneal.png")
+    # plt.savefig("docs/sim_anneal.png")
 
 
 def run_algorithm(verbose=True):
@@ -168,9 +169,9 @@ def run_algorithm(verbose=True):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
 
-    # Schedule all courses
-    for course in courses_sorted:
-        schedule_course(course, available_rooms)
+    # # Schedule all courses
+    # for course in courses_sorted:
+    #     schedule_course(course, available_rooms)
 
     # added schedule validity
     if not is_valid_schedule(students, rooms):
@@ -179,14 +180,23 @@ def run_algorithm(verbose=True):
 
     malus_points = malus_point_count(students, rooms)
 
+    room_count_table = [[7] * 4 for _ in range(5)]
+
+    for course in courses_sorted:
+        greedy_schedule_course(course, available_rooms, room_count_table)
+
     if verbose:
         print_2d_list(students[16])
 
+    print(malus_point_count(students, rooms))
+
     available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
-    malus_points_progress = start_annealing(
-        courses_sorted, available_rooms, students, rooms, 9
-    )
+    # malus_points_progress = hill_climb_restart(
+    #     courses_sorted, available_rooms, students, rooms
+    # )
+
+    malus_points_progress = []
 
     if not is_valid_schedule(students, rooms):
         print("not a valid schedule")
@@ -194,9 +204,6 @@ def run_algorithm(verbose=True):
     print(f"Start value = {malus_points}")
     print(f"End value = {malus_point_count(students, rooms)}")
     print("------------------------------------------------")
-
-    if verbose:
-        print_2d_list(students[16])
 
     student_time_tables = []
 
