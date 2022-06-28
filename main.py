@@ -20,12 +20,14 @@ from src.algorithm.sim_annealing import start_annealing
 # from src.algorithm.greedy import greedy
 from src.malus_point_count import malus_point_count, conflict_count
 from src.algorithm.hillclimber import hill_climb
+from src.algorithm.greedy import greedy_schedule_course
 
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from csv import DictWriter
 from tabulate import tabulate
 from copy import deepcopy
 from time import time
@@ -46,11 +48,13 @@ TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-
 
 
 def main():
-    # main()
+    # run_algorithm(True)
 
     n_hill_climbs = 1000
     data = []
     end_values = []
+    best_points = float("inf")
+    best_time_table = []
 
     computation_times = []
 
@@ -63,16 +67,27 @@ def main():
             )
         print(f"Simulation {i} out of {n_hill_climbs}")
 
-        points = run_algorithm()
+        points, time_table = run_algorithm()
 
-        end_values.append(points[-1])
+        end_value = points[-1]
+
+        end_values.append(end_value)
         data += points
+
+        if end_value < best_points:
+            best_points = end_value
+            best_time_table = deepcopy(time_table)
 
         end = time()
         duration = end - begin
         computation_times.append(duration)
 
     print(f"best timetable found: {min(data)} malus points")
+
+    # df = pd.DataFrame(best_time_table)
+    # df.columns = ["Student", "Course"]
+
+    # df.to_csv("output/output_time_table.csv")
 
     mu = np.mean(end_values)
     sigma = np.std(end_values)
@@ -89,9 +104,9 @@ def main():
         color="r",
     )
 
-    plt.xlabel("Malus Points")
-    plt.grid(which="both")
-    plt.savefig("sim_anneal_t=10_0.9995_normal.png")
+    # plt.xlabel("Malus Points")
+    # plt.grid(which="both")
+    # plt.savefig("docs/hillclimb_normal_dist_fifth_hour.png")
 
     # plt.bar(data)
 
@@ -100,7 +115,7 @@ def main():
 
     # plt.grid(which="both")
 
-    # plt.savefig("random_barplot.png")
+    # plt.savefig("docs/random_barplot.png")
 
     # plt.plot(data)
 
@@ -109,10 +124,10 @@ def main():
 
     # plt.grid(which="both")
 
-    # plt.savefig("sim_anneal.png")
+    # plt.savefig("docs/sim_anneal.png")
 
 
-def run_algorithm(print_time_table=False):
+def run_algorithm(verbose=True):
 
     rooms = load_rooms("data/zalen.csv")
     courses = load_courses("data/vakken.csv", "data/abbreviations.txt")
@@ -145,7 +160,7 @@ def run_algorithm(print_time_table=False):
             course.get_practicum_groups(),
         )
 
-    # -----------------------Create timetable, based on courses---------------------------
+    # -----------------------Create random timetable--------------------------------------
     available_rooms = []
 
     # Create a list of all available rooms, with all available time slots
@@ -154,9 +169,9 @@ def run_algorithm(print_time_table=False):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
 
-    # Schedule all courses
-    for course in courses_sorted:
-        schedule_course(course, available_rooms)
+    # # Schedule all courses
+    # for course in courses_sorted:
+    #     schedule_course(course, available_rooms)
 
     # added schedule validity
     if not is_valid_schedule(students, rooms):
@@ -165,14 +180,18 @@ def run_algorithm(print_time_table=False):
 
     malus_points = malus_point_count(students, rooms)
 
-    if print_time_table:
+    room_count_table = [[7] * 4 for _ in range(5)]
+
+    if verbose:
         print_2d_list(students[16])
 
     available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
-    malus_points_progress = start_annealing(
-        courses_sorted, available_rooms, students, rooms, 10
+    malus_points_progress = hill_climb_restart(
+        courses_sorted, available_rooms, students, rooms
     )
+
+    malus_points_progress = []
 
     if not is_valid_schedule(students, rooms):
         print("not a valid schedule")
@@ -181,7 +200,16 @@ def run_algorithm(print_time_table=False):
     print(f"End value = {malus_point_count(students, rooms)}")
     print("------------------------------------------------")
 
-    return malus_points_progress
+    student_time_tables = []
+
+    # Create output a list for the output file
+    for student in students:
+        time_table = student.get_time_table()
+        for day in time_table:
+            for time_slot in day:
+                student_time_tables.append([str(student), time_slot])
+
+    return malus_points_progress, student_time_tables
 
 
 def print_2d_list(object_to_print) -> None:

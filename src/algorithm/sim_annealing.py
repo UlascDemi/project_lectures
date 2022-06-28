@@ -17,6 +17,18 @@ def start_annealing(
     rooms: list[Room],
     starting_temp: int,
 ) -> int:
+    """_summary_
+
+    Args:
+        courses (list[Course]): _description_
+        room_time_slots (list): _description_
+        students (list[Student]): _description_
+        rooms (list[Room]): _description_
+        starting_temp (int): _description_
+
+    Returns:
+        int: _description_
+    """
 
     malus_points = []
     same_value_count = 0
@@ -96,6 +108,14 @@ def simulated_annealing(
 
 
 def get_filled_in_slots(time_table) -> list:
+    """_summary_
+
+    Args:
+        time_table (_type_): _description_
+
+    Returns:
+        list: _description_
+    """
     filled_in_slots = []
 
     # Find all non-empty timeslots in time_table

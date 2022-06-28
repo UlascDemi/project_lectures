@@ -152,6 +152,11 @@ def malus_point_count(students: list[Student], rooms: dict[Room]):
     # print(counts)
     maluspoint = sum(counts)
 
+    # print(f"conflict = {conflict_count(students)}")
+    # print(f"free_period_count = {free_period_count(students)}")
+    # print(f"fifth_hour = {fifth_hour_points(rooms)}")
+    # print(f"capac = {capacity_count(rooms)}")
+
     # maluspoint = conflicts + free_periods + capacity_conflict + fifth_hour
     # maluspoint = conflicts + free_periods + fifth_hour
 
