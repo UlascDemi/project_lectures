@@ -67,10 +67,14 @@ Pip install -r requirements.txt
 
 ### ***Structure***
 
-The ```data```- folder contains the csv-files with the essential data for setting up the schedule. The ```src```- folder contains all the python code needed to run the program. 
+
+The repository contains a the following folders:
+- In the ```data```- folder are the csv files with essential data to build the grid.  
+- In the ```docs```- folder are the visualizations in png files of the algorithms.
+- In the ```output```- folder is the csv-file with the final result when the code is executed.
+- The ```src```- folder contains all the python code needed to run the program. This includes the files for the algorithms, the files for the classes, the file that calculates the malus points and a file that checks the validity of the roster. 
 
 
-- AFMAKEN
 
 <p>&nbsp;</p>
 
