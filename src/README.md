@@ -1,6 +1,6 @@
 # src
 
-#### ***Folder algorithms***
+#### ***Folder algorithm***
 
 In the folder algorithms you can find the different algorithms, each one has its own python file.
 - In ```completely_random.py``` you can find the code of the random algorithm.
@@ -34,6 +34,6 @@ In the malus_point_count folder, you can find the python file called ```malus_po
 In the folder reschedule you can find the python file called ```reschedule.py```. This file takes a box and schedules it somewhere else.
 <p>&nbsp;</p>
 
-### ***Folder schedule_validity***
+#### ***Folder schedule_validity***
 
 In the folder schedule_validity you can find the python file called ```schedule_validity.py```. This file checks if the conditions of a valid weekly schedule are met.
