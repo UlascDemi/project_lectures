@@ -129,7 +129,7 @@ def capacity_count(rooms: dict[Room]) -> int:
 
 def malus_point_count(students: list[Student], rooms: dict[Room]):
     """
-    Add all malus points function together
+    Add all malus points function together.
 
     Args:
         students (list[Student]): list of student objects
@@ -138,28 +138,15 @@ def malus_point_count(students: list[Student], rooms: dict[Room]):
     Returns:
         int: total amount of malus point
     """
-    # conflicts = conflict_count(students)
-    # free_periods = free_period_count(students)
-    # # capacity_conflict = capacity_count(rooms)
-    # fifth_hour = fifth_hour_points(rooms)
-
     counts = [
         conflict_count(students),
         free_period_count(students),
         fifth_hour_points(rooms),
         capacity_count(rooms),
     ]
-    # print(counts)
+    
     maluspoint = sum(counts)
-
-    # print(f"conflict = {conflict_count(students)}")
-    # print(f"free_period_count = {free_period_count(students)}")
-    # print(f"fifth_hour = {fifth_hour_points(rooms)}")
-    # print(f"capac = {capacity_count(rooms)}")
-
-    # maluspoint = conflicts + free_periods + capacity_conflict + fifth_hour
-    # maluspoint = conflicts + free_periods + fifth_hour
 
     return maluspoint
 
-    # return conflicts
+
