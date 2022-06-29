@@ -121,7 +121,6 @@ def capacity_count(rooms: dict[Room]) -> int:
                 capacity = room.get_capacity()
 
                 if students_in_room > room.get_capacity():
-                    # print("aa")
                     excess_students += students_in_room - capacity
 
     return excess_students
@@ -144,9 +143,7 @@ def malus_point_count(students: list[Student], rooms: dict[Room]):
         fifth_hour_points(rooms),
         capacity_count(rooms),
     ]
-    
+
     maluspoint = sum(counts)
 
     return maluspoint
-
-

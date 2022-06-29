@@ -65,7 +65,6 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
 
         # If no rooms found, Schedule couldnt be found
         if len(choosable_rooms) == 0:
-            print(f"Couldnt schedule lecture: {course}")
             return False
 
         # Choose random time slot
@@ -123,7 +122,6 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
 
             # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
-                print(f"Couldnt schedule seminar: {course}")
                 return False
 
             # Choose a time slot
@@ -148,7 +146,8 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
             # Update time table of the students
             for student in group:
                 student_time_table = student.get_time_table()
-                student_time_table[day][time_slot].append((room, course, "Sem"))
+                student_time_table[day][time_slot].append(
+                    (room, course, "Sem"))
 
     return True
 
@@ -177,12 +176,10 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
         # Schedule invidual groups
         for group in practicum_groups:
 
-            
             choosable_rooms = available_rooms
 
             # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
-                print(f"Couldnt schedule practicum: {course}")
                 return False
 
             # Choose a time slot
@@ -207,6 +204,7 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
             # Update time tables of the students
             for student in group:
                 student_time_table = student.get_time_table()
-                student_time_table[day][time_slot].append((room, course, "Prac"))
+                student_time_table[day][time_slot].append(
+                    (room, course, "Prac"))
 
     return True

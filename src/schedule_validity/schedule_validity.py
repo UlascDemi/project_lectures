@@ -58,17 +58,17 @@ def fifth_hour_check(rooms: dict[Room]) -> bool:
     return True
 
 
-def is_valid_schedule(students, rooms):
+def is_valid_schedule(students: list[Student], rooms: dict[Room]):
     """
     Checks if valid schedules are created based on fifth hour check and third free 
     period check. Returns true the schedules passed the checks. 
 
     Args:
-        students (_type_): _description_
-        rooms (_type_): _description_
+        students (list[Student]): list of all student objects
+        rooms (dict[Student]): dictionairy of all room objects
 
     Returns:
-        _type_: _description_
+        bool: returns true if fifth hour checks and third free period check are passed
     """
 
     if fifth_hour_check(rooms) and third_free_period_check(students):

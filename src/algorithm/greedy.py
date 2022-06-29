@@ -7,17 +7,6 @@ from src.classes.room import Room
 import numpy as np
 import random
 
-# Kiest geen random optie: telkens de beste
-# Loop door courses: plant de course in en berekent voor alle mogelijkheden
-# de maluspunten. Wanneer de maluspunten het laagst zijn plant hij hem def in
-
-# Letten op: random bv op basis van veel maluspunten uit random.
-# available_rooms:
-# Slide maken waarom je greedy op welk probleem: werkte wel of niet
-# Stap 1. vind tijdslot
-# Stap 2. welke kamers zijn beschikbaar (availablerooms)
-# Stap 3. kies eentje waarvan de minste capaciteit nodig is?
-
 
 def get_choosable_rooms(
     room_time_slots: list[tuple[Room, int, int]], min_capacity: int, day, time_slot
@@ -216,7 +205,8 @@ def schedule_seminar(
             # Update time table of the students
             for student in group:
                 student_time_table = student.get_time_table()
-                student_time_table[day][time_slot].append((room, course, "Sem"))
+                student_time_table[day][time_slot].append(
+                    (room, course, "Sem"))
 
     return True
 
@@ -274,6 +264,7 @@ def schedule_practicum(
             # Update time tables of the students
             for student in group:
                 student_time_table = student.get_time_table()
-                student_time_table[day][time_slot].append((room, course, "Prac"))
+                student_time_table[day][time_slot].append(
+                    (room, course, "Prac"))
 
     return True
