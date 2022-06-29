@@ -47,9 +47,8 @@ In the simulated annealing algorithm, just like the Hill Climber, a random state
 
 
 #### **Algorithm 5. Greedy Algorithm**
-The Greedy algorithm does not choose a random option, but it will always choose the best option. In the short run, this algorithm always gives the best solution, but this may not always result in the best solution in the long run. 
+The Greedy algorithm is implemented based on the heuristics to reduce the number of conflicts. The algorithm takes the sorted list of courses to be scheduled. From this, a course is chosen and the algorithm looks for the time slots that have the most rooms available in which the number of students enrolled fits. If several time slots have the same number of available rooms, a time slot is randomly selected. Then a random room is chosen from the available rooms. In this way, the Greedy Algorithm always chooses the best option for scheduling the courses. 
 
-- AFMAKEN
 <p>&nbsp;</p>
 
 
@@ -83,7 +82,7 @@ The repository contains a the following folders:
 To run the code with the default configuration use the following instruction:
 
 ```
-Python3 main.py ??? (CHECK)
+Python3 main.py
 ```
 
 

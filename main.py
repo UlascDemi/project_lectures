@@ -160,7 +160,7 @@ def run_algorithm(verbose=True):
             course.get_practicum_groups(),
         )
 
-    # -----------------------Create random timetable--------------------------------------
+    # -----------------------Create a timetable-------------------------------------------
     available_rooms = []
 
     # Create a list of all available rooms, with all available time slots
@@ -169,9 +169,9 @@ def run_algorithm(verbose=True):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
 
-    # # Schedule all courses
-    # for course in courses_sorted:
-    #     schedule_course(course, available_rooms)
+    # Schedule all courses
+    for course in courses_sorted:
+        schedule_course(course, available_rooms)
 
     # added schedule validity
     if not is_valid_schedule(students, rooms):
