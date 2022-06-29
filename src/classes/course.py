@@ -5,6 +5,50 @@ from math import ceil
 
 
 class Course:
+    """
+    A class Course representing a course-object for a course that has to be scheduled.
+
+    ...
+
+    Attributes
+    ----------
+    self._course_name (str) = the name of a course
+    self._abbrevation (str) = abbrevation of the course
+    self.n_lecture (int) = the amount of lectures that has to be scheduled per week
+    self.n_seminar (int) = the amount of seminars that need to be scheduled per week
+    self.n_practica (int) = the amount of practicals that need to be scheduled per week
+    self._seminar_cap (int) = maximum number of students per course who can participate in a seminar
+    self._pract_cap (int) = maximum number of students per course who can participate in a practical
+    self._expected_students (int) = expected number of students per course
+    self._enrolled_students (list) = list of the names of students registered for the course
+    self._groups_per_seminar (int) = the amount of groups to be scheduled per seminar
+    self._students_per_sem_group (int) = the number of students per seminar group
+    self._seminar_groups (list) = groups of students per seminar
+    self._groups_per_practicum (int) = the amount of groups to be scheduled per practical
+    self._students_per_prac_group (int) = the number of students per practical group
+    self._prac_groups (list) = groups of students per practical
+
+    Methods
+    ----------
+    enroll(self, student: Student) -> None
+    subdivide_into_groups(self, n_group: int, stud_per_group: int, groups: list) -> None
+    calc_seminars(self) -> None
+    calc_practica(self) -> None
+    get_course_name(self) -> str
+    get_n_lecture(self) -> int
+    get_n_seminar(self) -> int
+    get_n_practicum(self) -> int
+    get_time_table(self) -> list
+    get_enrol_students(self) -> list
+    get_n_enrol_students(self) -> int
+    get_groups_per_seminar(self) -> int
+    get_stud_per_sem_group(self) -> int
+    get_seminar_groups(self) -> list
+    get_groups_per_practicum(self) -> int
+    get_stud_per_prac_group(self) -> int
+    get_practicum_groups(self) -> list
+
+    """
     def __init__(
         self,
         course,

@@ -1,4 +1,20 @@
 class Room:
+    """
+    A class Room representing a room-object for a room in which a course can be scheduled.
+
+    ...
+
+    Attributes
+    ----------
+    self._room_number (str) = number of the room in the format of a string
+    self._capacity (int) = maximum capacity of the number of students that can fit in a room
+
+    Methods
+    ----------
+    get_time_table(self) -> int
+    get_capacity(self) -> int
+
+    """	
     def __init__(self, roomnumber, capacity):
         self._room_number = roomnumber
         self._capacity = capacity
