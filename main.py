@@ -50,7 +50,7 @@ TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-
 def main():
     # run_algorithm(True)
 
-    n_hill_climbs = 1
+    n_hill_climbs = 1000
     data = []
     end_values = []
     best_points = float("inf")
@@ -69,10 +69,11 @@ def main():
 
         points, time_table = run_algorithm()
 
-        end_value = points[-1]
+        # end_value = points[-1]
 
+        end_value = points
         end_values.append(end_value)
-        data += points
+        # data += points
 
         if end_value < best_points:
             best_points = end_value
@@ -82,7 +83,7 @@ def main():
         duration = end - begin
         computation_times.append(duration)
 
-    print(f"best timetable found: {min(data)} malus points")
+    print(f"best timetable found: {min(end_values)} malus points")
 
     # df = pd.DataFrame(best_time_table)
     # df.columns = ["Student", "Course"]
@@ -104,9 +105,10 @@ def main():
         color="r",
     )
 
-    # plt.xlabel("Malus Points")
-    # plt.grid(which="both")
+    plt.xlabel("Malus Points")
+    plt.grid(which="both")
     # plt.savefig("docs/hillclimb_normal_dist_fifth_hour.png")
+    plt.savefig("docs/greedy_normal_dist.png")
 
     # plt.bar(data)
 
@@ -127,7 +129,7 @@ def main():
     # plt.savefig("docs/sim_anneal.png")
 
 
-def run_algorithm(verbose=True):
+def run_algorithm(verbose=False):
 
     rooms = load_rooms("data/zalen.csv")
     courses = load_courses("data/vakken.csv", "data/abbreviations.txt")
@@ -194,7 +196,7 @@ def run_algorithm(verbose=True):
     #     courses_sorted, available_rooms, students, rooms
     # )
 
-    malus_points_progress = []
+    malus_points_progress = malus_point_count(students, rooms)
 
     if not is_valid_schedule(students, rooms):
         print("not a valid schedule")
