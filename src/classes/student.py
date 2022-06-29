@@ -13,7 +13,7 @@ class Student:
 
     def get_first_name(self) -> str:
         """
-        Returns first name of a student
+        Returns first name of a student.
 
         Returns:
             str: the first name of the student
@@ -22,7 +22,7 @@ class Student:
 
     def get_last_name(self) -> str:
         """
-        Returns last name of a student
+        Returns last name of a student.
 
         Returns:
             str: the last name of the student
@@ -31,7 +31,7 @@ class Student:
 
     def get_student_number(self) -> str:
         """
-        Returns studentnumber of a student
+        Returns studentnumber of a student.
 
         Returns:
             str: the studentnumber of the student
@@ -40,7 +40,7 @@ class Student:
 
     def get_students_courses(self) -> list:
         """
-        Returns applied courses of a student
+        Returns applied courses of a student.
 
         Returns:
             list: the applied courses of the student
@@ -49,7 +49,7 @@ class Student:
 
     def get_time_table(self) -> list:
         """
-        Returns timetable of a student
+        Returns timetable of a student.
 
         Returns:
             list : the first name of the student

@@ -9,7 +9,7 @@ import random
 
 def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
     """
-    List of rooms that are still available after scheduling courses.
+    List of rooms that are available to schedule a course.
 
     Args:
         rooms (list:[Room]): a list containing all room objects
@@ -25,7 +25,8 @@ def get_choosable_rooms(rooms: list[Room], min_capacity: int) -> list:
 
 def random_schedule_course(course: Course, available_rooms: list[Room]) -> bool:
     """
-    Schedules courses based on random choices.
+    A course is scheduled via a completely random method. If a course cannot be scheduled 
+    then the function returns False, otherwise True.
 
     Args:
         course (Course): course object 
@@ -46,7 +47,10 @@ def random_schedule_course(course: Course, available_rooms: list[Room]) -> bool:
 
 def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
     """
-    Randomly selects a room to schedule lectures.
+    A lecture is scheduled at random in the weekly schedule. The available rooms for the 
+    course are checked and a room is chosen randomly. The room and time slot are then 
+    removed from the available rooms. When a lecture is scheduled it returns True, 
+    otherwise False.
 
     Args:
         course (Course): dictionairy with course objects
@@ -97,7 +101,10 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
 
 def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
     """
-    Randomly selects a room to schedule seminars.
+    A seminar is scheduled at random in the weekly schedule. The available rooms for the 
+    course are checked and a room is chosen randomly. The room and time slot are then 
+    removed from the available rooms. When a seminar is scheduled it returns True, 
+    otherwise False.
 
     Args:
         course (Course): dictionairy with course objects
@@ -154,7 +161,10 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
 
 def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
     """
-    Randomly slects a room to schedule practicals.
+    A practical is scheduled at random in the weekly schedule. The available rooms for the 
+    course are checked and a room is chosen randomly. The room and time slot are then 
+    removed from the available rooms. When a practical is scheduled it returns True, 
+    otherwise False.
 
     Args:
         course (Course): dictionairy with course objects

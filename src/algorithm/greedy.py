@@ -81,9 +81,9 @@ def greedy_schedule_course(
 ) -> bool:
     """
     Returns true if every lecture, seminar and practical is scheduled.
-    This functions schedules every lecture, seminar and practical in a greedy manner. It schedules every course
-    based on the room availabilty of a timeslot. It prioritizes timeslots with higher
-    room availability.
+    This functions schedules every lecture, seminar and practical in a greedy manner. It 
+    schedules every course based on the room availabilty of a timeslot. It prioritizes 
+    timeslots with higher room availability.
 
     Args:
         course (Course): course objects
@@ -157,8 +157,8 @@ def schedule_seminar(
 ) -> bool:
     """
     Returns true if every seminar group  of a course is scheduled.
-    This functions schedules every seminar group in a greedy manner. It schedules every course
-    based on the room availabilty of a timeslot. It prioritizes timeslots with higher
+    This functions schedules every seminar group in a greedy manner. It schedules every 
+    course based on the room availabilty of a timeslot. It prioritizes timeslots with higher
     room availability.
 
     Args:

@@ -86,7 +86,7 @@ def is_scheduled(course: Course) -> bool:
 
 def un_schedule(course: Course, available_rooms: list) -> None:
     """
-    Unschedules all lectures, seminars and practica.  
+    Unschedules all lectures, seminars and practicals.  
     
     Args:
         course (Course): a course object of the Course class

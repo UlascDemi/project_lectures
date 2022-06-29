@@ -92,7 +92,7 @@ class Course:
 
     def calc_practica(self) -> None:
         """
-        When a course has practica, it calculates how many groups should be given. This
+        When a course has practicals, it calculates how many groups should be given. This
         is determined based on the students enrolled in that course. This is because the
         practica have a maximum number of students who can participate in the class.
         """
@@ -144,10 +144,10 @@ class Course:
 
     def get_n_practicum(self) -> int:
         """
-        Returns the amount of given practica per week.
+        Returns the amount of given practicals per week.
 
         Returns:
-            int: amount of given practica per week
+            int: amount of given practicals per week
         """
         return self.n_practica
 
@@ -215,7 +215,7 @@ class Course:
 
     def get_groups_per_practicum(self) -> int:
         """
-        Returns the amount of groups to be scheduled per practicum.
+        Returns the amount of groups to be scheduled per practical.
 
         Returns:
             int: amount of groups
