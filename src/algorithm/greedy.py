@@ -40,7 +40,7 @@ def get_choosable_rooms(
     return choosable_rooms
 
 
-def get_best_time_slot(room_count_table: list[list]) -> bool:
+def get_best_time_slot(room_count_table: list[list]) -> tuple[int]:
     """
     Returns coordinates of timeslot with the most available rooms at that moment.
     If there are multiple timeslots with the most available rooms the function will choose
@@ -51,7 +51,7 @@ def get_best_time_slot(room_count_table: list[list]) -> bool:
         room_count_table (list): 2d array of all time slots and available room count
 
     Returns:
-       int : x and y coordinate
+       tuple[int] : x and y coordinate
     """
     max_value = np.max(room_count_table)
     max_value_indices = np.argwhere(room_count_table == max_value)
@@ -63,7 +63,7 @@ def get_best_time_slot(room_count_table: list[list]) -> bool:
     return best_i, best_j
 
 
-def get_best_room(available_rooms: list[tuple], day, time_slot, capacity):
+def get_best_room(available_rooms: list[tuple], day, time_slot, capacity) -> tuple[int]:
     rooms = [room for room in available_rooms if room[1:] == (day, time_slot)]
 
     rooms = sorted(rooms, key=lambda rooms: rooms[0].get_capacity())
@@ -99,6 +99,8 @@ def greedy_schedule_course(
         and schedule_practicum(course, available_rooms, room_count_table)
     ):
         return True
+
+    return False
 
 
 def schedule_lecture(
