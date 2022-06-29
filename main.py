@@ -5,6 +5,7 @@
 # Created Date:
 # ---------------------------------------------------------------------------
 from __future__ import annotations
+import argparse
 
 from src.classes.student import Student
 from src.classes.course import Course
@@ -44,9 +45,18 @@ DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-19:00"]
 
 
-def main(algr_type):
+def main(output: str, alg_type: str, n_simulations: int):
+    assert alg_type in ["R", "G", "H", "A"]
 
-    n_hill_climbs = 1000
+    if alg_type == "R":
+        alg_type = "random_schedule"
+    elif alg_type == "G":
+        alg_type = "greedy_algorithm"
+    elif alg_type == "H":
+        alg_type = "hill_climber"
+    elif alg_type == "A":
+        alg_type = "simulated_annealing"
+
     data = []
     end_values = []
     best_points = float("inf")
@@ -54,20 +64,19 @@ def main(algr_type):
 
     computation_times = []
 
-    for i in range(n_hill_climbs):
+    for i in range(n_simulations):
         begin = time()
         if i != 0:
             average_time = sum(computation_times) / len(computation_times)
             print(
-                f"Estimated time left: {ceil((average_time*(n_hill_climbs-i))/60)} minutes"
+                f"Estimated time left: {ceil((average_time*(n_simulations-i))/60)} minutes"
             )
-        print(f"Simulation {i} out of {n_hill_climbs}")
+        print(f"Simulation {i} out of {n_simulations}")
 
-        points, time_table = run_algorithm()
+        points, time_table = run_algorithm(alg_type)
 
         end_value = points[-1]
 
-        # end_value = points
         end_values.append(end_value)
         data += points
 
@@ -84,45 +93,7 @@ def main(algr_type):
     df = pd.DataFrame(best_time_table)
     df.columns = ["Student", "Course"]
 
-    df.to_csv("output/output_time_table.csv")
-
-    # mu = np.mean(end_values)
-    # sigma = np.std(end_values)
-
-    # normal_dist = np.random.normal(mu, sigma, 1000)
-
-    # count, bins, ignored = plt.hist(normal_dist, 30, density=True)
-    # plt.plot(
-    #     bins,
-    #     1
-    #     / (sigma * np.sqrt(2 * np.pi))
-    #     * np.exp(-((bins - mu) ** 2) / (2 * sigma**2)),
-    #     linewidth=2,
-    #     color="r",
-    # )
-
-    # plt.xlabel("Malus Points")
-    # plt.grid(which="both")
-    # # plt.savefig("docs/hillclimb_normal_dist_fifth_hour.png")
-    # plt.savefig("docs/greedy_normal_dist.png")
-
-    # plt.bar(data)
-
-    # plt.ylabel("N")
-    # plt.xlabel("Malus Points")
-
-    # plt.grid(which="both")
-
-    # plt.savefig("docs/random_barplot.png")
-
-    # plt.plot(data)
-
-    # plt.ylabel("Malus Points")
-    # plt.xlabel("Iterations")
-
-    # plt.grid(which="both")
-
-    # plt.savefig("docs/sim_anneal.png")
+    df.to_csv(output)
 
 
 def run_algorithm(algr, verbose=False):
@@ -179,13 +150,18 @@ def run_algorithm(algr, verbose=False):
         if not is_valid_schedule(students, rooms):
             return
 
+        if algr == "random_schedule":
+            malus_points_progress = [malus_point_count(students, rooms)]
+
     malus_points = malus_point_count(students, rooms)
 
-    if algr == "greedy":
+    if algr == "greedy_algorithm":
         room_count_table = [[7] * 4 for _ in range(5)]
 
         for course in courses_sorted:
             greedy_schedule_course(course, available_rooms, room_count_table)
+
+        malus_points_progress = [malus_point_count(students, rooms)]
 
     if verbose:
         print_2d_list(students[16])
@@ -262,4 +238,26 @@ def print_2d_list(object_to_print) -> None:
 
 
 if __name__ == "__main__":
-    main()
+
+    # Set-up parsing command line arguments
+    parser = argparse.ArgumentParser(description="Batch run a concert simulation")
+
+    # Adding arguments
+    parser.add_argument("output", help="output file (html)")
+    parser.add_argument(
+        "-a",
+        "--algorithm_type",
+        type=str,
+        default="H",
+        help="The type of algorithm. Choose from: [R / G / H / A] (default: H)",
+    )
+    parser.add_argument(
+        "-s",
+        "--n_simulations",
+        type=int,
+        default=1,
+        help="The amount of simulations to be run (default: 1)")
+
+    args = parser.parse_args()
+
+    main(args.output, args.algorithm_type, args.n_simulations)

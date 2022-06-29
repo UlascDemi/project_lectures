@@ -40,7 +40,8 @@ def reschedule_time_slot(
     end_room_time_table = end_room.get_time_table()
 
     # Remove old time slot from the room timetable and put contents in new time slot
-    assert end_room.get_time_table()[end_day_i][end_time_slot_i] != "-"
+    if end_room.get_time_table()[end_day_i][end_time_slot_i] != "-":
+        breakpoint()
 
     start_room_time_table[start_day_i][start_time_slot_i] = "-"
     end_room_time_table[end_day_i][end_time_slot_i] = course, students
