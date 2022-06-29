@@ -50,7 +50,7 @@ TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-
 def main():
     # run_algorithm(True)
 
-    n_hill_climbs = 1000
+    n_hill_climbs = 1
     data = []
     end_values = []
     best_points = float("inf")
@@ -169,9 +169,9 @@ def run_algorithm(verbose=True):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
 
-    # Schedule all courses
-    for course in courses_sorted:
-        schedule_course(course, available_rooms)
+    # # Schedule all courses
+    # for course in courses_sorted:
+    #     schedule_course(course, available_rooms)
 
     # added schedule validity
     if not is_valid_schedule(students, rooms):
@@ -182,14 +182,17 @@ def run_algorithm(verbose=True):
 
     room_count_table = [[7] * 4 for _ in range(5)]
 
+    for course in courses_sorted:
+        greedy_schedule_course(course, available_rooms, room_count_table)
+
     if verbose:
         print_2d_list(students[16])
 
     available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
-    malus_points_progress = hill_climb_restart(
-        courses_sorted, available_rooms, students, rooms
-    )
+    # malus_points_progress = hill_climb_restart(
+    #     courses_sorted, available_rooms, students, rooms
+    # )
 
     malus_points_progress = []
 

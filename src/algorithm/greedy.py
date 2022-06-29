@@ -1,16 +1,11 @@
 from __future__ import annotations
 
-from matplotlib.pyplot import get
-from src.algorithm.hillclimber import reschedule_time_slot
 from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
-from src.algorithm.Completely_random import random_schedule_course
+
 import numpy as np
-
 import random
-
-from src.malus_point_count.malus_point_count import malus_point_count
 
 # Kiest geen random optie: telkens de beste
 # Loop door courses: plant de course in en berekent voor alle mogelijkheden
@@ -56,9 +51,9 @@ def get_choosable_rooms(
     return choosable_rooms
 
 
-def get_best_room_time_slot(room_count_table: list[list]) -> bool:
+def get_best_time_slot(room_count_table: list[list]) -> bool:
     """
-    Returns coordinates of timeslot with the most available rooms at that moment. 
+    Returns coordinates of timeslot with the most available rooms at that moment.
     If there are multiple timeslots with the most available rooms the function will choose
     one of these randomly. When the coordinates are given the available room count will be
     updated.
@@ -67,7 +62,7 @@ def get_best_room_time_slot(room_count_table: list[list]) -> bool:
         room_count_table (list): 2d array of all time slots and available room count
 
     Returns:
-       int : x and y coordinate 
+       int : x and y coordinate
     """
     max_value = np.max(room_count_table)
     max_value_indices = np.argwhere(room_count_table == max_value)
@@ -79,12 +74,26 @@ def get_best_room_time_slot(room_count_table: list[list]) -> bool:
     return best_i, best_j
 
 
-def greedy_schedule_course(course: Course, available_rooms: list[Room], room_count_table:
-    list[list]) -> bool:
+def get_best_room(available_rooms: list[tuple], day, time_slot, capacity):
+    rooms = [room for room in available_rooms if room[1:] == (day, time_slot)]
+
+    rooms = sorted(rooms, key=lambda rooms: rooms[0].get_capacity())
+
+    for room in rooms:
+        if room[0].get_capacity() >= capacity:
+            available_rooms.remove(room)
+            return room
+
+    return (-1, -1, -1)
+
+
+def greedy_schedule_course(
+    course: Course, available_rooms: list[Room], room_count_table: list[list]
+) -> bool:
     """
     Returns true if every lecture, seminar and practical is scheduled.
     This functions schedules every lecture, seminar and practical in a greedy manner. It schedules every course
-    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
+    based on the room availabilty of a timeslot. It prioritizes timeslots with higher
     room availability.
 
     Args:
@@ -103,12 +112,13 @@ def greedy_schedule_course(course: Course, available_rooms: list[Room], room_cou
         return True
 
 
-def schedule_lecture(course: Course, available_rooms: list[Room], room_count_table:
-    list[list]) -> bool:
+def schedule_lecture(
+    course: Course, available_rooms: list[Room], room_count_table: list[list]
+) -> bool:
     """
     Returns true if every lecture of a course is scheduled.
     This functions schedules every lecture in a greedy manner. It schedules every course
-    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
+    based on the room availabilty of a timeslot. It prioritizes timeslots with higher
     room availability.
 
     Args:
@@ -125,32 +135,16 @@ def schedule_lecture(course: Course, available_rooms: list[Room], room_count_tab
             return True
 
         minimum_cap = course.get_n_enrol_students()
-        best_day, best_time_slot = get_best_room_time_slot(room_count_table)
-        choosable_rooms = get_choosable_rooms(
-            available_rooms, minimum_cap, best_day, best_time_slot
+        best_day, best_time_slot = get_best_time_slot(room_count_table)
+        room, day, time_slot = get_best_room(
+            available_rooms, best_day, best_time_slot, minimum_cap
         )
 
-        # Remove time slot from available room time slots list
-        if len(choosable_rooms) != 0:
-            for available_room in set(choosable_rooms):
-                if (
-                    available_room[1] == best_day
-                    and available_room[2] == best_time_slot
-                ):
-
-                    room, day, time_slot = available_room
-                    available_rooms.remove(available_room)
-                    break
-        else:
-            for available_room in set(available_rooms):
-                if (
-                    available_room[1] == best_day
-                    and available_room[2] == best_time_slot
-                ):
-
-                    room, day, time_slot = available_room
-                    available_rooms.remove(available_room)
-                    break
+        while room == -1:
+            best_day, best_time_slot = get_best_time_slot(room_count_table)
+            room, day, time_slot = get_best_room(
+                available_rooms, best_day, best_time_slot, minimum_cap
+            )
 
         # Get time tables
         course_time_table = course.get_time_table()
@@ -175,7 +169,7 @@ def schedule_seminar(
     """
     Returns true if every seminar group  of a course is scheduled.
     This functions schedules every seminar group in a greedy manner. It schedules every course
-    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
+    based on the room availabilty of a timeslot. It prioritizes timeslots with higher
     room availability.
 
     Args:
@@ -200,31 +194,16 @@ def schedule_seminar(
 
             minimum_cap = len(group)
 
-            best_day, best_time_slot = get_best_room_time_slot(room_count_table)
-            choosable_rooms = get_choosable_rooms(
-                available_rooms, minimum_cap, best_day, best_time_slot
+            best_day, best_time_slot = get_best_time_slot(room_count_table)
+            room, day, time_slot = get_best_room(
+                available_rooms, best_day, best_time_slot, minimum_cap
             )
 
-            if len(choosable_rooms) != 0:
-                for available_room in set(choosable_rooms):
-                    if (
-                        available_room[1] == best_day
-                        and available_room[2] == best_time_slot
-                    ):
-
-                        room, day, time_slot = available_room
-                        available_rooms.remove(available_room)
-                        break
-            else:
-                for available_room in set(available_rooms):
-                    if (
-                        available_room[1] == best_day
-                        and available_room[2] == best_time_slot
-                    ):
-
-                        room, day, time_slot = available_room
-                        available_rooms.remove(available_room)
-                        break
+            while room == -1:
+                best_day, best_time_slot = get_best_time_slot(room_count_table)
+                room, day, time_slot = get_best_room(
+                    available_rooms, best_day, best_time_slot, minimum_cap
+                )
 
             # Get time tables
             course_time_table = course.get_time_table()
@@ -246,10 +225,10 @@ def schedule_practicum(
     course: Course, available_rooms: list[Room], room_count_table: list[list]
 ) -> bool:
     """
-    Returns true if every seminar group  of a course is scheduled.
-    This functions schedules every seminar group in a greedy manner. It schedules every course
-    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
-    room availability.
+    Returns true if every practicum group  of a course is scheduled.
+    This functions schedules every practicum group in a greedy manner.
+    It schedules every course based on the room availabilty of a timeslot.
+    It prioritizes timeslots with higher room availability.
 
     Args:
         course (Course): course objects
@@ -273,36 +252,17 @@ def schedule_practicum(
 
             minimum_cap = len(group)
             # Remove time slot from available room time slots list
-            best_day, best_time_slot = get_best_room_time_slot(room_count_table)
-            choosable_rooms = get_choosable_rooms(
-                available_rooms, minimum_cap, best_day, best_time_slot
+            best_day, best_time_slot = get_best_time_slot(room_count_table)
+            room, day, time_slot = get_best_room(
+                available_rooms, best_day, best_time_slot, minimum_cap
             )
 
-            if len(choosable_rooms) != 0:
-                for available_room in set(choosable_rooms):
-                    if (
-                        available_room[1] == best_day
-                        and available_room[2] == best_time_slot
-                    ):
+            while room == -1:
+                best_day, best_time_slot = get_best_time_slot(room_count_table)
+                room, day, time_slot = get_best_room(
+                    available_rooms, best_day, best_time_slot, minimum_cap
+                )
 
-                        room, day, time_slot = available_room
-                        available_rooms.remove(available_room)
-                        break
-            else:
-                for available_room in set(available_rooms):
-                    if (
-                        available_room[1] == best_day
-                        and available_room[2] == best_time_slot
-                    ):
-
-                        room, day, time_slot = available_room
-                        available_rooms.remove(available_room)
-                        break
-
-            # print(room_count_table)
-            # print(choosable_rooms)
-            # print(available_rooms)
-            # print(best_day, best_time_slot)
             # Get time tables
             course_time_table = course.get_time_table()
             room_time_table = room.get_time_table()
