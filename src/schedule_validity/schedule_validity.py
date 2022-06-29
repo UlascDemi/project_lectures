@@ -6,7 +6,7 @@ from src.classes.room import Room
 
 def third_free_period_check(students: list[Student]) -> int:
     """
-    Check if a student has a third free period.
+    Check if a student has a three free periods on a row.
 
     Args:
         students (list[Student]): list of student object

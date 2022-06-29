@@ -21,8 +21,7 @@ def reschedule_time_slot(
         end_time_slot (tuple)): tuple which contains new room, day and timeslot
     """
 
-    if len(room_time_slots) != 16:
-        breakpoint()
+    assert len(room_time_slots) == 16
 
     # Unpack the time_slot tuples
     start_room, start_day_i, start_time_slot_i = start_time_slot
@@ -41,8 +40,7 @@ def reschedule_time_slot(
     end_room_time_table = end_room.get_time_table()
 
     # Remove old time slot from the room timetable and put contents in new time slot
-    if end_room.get_time_table()[end_day_i][end_time_slot_i] != "-":
-        breakpoint()
+    assert end_room.get_time_table()[end_day_i][end_time_slot_i] != "-"
 
     start_room_time_table[start_day_i][start_time_slot_i] = "-"
     end_room_time_table[end_day_i][end_time_slot_i] = course, students
