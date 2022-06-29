@@ -31,13 +31,21 @@ def third_free_period_check(students: list[Student]) -> int:
                 free_periods = amount_activities - activity
 
                 if free_periods > 2:
-                    # print("ERROR: more than two free periods")
                     return False
 
     return True
 
 
 def fifth_hour_check(rooms: dict[Room]) -> bool:
+    """
+    Checks if the fifth time slot of other rooms except C0.110 is used.
+
+    Args:
+        rooms (dict[Room]): dictionairy of every room object
+
+    Returns:
+        bool: returns true fifth hour is used
+    """
 
     for room in rooms.values():
         if room == rooms["C0.110"]:
@@ -51,6 +59,17 @@ def fifth_hour_check(rooms: dict[Room]) -> bool:
 
 
 def is_valid_schedule(students, rooms):
+    """
+    Checks if valid schedules are created based on fifth hour check and third free 
+    period check. Returns true the schedules passed the checks. 
+
+    Args:
+        students (_type_): _description_
+        rooms (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     if fifth_hour_check(rooms) and third_free_period_check(students):
         return True
