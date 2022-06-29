@@ -85,10 +85,22 @@ The repository contains a the following folders:
 
 ### **_Testing_**
 
-To run the code with the default configuration use the following instruction:
+The usage of the code is as follows:
 
 ```
-Python3 main.py
+usage: main.py [-h] [-a ALGORITHM_TYPE] [-s N_SIMULATIONS] output
+
+Batch run a concert simulation
+
+positional arguments:
+  output                output file (html)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -a ALGORITHM_TYPE, --algorithm_type ALGORITHM_TYPE
+                        The type of algorithm. Choose from: [R / G / H / A] (default: H)
+  -s N_SIMULATIONS, --n_simulations N_SIMULATIONS
+                        The amount of simulations to be run (default: 1)
 ```
 
 <p>&nbsp;</p>
