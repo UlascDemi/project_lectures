@@ -16,9 +16,12 @@ def start_annealing(
     students: list[Student],
     rooms: list[Room],
     starting_temp: int,
-) -> int:
+) -> list[int]:
     """
-
+    This function calls the simulated_annealing() function. This function keeps on
+    calling the the simulated_annealing() function untill there is no improvement
+    in the state for 2000 iterations. After this the function returns all points
+    from beginning till end of the simulated annealing.
 
     Args:
         courses (list[Course]): list of all course objects
@@ -66,9 +69,15 @@ def simulated_annealing(
     current_iteration: int,
 ) -> int:
     """
-    This functions uses hillclimber to lower the amount of maluspoints. But based on 
-    the starting temperatuur allows random swaps instead of swaps that only decreases the
-    amount of maluspoints
+    simulated_annealing() works very similair to the restart hillclimber, however it has
+    a slight difference.
+    The function works by making a change to the state of the time_table and comparing
+    the points before and after the change. If the points are lower (better), the new state is
+    accepted. If the new points are higher (worse) the state has a chance to be accepted.
+    This chance lowers exponentionally, the worse the new points are.
+    The accepting chance is also dependent on how many iterations in the anealling is.
+    Meaning the longer this algorithm goes on, the less the chance becomes on accepting a
+    worse change.
 
     Args:
         courses (list[Course]): a list of all courses
