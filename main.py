@@ -17,9 +17,7 @@ from src.algorithm.Completely_random import random_schedule_course
 from src.algorithm.restart_hillclimb import hill_climb_restart
 from src.algorithm.sim_annealing import start_annealing
 
-# from src.algorithm.greedy import greedy
-from src.malus_point_count import malus_point_count, conflict_count
-from src.algorithm.hillclimber import hill_climb
+from src.malus_point_count import malus_point_count
 from src.algorithm.greedy import greedy_schedule_course
 
 
@@ -27,7 +25,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from csv import DictWriter
 from tabulate import tabulate
 from copy import deepcopy
 from time import time
@@ -47,8 +44,7 @@ DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-19:00"]
 
 
-def main():
-    # run_algorithm(True)
+def main(algr_type):
 
     n_hill_climbs = 1000
     data = []
@@ -69,11 +65,11 @@ def main():
 
         points, time_table = run_algorithm()
 
-        # end_value = points[-1]
+        end_value = points[-1]
 
-        end_value = points
+        # end_value = points
         end_values.append(end_value)
-        # data += points
+        data += points
 
         if end_value < best_points:
             best_points = end_value
@@ -85,30 +81,30 @@ def main():
 
     print(f"best timetable found: {min(end_values)} malus points")
 
-    # df = pd.DataFrame(best_time_table)
-    # df.columns = ["Student", "Course"]
+    df = pd.DataFrame(best_time_table)
+    df.columns = ["Student", "Course"]
 
-    # df.to_csv("output/output_time_table.csv")
+    df.to_csv("output/output_time_table.csv")
 
-    mu = np.mean(end_values)
-    sigma = np.std(end_values)
+    # mu = np.mean(end_values)
+    # sigma = np.std(end_values)
 
-    normal_dist = np.random.normal(mu, sigma, 1000)
+    # normal_dist = np.random.normal(mu, sigma, 1000)
 
-    count, bins, ignored = plt.hist(normal_dist, 30, density=True)
-    plt.plot(
-        bins,
-        1
-        / (sigma * np.sqrt(2 * np.pi))
-        * np.exp(-((bins - mu) ** 2) / (2 * sigma**2)),
-        linewidth=2,
-        color="r",
-    )
+    # count, bins, ignored = plt.hist(normal_dist, 30, density=True)
+    # plt.plot(
+    #     bins,
+    #     1
+    #     / (sigma * np.sqrt(2 * np.pi))
+    #     * np.exp(-((bins - mu) ** 2) / (2 * sigma**2)),
+    #     linewidth=2,
+    #     color="r",
+    # )
 
-    plt.xlabel("Malus Points")
-    plt.grid(which="both")
-    # plt.savefig("docs/hillclimb_normal_dist_fifth_hour.png")
-    plt.savefig("docs/greedy_normal_dist.png")
+    # plt.xlabel("Malus Points")
+    # plt.grid(which="both")
+    # # plt.savefig("docs/hillclimb_normal_dist_fifth_hour.png")
+    # plt.savefig("docs/greedy_normal_dist.png")
 
     # plt.bar(data)
 
@@ -129,7 +125,7 @@ def main():
     # plt.savefig("docs/sim_anneal.png")
 
 
-def run_algorithm(verbose=False):
+def run_algorithm(algr, verbose=False):
 
     rooms = load_rooms("data/zalen.csv")
     courses = load_courses("data/vakken.csv", "data/abbreviations.txt")
@@ -162,7 +158,7 @@ def run_algorithm(verbose=False):
             course.get_practicum_groups(),
         )
 
-    # -----------------------Create a timetable-------------------------------------------
+    # -----------------------Create the timetable-----------------------------------------
     available_rooms = []
 
     # Create a list of all available rooms, with all available time slots
@@ -171,32 +167,40 @@ def run_algorithm(verbose=False):
             for time_slot in range(4):
                 available_rooms.append((room, day, time_slot))
 
-    # # Schedule all courses
-    # for course in courses_sorted:
-    #     schedule_course(course, available_rooms)
+    if (
+        algr == "random_schedule"
+        or algr == "hill_climber"
+        or algr == "simulated_annealing"
+    ):
+        # Schedule all courses
+        for course in courses_sorted:
+            schedule_course(course, available_rooms)
 
-    # added schedule validity
-    if not is_valid_schedule(students, rooms):
-        print("not a valid schedule")
-        return
+        if not is_valid_schedule(students, rooms):
+            return
 
     malus_points = malus_point_count(students, rooms)
 
-    room_count_table = [[7] * 4 for _ in range(5)]
+    if algr == "greedy":
+        room_count_table = [[7] * 4 for _ in range(5)]
 
-    for course in courses_sorted:
-        greedy_schedule_course(course, available_rooms, room_count_table)
+        for course in courses_sorted:
+            greedy_schedule_course(course, available_rooms, room_count_table)
 
     if verbose:
         print_2d_list(students[16])
 
-    available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
+    if algr == "hill_climber" or algr == "simulated_annealing":
+        available_rooms += [(rooms["C0.110"], day, 4) for day in range(5)]
 
-    # malus_points_progress = hill_climb_restart(
-    #     courses_sorted, available_rooms, students, rooms
-    # )
-
-    malus_points_progress = malus_point_count(students, rooms)
+        if algr == "hill_climber":
+            malus_points_progress = hill_climb_restart(
+                courses_sorted, available_rooms, students, rooms
+            )
+        elif algr == "simulated_annealing":
+            malus_points_progress = start_annealing(
+                courses_sorted, available_rooms, students, rooms, 9
+            )
 
     if not is_valid_schedule(students, rooms):
         print("not a valid schedule")
