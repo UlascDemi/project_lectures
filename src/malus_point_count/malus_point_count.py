@@ -126,7 +126,7 @@ def capacity_count(rooms: dict[Room]) -> int:
     return excess_students
 
 
-def malus_point_count(students: list[Student], rooms: dict[Room]):
+def malus_point_count(students: list[Student], rooms: dict[Room]) -> int:
     """
     Add all malus points function together.
 

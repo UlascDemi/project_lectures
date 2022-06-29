@@ -68,13 +68,13 @@ def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
 def is_scheduled(course: Course) -> bool:
     """
     Checks if the course is already scheduled.
-    
+
     Args:
         course (Course): a course object of the Course class
 
     Returns:
         bool: returns True if course is already planned in, False if not
-    
+
     """
     time_table = course.get_time_table()
 
@@ -83,19 +83,21 @@ def is_scheduled(course: Course) -> bool:
             if time_slot != "-":
                 return True
 
+    return False
+
 
 def un_schedule(course: Course, available_rooms: list) -> None:
     """
     Unschedules all lectures, seminars and practicals.  
-    
+
     Args:
         course (Course): a course object of the Course class
-        
+
     """
     time_table = course.get_time_table()
 
     students = course.get_enrol_students()
-    
+
     # Go through each time slot of the timetable
     for i, day in enumerate(time_table):
         for j, time_slot in enumerate(day):
@@ -126,7 +128,7 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
     Returns:
         bool: True if lectures have been scheduled, False if not
     """
-    for _ in range(course.n_lecture):
+    for _ in range(course.get_n_lecture()):
         # Checks if lectures need to be given
         if course.n_lecture == 0:
             return True
@@ -147,9 +149,7 @@ def schedule_lecture(course: Course, available_rooms: list[Room]) -> bool:
         available_rooms.remove(room_time_slot)
 
         # Unpack tuple
-        room = room_time_slot[0]
-        day = room_time_slot[1]
-        time_slot = room_time_slot[2]
+        room, day, time_slot = room_time_slot
 
         # Get time tables
         course_time_table = course.get_time_table()
@@ -206,9 +206,7 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
             available_rooms.remove(room_time_slot)
 
             # Unpack time_slot tuple
-            room = room_time_slot[0]
-            day = room_time_slot[1]
-            time_slot = room_time_slot[2]
+            room, day, time_slot = room_time_slot
 
             # Get time tables
             course_time_table = course.get_time_table()
@@ -263,10 +261,7 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
             # Remove time slot from available room time slots list
             available_rooms.remove(room_time_slot)
 
-            # Unpack time_slot tuple
-            room = room_time_slot[0]
-            day = room_time_slot[1]
-            time_slot = room_time_slot[2]
+            room, day, time_slot = room_time_slot
 
             # Get time tables
             course_time_table = course.get_time_table()
