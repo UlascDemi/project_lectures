@@ -17,17 +17,18 @@ def start_annealing(
     rooms: list[Room],
     starting_temp: int,
 ) -> int:
-    """_summary_
+    """
+
 
     Args:
-        courses (list[Course]): _description_
-        room_time_slots (list): _description_
-        students (list[Student]): _description_
-        rooms (list[Room]): _description_
-        starting_temp (int): _description_
+        courses (list[Course]): list of all course objects
+        room_time_slots (list): list of all room timeslots
+        students (list[Student]): list of all student objects 
+        rooms (list[Room]): list of all room objects 
+        starting_temp (int): temperature to start the simulated annealing with
 
     Returns:
-        int: _description_
+        int: amount of malus points
     """
 
     malus_points = []
@@ -65,7 +66,9 @@ def simulated_annealing(
     current_iteration: int,
 ) -> int:
     """
-
+    This functions uses hillclimber to lower the amount of maluspoints. But based on 
+    the starting temperatuur allows random swaps instead of swaps that only decreases the
+    amount of maluspoints
 
     Args:
         courses (list[Course]): a list of all courses
@@ -108,13 +111,14 @@ def simulated_annealing(
 
 
 def get_filled_in_slots(time_table) -> list:
-    """_summary_
+    """
+    Checks for timeslots in timetable if its filled.
 
     Args:
-        time_table (_type_): _description_
+        time_table (list[list]): 2d array 
 
     Returns:
-        list: _description_
+        list: list of filled timeslots
     """
     filled_in_slots = []
 

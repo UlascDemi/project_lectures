@@ -86,7 +86,17 @@ time_table_9 = [
     [[],[],[],[],[]]
 ]
 
-def tussenuur_count(students) -> int:
+def tussenuur_count(students: list[Student]) -> int:
+    """
+    Checks the amount of free periods between teachings. Gives one malus points for every
+    free period and three malus points for two free periods.
+
+    Args:
+        students (list[Student]): list of student objects
+
+    Returns:
+        int: returns the total amount of malus points
+    """
     tussen_uur_maluspunt = 0
 
     # for student in students:

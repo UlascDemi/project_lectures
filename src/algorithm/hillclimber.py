@@ -62,6 +62,15 @@ def hill_climb(
 
 
 def get_filled_in_slots(time_table) -> list:
+    """
+    Checks for timeslots in timetable if its filled.
+
+    Args:
+        time_table (list[list]): 2d array 
+
+    Returns:
+        list: list of filled timeslots
+    """
     filled_in_slots = []
 
     # Find all non-empty timeslots in time_table

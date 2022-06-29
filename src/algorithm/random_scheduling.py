@@ -18,8 +18,8 @@ def get_choosable_rooms(
     three elements: (Room, day, time_slot). Where Room is a Room object and the day and
     time_slot are represented by an int. In this case (Room1, 0, 0) would be room 1 on
     monday with the first time slot.
-    the function returns a list in the same format as the input list with the room time
-    slots that have enough capacity
+    The function returns a list in the same format as the input list with the room time
+    slots that have enough capacity.
 
     Args:
         rooms (list[tuple[Room, int, int]]): a list with all available room_time_slots
@@ -43,7 +43,7 @@ def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
     The rooms and time slots are randomly chosen. If the course was already
     scheduled in, the course in unscheduled and scheduled again. If all
     activities of the course are scheduled succesfully, True is returned.
-    If one of them fails, False is returned
+    If one of them fails, False is returned.
 
     Args:
         course (Course): the course that needs to be scheduled
@@ -67,7 +67,7 @@ def schedule_course(course: Course, available_rooms: list[Room]) -> bool:
 
 def is_scheduled(course: Course) -> bool:
     """
-    Checks if the course is already planned in 
+    Checks if the course is already scheduled.
     
     Args:
         course (Course): a course object of the Course class
@@ -197,7 +197,6 @@ def schedule_seminar(course: Course, available_rooms: list[Room]) -> bool:
 
             # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
-                # print(f"Couldnt schedule seminar: {course}")
                 return False
 
             # Choose a time slot
@@ -256,7 +255,6 @@ def schedule_practicum(course: Course, available_rooms: list[Room]) -> bool:
 
             # If no choosable rooms, return file and print message
             if len(choosable_rooms) == 0:
-                # print(f"Couldnt schedule practicum: {course}")
                 return False
 
             # Choose a time slot
