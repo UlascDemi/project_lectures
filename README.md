@@ -47,7 +47,7 @@ In the simulated annealing algorithm, just like the Hill Climber, a random state
 
 
 #### **Algorithm 5. Greedy Algorithm**
-The Greedy algorithm is implemented based on the heuristics to reduce the number of conflicts. The algorithm takes the sorted list of courses to be scheduled. From this, a course is chosen and the algorithm looks for the time slots that have the most rooms available in which the number of students enrolled fits. If several time slots have the same number of available rooms, a time slot is randomly selected. Then a random room is chosen from the available rooms. In this way, the Greedy Algorithm always chooses the best option for scheduling the courses. 
+The Greedy algorithm is implemented based on the heuristics to reduce the number of conflicts. The algorithm takes the sorted list of courses to be scheduled. From this, a course is chosen and the algorithm looks for the time slots that has the most halls available. It then chooses a room that matches the capacity of the course. So if a course has 20 students, it will choose a room that has a capacity of 20 or for example 22. In this way the algorithm always chooses the best option for scheduling the courses.  
 
 <p>&nbsp;</p>
 
