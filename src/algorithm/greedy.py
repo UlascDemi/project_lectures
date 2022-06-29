@@ -56,7 +56,19 @@ def get_choosable_rooms(
     return choosable_rooms
 
 
-def get_best_room_time_slot(room_count_table):
+def get_best_room_time_slot(room_count_table: list[list]) -> bool:
+    """
+    Returns coordinates of timeslot with the most available rooms at that moment. 
+    If there are multiple timeslots with the most available rooms the function will choose
+    one of these randomly. When the coordinates are given the available room count will be
+    updated.
+
+    Args:
+        room_count_table (list): 2d array of all time slots and available room count
+
+    Returns:
+       int : x and y coordinate 
+    """
     max_value = np.max(room_count_table)
     max_value_indices = np.argwhere(room_count_table == max_value)
 
@@ -67,8 +79,22 @@ def get_best_room_time_slot(room_count_table):
     return best_i, best_j
 
 
-def greedy_schedule_course(course, available_rooms, room_count_table):
-    print(room_count_table)
+def greedy_schedule_course(course: Course, available_rooms: list[Room], room_count_table:
+    list[list]) -> bool:
+    """
+    Returns true if every lecture, seminar and practical is scheduled.
+    This functions schedules every lecture, seminar and practical in a greedy manner. It schedules every course
+    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
+    room availability.
+
+    Args:
+        course (Course): course objects
+        available_rooms (list[Room]): list of available rooms
+        room_count_table (list[list]): 2d array of timeslots
+
+    Returns:
+        bool : Returns True if every course aspect is scheduled
+    """
     if (
         schedule_lecture(course, available_rooms, room_count_table)
         and schedule_seminar(course, available_rooms, room_count_table)
@@ -77,8 +103,22 @@ def greedy_schedule_course(course, available_rooms, room_count_table):
         return True
 
 
-def schedule_lecture(course: Course, available_rooms: list[Room], room_count_table):
+def schedule_lecture(course: Course, available_rooms: list[Room], room_count_table:
+    list[list]) -> bool:
+    """
+    Returns true if every lecture of a course is scheduled.
+    This functions schedules every lecture in a greedy manner. It schedules every course
+    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
+    room availability.
 
+    Args:
+        course (Course): course objects
+        available_rooms (list[Room]): list of available rooms
+        room_count_table (list[list]): 2d array of timeslots
+
+    Returns:
+        bool: returns true if every lecture is scheduled
+    """
     for _ in range(course.n_lecture):
         # Checks if lectures need to be given
         if course.n_lecture == 0:
@@ -130,16 +170,21 @@ def schedule_lecture(course: Course, available_rooms: list[Room], room_count_tab
 
 
 def schedule_seminar(
-    course: Course, available_rooms: list[Room], room_count_table
+    course: Course, available_rooms: list[Room], room_count_table: list[list]
 ) -> bool:
-    """_summary_
+    """
+    Returns true if every seminar group  of a course is scheduled.
+    This functions schedules every seminar group in a greedy manner. It schedules every course
+    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
+    room availability.
 
     Args:
-        course (Course): Course to be scheduled
-        available_rooms (list[Room]): The available room time slots
+        course (Course): course objects
+        available_rooms (list[Room]): list of available rooms
+        room_count_table (list[list]): 2d array of timeslots
 
     Returns:
-        bool: True if lectures have been scheduled, False if not
+        bool: returns true if every lecture is scheduled
     """
     seminar_groups = course.get_seminar_groups()
 
@@ -198,16 +243,21 @@ def schedule_seminar(
 
 
 def schedule_practicum(
-    course: Course, available_rooms: list[Room], room_count_table
+    course: Course, available_rooms: list[Room], room_count_table: list[list]
 ) -> bool:
-    """_summary_
+    """
+    Returns true if every seminar group  of a course is scheduled.
+    This functions schedules every seminar group in a greedy manner. It schedules every course
+    based on the room availabilty of a timeslot. It prioritizes timeslots with higher 
+    room availability.
 
     Args:
-        course (Course): Course to be scheduled
-        available_rooms (list[Room]): The available room time slots
+        course (Course): course objects
+        available_rooms (list[Room]): list of available rooms
+        room_count_table (list[list]): 2d array of timeslots
 
     Returns:
-        bool: True if lectures have been scheduled, False if not
+        bool: returns true if every lecture is scheduled
     """
     practicum_groups = course.get_practicum_groups()
 

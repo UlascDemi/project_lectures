@@ -50,7 +50,7 @@ TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-
 def main():
     # run_algorithm(True)
 
-    n_hill_climbs = 1
+    n_hill_climbs = 1000
     data = []
     end_values = []
     best_points = float("inf")
@@ -89,20 +89,20 @@ def main():
 
     # df.to_csv("output/output_time_table.csv")
 
-    # mu = np.mean(end_values)
-    # sigma = np.std(end_values)
+    mu = np.mean(end_values)
+    sigma = np.std(end_values)
 
-    # normal_dist = np.random.normal(mu, sigma, 1000)
+    normal_dist = np.random.normal(mu, sigma, 1000)
 
-    # count, bins, ignored = plt.hist(normal_dist, 30, density=True)
-    # plt.plot(
-    #     bins,
-    #     1
-    #     / (sigma * np.sqrt(2 * np.pi))
-    #     * np.exp(-((bins - mu) ** 2) / (2 * sigma**2)),
-    #     linewidth=2,
-    #     color="r",
-    # )
+    count, bins, ignored = plt.hist(normal_dist, 30, density=True)
+    plt.plot(
+        bins,
+        1
+        / (sigma * np.sqrt(2 * np.pi))
+        * np.exp(-((bins - mu) ** 2) / (2 * sigma**2)),
+        linewidth=2,
+        color="r",
+    )
 
     # plt.xlabel("Malus Points")
     # plt.grid(which="both")
