@@ -90,10 +90,13 @@ def main(output: str, alg_type: str, n_simulations: int):
 
     print(f"best timetable found: {min(end_values)} malus points")
 
-    df = pd.DataFrame(best_time_table)
-    df.columns = ["Student", "Course"]
-
+    df = pd.DataFrame(data)
     df.to_csv(output)
+
+    # df = pd.DataFrame(best_time_table)
+    # df.columns = ["Student", "Course"]
+
+    # df.to_csv(output)
 
 
 def run_algorithm(algr, verbose=False):
