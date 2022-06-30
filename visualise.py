@@ -9,10 +9,10 @@ anneal2 = pd.read_csv("output/random.csv", names=["index", "vals"])
 random = pd.read_csv("output/random.csv", names=["index", "vals"])
 
 plots = [
-    pd.read_csv("output/random.csv", names=["index", "vals"]),
-    # pd.read_csv("output/hillclimb_700.csv", names=["index", "vals"]),
+    # pd.read_csv("output/random.csv", names=["index", "vals"]),
+    pd.read_csv("output/random_1000.csv", names=["index", "vals"]),
+    pd.read_csv("output/greedy_1000.csv", names=["index", "vals"]),
     pd.read_csv("output/hillclimb_700_2.csv", names=["index", "vals"]),
-    # pd.read_csv("output/sim_anneal_500.csv", names=["index", "vals"]),
     pd.read_csv("output/sim_anneal_500_2.csv", names=["index", "vals"]),
     # pd.read_csv("output/random.csv", names=["index", "vals"]),
 ]
@@ -32,6 +32,8 @@ for data in plots:
     #     color="r",
     # )
 
-plt.legend(["random", "hillclimb", "simulated annealing"])
+plt.legend(["random", "Greedy", "hillclimb", "simulated annealing"])
+plt.xlabel("Malus Points")
+plt.ylabel("Probability")
 plt.grid(which="both")
 plt.savefig("aaaa.png")

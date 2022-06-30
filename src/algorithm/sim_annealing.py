@@ -39,14 +39,13 @@ def start_annealing(
     old_points = float("inf")
 
     threshold = 2000
+    iterations = 5000
 
     current_iteration = 0
 
-    # Continue hillclimbing untill no improvement is found in N steps
-    while same_value_count < threshold:
+    for i in range(iterations):
         new_points = simulated_annealing(
-            courses, room_time_slots, students, rooms, starting_temp, current_iteration
-        )
+            courses, room_time_slots, students, rooms, starting_temp, i, iterations)
 
         if old_points == new_points:
             same_value_count += 1
@@ -55,7 +54,21 @@ def start_annealing(
 
         old_points = new_points
         malus_points.append(new_points)
-        current_iteration += 1
+
+    # # Continue hillclimbing untill no improvement is found in N steps
+    # while same_value_count < threshold:
+    #     new_points = simulated_annealing(
+    #         courses, room_time_slots, students, rooms, starting_temp, current_iteration
+    #     )
+
+    #     if old_points == new_points:
+    #         same_value_count += 1
+    #     else:
+    #         same_value_count = 0
+
+    #     old_points = new_points
+    #     malus_points.append(new_points)
+    #     current_iteration += 1
 
     return malus_points
 
@@ -67,6 +80,7 @@ def simulated_annealing(
     rooms: list[Room],
     starting_temp: int,
     current_iteration: int,
+    iterations
 ) -> int:
     """
     simulated_annealing() works very similair to the restart hillclimber, however it has
@@ -106,7 +120,8 @@ def simulated_annealing(
 
     # Check if the new schedule is better, if worse, revert back
     if new_points > old_points:
-        temp = starting_temp * 0.9995**current_iteration
+        # temp = starting_temp * 0.9995**current_iteration
+        temp = starting_temp - (starting_temp/iterations) * current_iteration
         accept_chance = 2 ** ((old_points - new_points) / temp)
 
         if random.random() > accept_chance:
