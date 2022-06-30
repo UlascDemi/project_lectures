@@ -90,21 +90,10 @@ def main(output: str, alg_type: str, n_simulations: int):
 
     print(f"best timetable found: {best_points} malus points")
 
-    plt.plot(data)
+    df = pd.DataFrame(best_time_table)
+    df.columns = ["Student", "Course"]
 
-    plt.xlabel("Iterations")
-    plt.ylabel("Malus Points")
-    plt.grid(which="both")
-
-    plt.savefig(output)
-
-    # df = pd.DataFrame(data)
-    # df.to_csv(output)
-
-    # df = pd.DataFrame(best_time_table)
-    # df.columns = ["Student", "Course"]
-
-    # df.to_csv(output)
+    df.to_csv(output)
 
 
 def run_algorithm(algr, verbose=False):
@@ -186,7 +175,7 @@ def run_algorithm(algr, verbose=False):
             )
         elif algr == "simulated_annealing":
             malus_points_progress = start_annealing(
-                courses_sorted, available_rooms, students, rooms, 5.5
+                courses_sorted, available_rooms, students, rooms, 5
             )
 
     if not is_valid_schedule(students, rooms):
