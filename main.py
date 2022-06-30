@@ -24,7 +24,6 @@ from src.algorithm.greedy import greedy_schedule_course
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from tabulate import tabulate
 from copy import deepcopy
@@ -88,7 +87,7 @@ def main(output: str, alg_type: str, n_simulations: int):
         duration = end - begin
         computation_times.append(duration)
 
-    print(f"best timetable found: {min(end_values)} malus points")
+    print(f"best timetable found: {best_points} malus points")
 
     df = pd.DataFrame(best_time_table)
     df.columns = ["Student", "Course"]
@@ -256,7 +255,8 @@ if __name__ == "__main__":
         "--n_simulations",
         type=int,
         default=1,
-        help="The amount of simulations to be run (default: 1)")
+        help="The amount of simulations to be run (default: 1)",
+    )
 
     args = parser.parse_args()
 
