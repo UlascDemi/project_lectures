@@ -24,6 +24,7 @@ from src.algorithm.greedy import greedy_schedule_course
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from tabulate import tabulate
 from copy import deepcopy
@@ -89,13 +90,10 @@ def main(output: str, alg_type: str, n_simulations: int):
 
     print(f"best timetable found: {best_points} malus points")
 
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(best_time_table)
+    df.columns = ["Student", "Course"]
+
     df.to_csv(output)
-
-    # df = pd.DataFrame(best_time_table)
-    # df.columns = ["Student", "Course"]
-
-    # df.to_csv(output)
 
 
 def run_algorithm(algr, verbose=False):
@@ -177,7 +175,7 @@ def run_algorithm(algr, verbose=False):
             )
         elif algr == "simulated_annealing":
             malus_points_progress = start_annealing(
-                courses_sorted, available_rooms, students, rooms, 9
+                courses_sorted, available_rooms, students, rooms, 5
             )
 
     if not is_valid_schedule(students, rooms):
