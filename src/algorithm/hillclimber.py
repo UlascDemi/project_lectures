@@ -4,7 +4,7 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
-from src.malus_point_count import malus_point_count
+from src.malus_point_count.malus_point_count import malus_point_count
 from src.reschedule.reschedule import reschedule_time_slot
 from src.schedule_validity.schedule_validity import third_free_period_check
 
@@ -39,7 +39,7 @@ def hill_climb(
 
     course = random.choice(courses)
     time_table = course.get_time_table()
-    
+
     filled_in_slots = get_filled_in_slots(time_table)
 
     # Choose the course that needs to be moved and choose a new time_slot
@@ -66,7 +66,7 @@ def get_filled_in_slots(time_table) -> list:
     Checks for timeslots in timetable if its filled.
 
     Args:
-        time_table (list[list]): 2d array 
+        time_table (list[list]): 2d array
 
     Returns:
         list: list of filled timeslots

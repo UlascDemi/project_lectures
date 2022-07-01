@@ -4,7 +4,7 @@ from src.classes.student import Student
 from src.classes.course import Course
 from src.classes.room import Room
 
-from src.malus_point_count import malus_point_count
+from src.malus_point_count.malus_point_count import malus_point_count
 from src.reschedule.reschedule import reschedule_time_slot
 
 import random
@@ -26,8 +26,8 @@ def start_annealing(
     Args:
         courses (list[Course]): list of all course objects
         room_time_slots (list): list of all room timeslots
-        students (list[Student]): list of all student objects 
-        rooms (list[Room]): list of all room objects 
+        students (list[Student]): list of all student objects
+        rooms (list[Room]): list of all room objects
         starting_temp (int): temperature to start the simulated annealing with
 
     Returns:
@@ -42,7 +42,8 @@ def start_annealing(
 
     for i in range(iterations):
         new_points = simulated_annealing(
-            courses, room_time_slots, students, rooms, starting_temp, i, iterations)
+            courses, room_time_slots, students, rooms, starting_temp, i, iterations
+        )
 
         if old_points == new_points:
             same_value_count += 1
@@ -62,7 +63,7 @@ def simulated_annealing(
     rooms: list[Room],
     starting_temp: float,
     current_iteration: int,
-    iterations
+    iterations,
 ) -> int:
     """
     simulated_annealing() works very similair to the restart hillclimber, however it has
@@ -102,7 +103,7 @@ def simulated_annealing(
 
     # Check if the new schedule is better, if worse, revert back
     if new_points > old_points:
-        temp = starting_temp - (starting_temp/iterations) * current_iteration
+        temp = starting_temp - (starting_temp / iterations) * current_iteration
         accept_chance = 2 ** ((old_points - new_points) / temp)
 
         if random.random() > accept_chance:
@@ -120,7 +121,7 @@ def get_filled_in_slots(time_table) -> list:
     Checks for timeslots in timetable if its filled.
 
     Args:
-        time_table (list[list]): 2d array 
+        time_table (list[list]): 2d array
 
     Returns:
         list: list of filled timeslots

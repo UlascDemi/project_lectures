@@ -18,7 +18,13 @@ from src.algorithm.Completely_random import random_schedule_course
 from src.algorithm.restart_hillclimb import hill_climb_restart
 from src.algorithm.sim_annealing import start_annealing
 
-from src.malus_point_count import malus_point_count
+from src.malus_point_count.malus_point_count import (
+    malus_point_count,
+    conflict_count,
+    capacity_count,
+    fifth_hour_points,
+    free_period_count,
+)
 from src.algorithm.greedy import greedy_schedule_course
 
 
@@ -61,6 +67,10 @@ def main(output: str, alg_type: str, n_simulations: int):
     end_values = []
     best_points = float("inf")
     best_time_table = []
+    conflict = []
+    free_period = []
+    capacity = []
+    fifth = []
 
     computation_times = []
 
@@ -73,11 +83,16 @@ def main(output: str, alg_type: str, n_simulations: int):
             )
         print(f"Simulation {i} out of {n_simulations}")
 
-        points, time_table = run_algorithm(alg_type)
+        points, time_table, malus_points = run_algorithm(alg_type)
 
         end_value = points[-1]
 
         end_values.append(end_value)
+        conflict.append(malus_points[0])
+        capacity.append(malus_points[1])
+        fifth.append(malus_points[2])
+        free_period.append(malus_points[3])
+
         data += points
 
         if end_value < best_points:
@@ -90,9 +105,26 @@ def main(output: str, alg_type: str, n_simulations: int):
 
     print(f"best timetable found: {best_points} malus points")
 
-    df = pd.DataFrame(best_time_table)
-    df.columns = ["Student", "Course"]
+    # df = pd.DataFrame(best_time_table)
+    # df.columns = ["Student", "Course"]
 
+    conflict = sum(conflict) / len(conflict)
+    free_period = sum(free_period) / len(free_period)
+    capacity = sum(capacity) / len(capacity)
+    fifth = sum(fifth) / len(fifth)
+
+    data = {
+        "Malus Points": [conflict, free_period, capacity, fifth],
+        "Index Title": ["conflict", "free_period", "capacity", "fifth"],
+    }
+    # df = pd.DataFrame(
+    #     (conflict, free_period, capacity, fifth),
+    #     # columns=["conflict", "free_period", "capacity", "fifth_hour"],
+    # )
+    df = pd.DataFrame(data)
+    df.index = df["Index Title"]
+    del df["Index Title"]
+    print(df)
     df.to_csv(output)
 
 
@@ -145,7 +177,7 @@ def run_algorithm(algr, verbose=False):
     ):
         # Schedule all courses
         for course in courses_sorted:
-            random_schedule_course(course, available_rooms)
+            schedule_course(course, available_rooms)
 
         if not is_valid_schedule(students, rooms):
             return
@@ -194,7 +226,14 @@ def run_algorithm(algr, verbose=False):
             for time_slot in day:
                 student_time_tables.append([str(student), time_slot])
 
-    return malus_points_progress, student_time_tables
+    malus_dist = [
+        conflict_count(students),
+        capacity_count(rooms),
+        fifth_hour_points(rooms),
+        free_period_count(students),
+    ]
+
+    return malus_points_progress, student_time_tables, malus_dist
 
 
 def print_2d_list(object_to_print) -> None:
