@@ -147,7 +147,7 @@ def run_algorithm(algr, verbose=False):
     ):
         # Schedule all courses
         for course in courses_sorted:
-            schedule_course(course, available_rooms)
+            random_schedule_course(course, available_rooms)
 
         if not is_valid_schedule(students, rooms):
             return
