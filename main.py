@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # ---------------------------------------------------------------------------
-# Created By  :
-# Created Date:
+# Created By  : Brechje, Justin and Ulas
+# Created Date: 30-06-2022
 # ---------------------------------------------------------------------------
 from __future__ import annotations
 import argparse
@@ -37,15 +37,6 @@ from copy import deepcopy
 from time import time
 from math import ceil
 
-# TODO getters voor course schrijven - Brechje
-# TODO getters voor room schrijven - Ulas
-# TODO getters voor student schrijven - Justin
-
-# TODO docstrings in loader_pandas schrijven
-
-# TODO een check maken of rooms niet overlappen
-
-# TODO README
 
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 TIME_SLOTS = ["9:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-19:00"]
@@ -86,13 +77,6 @@ def main(output: str, alg_type: str, n_simulations: int):
         points, time_table, malus_points = run_algorithm(alg_type)
 
         end_value = points[-1]
-
-        end_values.append(end_value)
-        conflict.append(malus_points[0])
-        capacity.append(malus_points[1])
-        fifth.append(malus_points[2])
-        free_period.append(malus_points[3])
-
         data += points
 
         if end_value < best_points:
@@ -105,26 +89,9 @@ def main(output: str, alg_type: str, n_simulations: int):
 
     print(f"best timetable found: {best_points} malus points")
 
-    # df = pd.DataFrame(best_time_table)
-    # df.columns = ["Student", "Course"]
-
-    conflict = sum(conflict) / len(conflict)
-    free_period = sum(free_period) / len(free_period)
-    capacity = sum(capacity) / len(capacity)
-    fifth = sum(fifth) / len(fifth)
-
-    data = {
-        "Malus Points": [conflict, free_period, capacity, fifth],
-        "Index Title": ["conflict", "free_period", "capacity", "fifth"],
-    }
-    # df = pd.DataFrame(
-    #     (conflict, free_period, capacity, fifth),
-    #     # columns=["conflict", "free_period", "capacity", "fifth_hour"],
-    # )
-    df = pd.DataFrame(data)
-    df.index = df["Index Title"]
-    del df["Index Title"]
-    print(df)
+    df = pd.DataFrame(best_time_table)
+    df.columns = ["Student", "Course"]
+    
     df.to_csv(output)
 
 
